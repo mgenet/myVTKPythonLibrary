@@ -20,20 +20,25 @@ import myVTKPythonLibrary as myVTK
 
 def splitDomainBetweenEndoAndEpi(
         pdata_domain,
-        ratio=0.90,
+        r=0.99,
         verbose=1):
 
     myVTK.myPrint(verbose, "*** splitDomainBetweenEndoAndEpi ***")
 
     bounds = pdata_domain.GetBounds()
-    C = [(bounds[0]+bounds[1])/2, (bounds[2]+bounds[3])/2, (1.-ratio)*bounds[4]+ratio*bounds[5]]
-    N = [0,0,1]
+    assert (r > 0.)
+    assert (r < 1.)
+    origin = [(1./2)*bounds[0]+(1./2)*bounds[1],
+              (1./2)*bounds[2]+(1./2)*bounds[3],
+              (1.-r)*bounds[4]+(  r )*bounds[5]]
+    #myVTK.myPrint(verbose, "bounds = " + str(bounds))
+    #myVTK.myPrint(verbose, "origin = " + str(origin))
 
     (pdata_domain,
      cap) = myVTK.clipPDataUsingPlane(
          pdata_mesh=pdata_domain,
-         plane_C=C,
-         plane_N=N,
+         plane_O=origin,
+         plane_N=[0,0,1],
          verbose=verbose-1)
 
     connectivity0 = vtk.vtkPolyDataConnectivityFilter()
@@ -42,6 +47,7 @@ def splitDomainBetweenEndoAndEpi(
     connectivity0.SetInputData(pdata_domain)
     connectivity0.Update()
     pdata0 = connectivity0.GetOutput()
+    assert (pdata0.GetNumberOfPoints())
 
     connectivity1 = vtk.vtkPolyDataConnectivityFilter()
     connectivity1.SetExtractionModeToSpecifiedRegions()
@@ -49,6 +55,7 @@ def splitDomainBetweenEndoAndEpi(
     connectivity1.SetInputData(pdata_domain)
     connectivity1.Update()
     pdata1 = connectivity1.GetOutput()
+    assert (pdata1.GetNumberOfPoints())
 
     if (myVTK.getPDataSurfaceArea(pdata0,0) < myVTK.getPDataSurfaceArea(pdata1,0)):
         return pdata0, pdata1
@@ -59,10 +66,11 @@ def splitDomainBetweenEndoAndEpi(
 
 if (__name__ == "__main__"):
     parser = argparse.ArgumentParser()
-    parser.add_argument('domain_filename' , type=str              )
-    parser.add_argument('--endLV_filename', type=str, default=None)
-    parser.add_argument('--epiLV_filename', type=str, default=None)
-    parser.add_argument('--verbose', '-v' , type=int, default=1   )
+    parser.add_argument("domain_filename" , type=str                )
+    parser.add_argument("--r"             , type=float, default=0.99)
+    parser.add_argument("--endLV_filename", type=str  , default=None)
+    parser.add_argument("--epiLV_filename", type=str  , default=None)
+    parser.add_argument("--verbose", "-v" , type=int  , default=1   )
     args = parser.parse_args()
 
     if (args.endLV_filename == None):
@@ -77,6 +85,7 @@ if (__name__ == "__main__"):
     (pdata_end,
      pdata_epi) = myVTK.splitDomainBetweenEndoAndEpi(
          pdata_domain=pdata_domain,
+         r=args.r,
          verbose=args.verbose)
 
     myVTK.writeSTL(
