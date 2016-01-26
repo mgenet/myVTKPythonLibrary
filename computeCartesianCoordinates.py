@@ -39,9 +39,9 @@ def computeCartesianCoordinates(
     if (verbose >= 2): print "zmax = " + str(zmax)
     if (verbose >= 2): print "dz = " + str(dz)
 
-    farray_norm_x = myVTK.createFloatArray("norm_x", 1, n_points)
-    farray_norm_y = myVTK.createFloatArray("norm_y", 1, n_points)
-    farray_norm_z = myVTK.createFloatArray("norm_z", 1, n_points)
+    farray_xx = myVTK.createFloatArray("xx", 1, n_points)
+    farray_yy = myVTK.createFloatArray("yy", 1, n_points)
+    farray_zz = myVTK.createFloatArray("zz", 1, n_points)
 
     for k_point in xrange(n_points):
         if (verbose >= 2): print "k_point = " + str(k_point)
@@ -49,17 +49,17 @@ def computeCartesianCoordinates(
         point = points.GetPoint(k_point)
         if (verbose >= 2): print "point = " + str(point)
 
-        norm_x = (point[0] - xmin) / dx
-        norm_y = (point[1] - ymin) / dy
-        norm_z = (point[2] - zmin) / dz
+        xx = (point[0] - xmin) / dx
+        yy = (point[1] - ymin) / dy
+        zz = (point[2] - zmin) / dz
 
-        farray_norm_x.InsertTuple(k_point, [norm_x])
-        farray_norm_y.InsertTuple(k_point, [norm_y])
-        farray_norm_z.InsertTuple(k_point, [norm_z])
+        farray_xx.InsertTuple(k_point, [xx])
+        farray_yy.InsertTuple(k_point, [yy])
+        farray_zz.InsertTuple(k_point, [zz])
 
-    return (farray_norm_x,
-            farray_norm_y,
-            farray_norm_z)
+    return (farray_xx,
+            farray_yy,
+            farray_zz)
 
 ########################################################################
 
@@ -70,25 +70,25 @@ def addCartesianCoordinates(
     myVTK.myPrint(verbose, "*** addCartesianCoordinates ***")
 
     points = ugrid.GetPoints()
-    (farray_norm_x,
-     farray_norm_y,
-     farray_norm_z) = computeCartesianCoordinates(
+    (farray_xx,
+     farray_yy,
+     farray_zz) = computeCartesianCoordinates(
         points=points,
         verbose=verbose-1)
 
-    ugrid.GetPointData().AddArray(farray_norm_x)
-    ugrid.GetPointData().AddArray(farray_norm_y)
-    ugrid.GetPointData().AddArray(farray_norm_z)
+    ugrid.GetPointData().AddArray(farray_xx)
+    ugrid.GetPointData().AddArray(farray_yy)
+    ugrid.GetPointData().AddArray(farray_zz)
 
     cell_centers = myVTK.getCellCenters(
         mesh=ugrid,
         verbose=verbose-1)
-    (farray_norm_x,
-     farray_norm_y,
-     farray_norm_z) = computeCartesianCoordinates(
+    (farray_xx,
+     farray_yy,
+     farray_zz) = computeCartesianCoordinates(
         points=cell_centers,
         verbose=verbose-1)
 
-    ugrid.GetCellData().AddArray(farray_norm_x)
-    ugrid.GetCellData().AddArray(farray_norm_y)
-    ugrid.GetCellData().AddArray(farray_norm_z)
+    ugrid.GetCellData().AddArray(farray_xx)
+    ugrid.GetCellData().AddArray(farray_yy)
+    ugrid.GetCellData().AddArray(farray_zz)
