@@ -32,13 +32,19 @@ def clipSurfacesForCutLVMesh(
 
     clip = vtk.vtkClipPolyData()
     clip.SetClipFunction(plane)
-    clip.SetInputData(endo)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        clip.SetInputData(endo)
+    else:
+        clip.SetInput(endo)
     clip.Update()
     clipped_endo = clip.GetOutput(0)
 
     clip = vtk.vtkClipPolyData()
     clip.SetClipFunction(plane)
-    clip.SetInputData(epi)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        clip.SetInputData(epi)
+    else:
+        clip.SetInput(epi)
     clip.Update()
     clipped_epi = clip.GetOutput(0)
 

@@ -44,7 +44,10 @@ def splitDomainBetweenEndoAndEpi(
     connectivity0 = vtk.vtkPolyDataConnectivityFilter()
     connectivity0.SetExtractionModeToSpecifiedRegions()
     connectivity0.AddSpecifiedRegion(0)
-    connectivity0.SetInputData(pdata_domain)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        connectivity0.SetInputData(pdata_domain)
+    else:
+        connectivity0.SetInput(pdata_domain)
     connectivity0.Update()
     pdata0 = connectivity0.GetOutput()
     assert (pdata0.GetNumberOfPoints())
@@ -52,7 +55,10 @@ def splitDomainBetweenEndoAndEpi(
     connectivity1 = vtk.vtkPolyDataConnectivityFilter()
     connectivity1.SetExtractionModeToSpecifiedRegions()
     connectivity1.AddSpecifiedRegion(1)
-    connectivity1.SetInputData(pdata_domain)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        connectivity1.SetInputData(pdata_domain)
+    else:
+        connectivity1.SetInput(pdata_domain)
     connectivity1.Update()
     pdata1 = connectivity1.GetOutput()
     assert (pdata1.GetNumberOfPoints())

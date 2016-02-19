@@ -31,6 +31,9 @@ def writeImage(
         assert 0, "File must be .vtk or .vti. Aborting."
 
     image_writer.SetFileName(filename)
-    image_writer.SetInputData(image)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        image_writer.SetInputData(image)
+    else:
+        image_writer.SetInput(image)
     image_writer.Update()
     image_writer.Write()

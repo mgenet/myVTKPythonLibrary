@@ -29,7 +29,10 @@ def findPointsInCell(points,
     ugrid_cell.SetCells(vtk.VTK_HEXAHEDRON, cell_array_cell)
 
     geometry_filter = vtk.vtkGeometryFilter()
-    geometry_filter.SetInputData(ugrid_cell)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        geometry_filter.SetInputData(ugrid_cell)
+    else:
+        geometry_filter.SetInput(ugrid_cell)
     geometry_filter.Update()
     cell_boundary = geometry_filter.GetOutput()
 
@@ -38,7 +41,10 @@ def findPointsInCell(points,
 
     enclosed_points_filter = vtk.vtkSelectEnclosedPoints()
     enclosed_points_filter.SetSurfaceData(cell_boundary)
-    enclosed_points_filter.SetInputData(pdata_points)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        enclosed_points_filter.SetInputData(pdata_points)
+    else:
+        enclosed_points_filter.SetInput(pdata_points)
     enclosed_points_filter.Update()
 
     points_in_cell = [k_point for k_point in xrange(points.GetNumberOfPoints()) if enclosed_points_filter.GetOutput().GetPointData().GetArray('SelectedPoints').GetTuple(k_point)[0]]

@@ -32,7 +32,10 @@ def clipSurfacesForFullLVMesh(
     epi_implicit_distance.SetInput(epi)
 
     epi_clip = vtk.vtkClipPolyData()
-    epi_clip.SetInputData(epi)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        epi_clip.SetInputData(epi)
+    else:
+        epi_clip.SetInput(epi)
     epi_clip.SetClipFunction(endo_implicit_distance)
     epi_clip.GenerateClippedOutputOn()
     epi_clip.Update()
@@ -40,7 +43,10 @@ def clipSurfacesForFullLVMesh(
     clipped_valve = epi_clip.GetOutput(1)
 
     endo_clip = vtk.vtkClipPolyData()
-    endo_clip.SetInputData(endo)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        endo_clip.SetInputData(endo)
+    else:
+        endo_clip.SetInput(endo)
     endo_clip.SetClipFunction(epi_implicit_distance)
     endo_clip.InsideOutOn()
     endo_clip.Update()

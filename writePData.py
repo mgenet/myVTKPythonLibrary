@@ -31,6 +31,9 @@ def writePData(
         assert 0, "File must be .vtk or .vtp. Aborting."
 
     pdata_writer.SetFileName(filename)
-    pdata_writer.SetInputData(pdata)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        pdata_writer.SetInputData(pdata)
+    else:
+        pdata_writer.SetInput(pdata)
     pdata_writer.Update()
     pdata_writer.Write()

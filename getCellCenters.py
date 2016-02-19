@@ -23,7 +23,10 @@ def getCellCenters(
     myVTK.myPrint(verbose, "*** getCellCenters ***")
 
     filter_cell_centers = vtk.vtkCellCenters()
-    filter_cell_centers.SetInputData(mesh)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        filter_cell_centers.SetInputData(mesh)
+    else:
+        filter_cell_centers.SetInput(mesh)
     filter_cell_centers.Update()
 
     return filter_cell_centers.GetOutput()

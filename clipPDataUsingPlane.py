@@ -37,7 +37,10 @@ def clipPDataUsingPlane(
     clip = vtk.vtkClipPolyData()
     clip.SetClipFunction(plane)
     clip.GenerateClippedOutputOn()
-    clip.SetInputData(pdata_mesh)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        clip.SetInputData(pdata_mesh)
+    else:
+        clip.SetInput(pdata_mesh)
     clip.Update()
     clipped0 = clip.GetOutput(0)
     clipped1 = clip.GetOutput(1)

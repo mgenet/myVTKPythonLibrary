@@ -25,6 +25,9 @@ def writeSTL(
 
     stl_writer = vtk.vtkSTLWriter()
     stl_writer.SetFileName(filename)
-    stl_writer.SetInputData(pdata)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        stl_writer.SetInputData(pdata)
+    else:
+        stl_writer.SetInput(pdata)
     stl_writer.Update()
     stl_writer.Write()

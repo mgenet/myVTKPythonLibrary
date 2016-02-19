@@ -26,7 +26,10 @@ def addPDataNormals(
     poly_data_normals = vtk.vtkPolyDataNormals()
     poly_data_normals.ComputePointNormalsOff()
     poly_data_normals.ComputeCellNormalsOn()
-    poly_data_normals.SetInputData(pdata)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        poly_data_normals.SetInputData(pdata)
+    else:
+        poly_data_normals.SetInput(pdata)
     poly_data_normals.Update()
     pdata = poly_data_normals.GetOutput()
 

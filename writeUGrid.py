@@ -31,6 +31,9 @@ def writeUGrid(
         assert 0, "File must be .vtk or .vtu. Aborting."
 
     ugrid_writer.SetFileName(filename)
-    ugrid_writer.SetInputData(ugrid)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        ugrid_writer.SetInputData(ugrid)
+    else:
+        ugrid_writer.SetInput(ugrid)
     ugrid_writer.Update()
     ugrid_writer.Write()

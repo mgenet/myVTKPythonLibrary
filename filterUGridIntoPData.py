@@ -24,13 +24,19 @@ def filterUGridIntoPData(
     myVTK.myPrint(verbose, "*** filterUGridIntoPData ***")
 
     filter_geometry = vtk.vtkGeometryFilter()
-    filter_geometry.SetInputData(ugrid)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        filter_geometry.SetInputData(ugrid)
+    else:
+        filter_geometry.SetInput(ugrid)
     filter_geometry.Update()
     pdata = filter_geometry.GetOutput()
 
     if (only_trianlges):
         filter_triangle = vtk.vtkTriangleFilter()
-        filter_triangle.SetInputData(pdata)
+        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+            filter_triangle.SetInputData(pdata)
+        else:
+            filter_triangle.SetInput(pdata)
         filter_triangle.Update()
         pdata = filter_triangle.GetOutput()
 

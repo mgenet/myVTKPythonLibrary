@@ -26,7 +26,10 @@ def clipPDataUsingField(
 
     pdata_mesh.GetPointData().SetActiveScalars(array_name)
     clip_poly_data = vtk.vtkClipPolyData()
-    clip_poly_data.SetInputData(pdata_mesh)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        clip_poly_data.SetInputData(pdata_mesh)
+    else:
+        clip_poly_data.SetInput(pdata_mesh)
     clip_poly_data.SetValue(threshold_value)
     clip_poly_data.GenerateClippedOutputOn()
     clip_poly_data.Update()

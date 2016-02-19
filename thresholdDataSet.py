@@ -27,7 +27,10 @@ def thresholdUGrid(
     myVTK.myPrint(verbose, "*** thresholdUGrid ***")
 
     threshold = vtk.vtkThreshold()
-    threshold.SetInputData(ugrid_mesh)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        threshold.SetInputData(ugrid_mesh)
+    else:
+        threshold.SetInput(ugrid_mesh)
     if (field_support == "points"):
         association = vtk.vtkDataObject.FIELD_ASSOCIATION_POINTS
     elif (field_support == "cells"):

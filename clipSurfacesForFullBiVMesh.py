@@ -37,21 +37,30 @@ def clipSurfacesForFullBiVMesh(
     pdata_epi_implicit_distance.SetInput(pdata_epi)
 
     pdata_endLV_clip = vtk.vtkClipPolyData()
-    pdata_endLV_clip.SetInputData(pdata_endLV)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        pdata_endLV_clip.SetInputData(pdata_endLV)
+    else:
+        pdata_endLV_clip.SetInput(pdata_endLV)
     pdata_endLV_clip.SetClipFunction(pdata_epi_implicit_distance)
     pdata_endLV_clip.InsideOutOn()
     pdata_endLV_clip.Update()
     clipped_pdata_endLV = pdata_endLV_clip.GetOutput(0)
 
     pdata_endRV_clip = vtk.vtkClipPolyData()
-    pdata_endRV_clip.SetInputData(pdata_endRV)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        pdata_endRV_clip.SetInputData(pdata_endRV)
+    else:
+        pdata_endRV_clip.SetInput(pdata_endRV)
     pdata_endRV_clip.SetClipFunction(pdata_epi_implicit_distance)
     pdata_endRV_clip.InsideOutOn()
     pdata_endRV_clip.Update()
     clipped_pdata_endRV = pdata_endRV_clip.GetOutput(0)
 
     pdata_epi_clip = vtk.vtkClipPolyData()
-    pdata_epi_clip.SetInputData(pdata_epi)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        pdata_epi_clip.SetInputData(pdata_epi)
+    else:
+        pdata_epi_clip.SetInput(pdata_epi)
     pdata_epi_clip.SetClipFunction(pdata_endLV_implicit_distance)
     pdata_epi_clip.GenerateClippedOutputOn()
     pdata_epi_clip.Update()
@@ -59,7 +68,10 @@ def clipSurfacesForFullBiVMesh(
     clipped_valM = pdata_epi_clip.GetOutput(1)
 
     pdata_epi_clip = vtk.vtkClipPolyData()
-    pdata_epi_clip.SetInputData(clipped_pdata_epi)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        pdata_epi_clip.SetInputData(clipped_pdata_epi)
+    else:
+        pdata_epi_clip.SetInput(clipped_pdata_epi)
     pdata_epi_clip.SetClipFunction(pdata_endRV_implicit_distance)
     pdata_epi_clip.GenerateClippedOutputOn()
     pdata_epi_clip.Update()

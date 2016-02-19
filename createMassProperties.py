@@ -23,7 +23,10 @@ def createMassProperties(
     myVTK.myPrint(verbose, "*** createMassProperties ***")
 
     mass_properties = vtk.vtkMassProperties()
-    mass_properties.SetInputData(pdata)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        mass_properties.SetInputData(pdata)
+    else:
+        mass_properties.SetInput(pdata)
 
     return mass_properties
 
