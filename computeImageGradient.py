@@ -31,4 +31,3 @@ def computeImageGradient(
     image = image_gradient.GetOutput()
 
     return image
-

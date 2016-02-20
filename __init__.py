@@ -46,6 +46,7 @@ from computeABPointsFromOrientedBoundingBox import *
 from writeFiberOrientationFileForGNUPlot import *
 from computePseudoProlateSpheroidalCoordinatesAndBasis import *
 from computeCylindricalCoordinatesAndBasis import *
+from computeImageGradient import *
 from computeFiberDirections import *
 from readAbaqusMeshFromINP import *
 from createArray import *
