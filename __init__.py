@@ -27,6 +27,7 @@ from readPData import *
 from exportDynaDeformationGradients import *
 from computeHelixTransverseSheetAngles2 import *
 from computeFractionalAnisotropy import *
+from createImageInterpolator import *
 from getCellLocator import *
 from mapDataSetToPointData import *
 from computeABPointsFromBoundsAndCenter import *
