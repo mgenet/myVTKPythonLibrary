@@ -10,7 +10,6 @@
 ###                                                                  ###
 ########################################################################
 
-import math
 import random
 
 import myVTKPythonLibrary as myVTK

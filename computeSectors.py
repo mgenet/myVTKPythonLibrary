@@ -10,12 +10,6 @@
 ###                                                                  ###
 ########################################################################
 
-import math
-import numpy
-import vtk
-import os
-import sys
-
 import myVTKPythonLibrary as myVTK
 
 ########################################################################

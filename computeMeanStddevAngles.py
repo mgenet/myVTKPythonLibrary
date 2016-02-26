@@ -12,7 +12,6 @@
 
 import math
 import numpy
-import vtk
 
 import myVTKPythonLibrary as myVTK
 

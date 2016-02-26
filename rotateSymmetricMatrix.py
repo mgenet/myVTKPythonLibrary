@@ -11,7 +11,6 @@
 ########################################################################
 
 import numpy
-import vtk
 
 import myVTKPythonLibrary as myVTK
 from mat_vec_tools import *
