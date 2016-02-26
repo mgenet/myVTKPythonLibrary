@@ -10,8 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
-import vtk
 import numpy
+import vtk
 
 import myVTKPythonLibrary as myVTK
 
