@@ -39,7 +39,7 @@ def addArrays(
 
     if (array3 == None):
         array3 = myVTK.createArray(
-            array_name="",
+            name="",
             n_components=n_components,
             n_tuples=n_tuples,
             array_type=array_type)
@@ -79,7 +79,7 @@ def subArrays(
 
     if (array3 == None):
         array3 = myVTK.createArray(
-            array_name="",
+            name="",
             n_components=n_components,
             n_tuples=n_tuples,
             array_type=array_type)
@@ -117,7 +117,7 @@ def mulArrays(
 
     if (array3 == None):
         array3 = myVTK.createArray(
-            array_name="",
+            name="",
             n_components=n_components,
             n_tuples=n_tuples,
             array_type=array_type)

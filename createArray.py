@@ -15,52 +15,94 @@ import myVTKPythonLibrary as myVTK
 ########################################################################
 
 def createArray(
-        array_name,
+        name,
         n_components=1,
         n_tuples=0,
         array_type="float",
         init_to_zero=0,
         verbose=1):
 
-    assert (type(array_type) in [type, str]), "array_type must be a type or a str. Aborting."
+    assert (type(array_type) in (type, str)), "array_type must be a type or a str. Aborting."
 
     if (type(array_type) is type):
-        assert (array_type in [float, int]), "if a type, array_type must be equal to float or int. Aborting."
+        assert (array_type in (float, int)), "Wrong array type. Aborting."
 
         if (array_type == float):
             return myVTK.createFloatArray(
-                       name=array_name,
+                       name=name,
                        n_components=n_components,
                        n_tuples=n_tuples,
                        init_to_zero=init_to_zero,
                        verbose=verbose-1)
         elif (array_type == int):
             return myVTK.createIntArray(
-                       name=array_name,
+                       name=name,
                        n_components=n_components,
                        n_tuples=n_tuples,
                        init_to_zero=init_to_zero,
                        verbose=verbose-1)
     elif (type(array_type) is str):
-        assert (array_type in ["double", "float", "int", "short"]), "if a str, array_type must be equal to double, float, int or short. Aborting."
+        assert (array_type in ("double", "float", "long", "unsigned long", "int", "unsigned int", "short", "unsigned short", "char", "unsigned char", "int64", "uint64", "int32", "uint32", "int16", "uint16", "int8", "uint8")), "Wrong array type. Aborting."
 
-        if (array_type == "float") or (array_type == "double"):
+        if (array_type in ("float", "double")):
             return myVTK.createFloatArray(
-                       name=array_name,
+                       name=name,
                        n_components=n_components,
                        n_tuples=n_tuples,
                        init_to_zero=init_to_zero,
                        verbose=verbose-1)
-        elif (array_type == "int"):
+        elif (array_type in ("long", "int64")):
+            return myVTK.createLongArray(
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type in ("unsigned long", "uint64")):
+            return myVTK.createUnsignedLongArray(
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type in ("int", "int32")):
             return myVTK.createIntArray(
-                       name=array_name,
+                       name=name,
                        n_components=n_components,
                        n_tuples=n_tuples,
                        init_to_zero=init_to_zero,
                        verbose=verbose-1)
-        elif (array_type == "short"):
+        elif (array_type in ("unsigned int", "uint32")):
+            return myVTK.createUnsignedIntArray(
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type in ("short", "int16")):
             return myVTK.createShortArray(
-                       name=array_name,
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type in ("unsigned short", "uint16")):
+            return myVTK.createUnsignedShortArray(
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type in ("char", "int8")):
+            return myVTK.createCharArray(
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type in ("unsigned char", "uint8")):
+            return myVTK.createUnsignedCharArray(
+                       name=name,
                        n_components=n_components,
                        n_tuples=n_tuples,
                        init_to_zero=init_to_zero,
