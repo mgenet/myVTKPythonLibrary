@@ -296,7 +296,7 @@ def generateImages(
         mapping.init_t(t)
         for k_point in xrange(image.GetNumberOfPoints()):
             image.GetPoint(k_point, x0)
-            print "x0 = " + str(x0)
+            #print "x0 = " + str(x0)
             x[:] = x0[:]
             I = 0.
             if   (images["n_dim"] == 1):
@@ -318,9 +318,9 @@ def generateImages(
                         x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_int"][1]
                         for k_x in xrange(images["n_int"][0]):
                             x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_int"][0]
-                            print "x = " + str(x)
+                            #print "x = " + str(x)
                             I += image_data.I0(mapping.X(x))
-                            print "I = " + str(I)
+                            #print "I = " + str(I)
                 I /= images["n_int"][2]*images["n_int"][1]*images["n_int"][0]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
