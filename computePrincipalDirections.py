@@ -65,9 +65,9 @@ def computePrincipalDirections(
             #if (verbose): print + 'vec =', vec
             #if (verbose): print + 'det =', numpy.linalg.det(vec)
 
-            matrix_Lmin = [val[0]]
-            matrix_Lmid = [val[1]]
-            matrix_Lmax = [val[2]]
+            matrix_Lmin = val[0]
+            matrix_Lmid = val[1]
+            matrix_Lmax = val[2]
 
             matrix_Vmax = vec[:,2]
             matrix_Vmid = vec[:,1]
@@ -78,19 +78,19 @@ def computePrincipalDirections(
                 matrix_Vmid = math.copysign(1, numpy.dot(matrix_Vmid, eLL)) * matrix_Vmid
             matrix_Vmin = numpy.cross(matrix_Vmax, matrix_Vmid)
         else:
-            matrix_Lmin = [0.]
-            matrix_Lmid = [0.]
-            matrix_Lmax = [0.]
+            matrix_Lmin = 0.
+            matrix_Lmid = 0.
+            matrix_Lmax = 0.
             matrix_Vmin = [0.]*3
             matrix_Vmid = [0.]*3
             matrix_Vmax = [0.]*3
 
-        farray_Lmin.InsertTuple(k_tuple, matrix_Lmin)
-        farray_Lmid.InsertTuple(k_tuple, matrix_Lmid)
-        farray_Lmax.InsertTuple(k_tuple, matrix_Lmax)
-        farray_Vmin.InsertTuple(k_tuple, matrix_Vmin)
-        farray_Vmid.InsertTuple(k_tuple, matrix_Vmid)
-        farray_Vmax.InsertTuple(k_tuple, matrix_Vmax)
+        farray_Lmin.SetTuple1(k_tuple, matrix_Lmin)
+        farray_Lmid.SetTuple1(k_tuple, matrix_Lmid)
+        farray_Lmax.SetTuple1(k_tuple, matrix_Lmax)
+        farray_Vmin.SetTuple(k_tuple, matrix_Vmin)
+        farray_Vmid.SetTuple(k_tuple, matrix_Vmid)
+        farray_Vmax.SetTuple(k_tuple, matrix_Vmax)
 
     return (farray_Lmin,
             farray_Lmid,

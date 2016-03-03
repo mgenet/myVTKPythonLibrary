@@ -35,10 +35,17 @@ def addMappingFromPointsToCells(
          mesh=ugrid_cells,
          verbose=verbose-1)
 
-    iarray_k_cell = createIntArray("k_cell", 1, n_points)
+    iarray_k_cell = createIntArray(
+        name="k_cell",
+        n_components=1,
+        n_tuples=n_points,
+        verbose=verbose-1)
 
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
-        point = ugrid_points.GetPoint(k_point)
+        ugrid_points.GetPoint(
+            k_point,
+            point)
 
         cell_locator.FindClosestPoint(
             point,
@@ -48,10 +55,12 @@ def addMappingFromPointsToCells(
             subId,
             dist)
         #k_cell = cell_locator.FindCell(point)
-
-        iarray_k_cell.InsertTuple(k_point, [k_cell])
         #print "k_point = " + str(k_point)
         #print "k_cell = " + str(k_cell)
 
-    #ugrid_points.GetPointData().AddArray(iarray_k_cell)
+        iarray_k_cell.SetTuple1(
+            k_point,
+            k_cell)
+
+    ugrid_points.GetPointData().AddArray(iarray_k_cell)
     ugrid_points.GetCellData().AddArray(iarray_k_cell)

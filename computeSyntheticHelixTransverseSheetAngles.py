@@ -80,7 +80,7 @@ def computeSyntheticHelixTransverseSheetAngles(
     for k_tuple in xrange(n_tuples):
         #print "k_tuple = " + str(k_tuple)
 
-        angles_in_degrees = numpy.array([0.]*3)
+        angles_in_degrees = numpy.empty(3)
         for k_angle in xrange(3):
             #print "k_angle = " + str(k_angle)
 
@@ -139,7 +139,9 @@ def computeSyntheticHelixTransverseSheetAngles(
                 if (sigma > 0.):
                     angles_in_degrees[k_angle] += random.normalvariate(0., sigma)
                     angles_in_degrees[k_angle]  = (angles_in_degrees[k_angle]+90)%180-90
-                farray_angles[k_angle].InsertTuple(k_tuple, [angles_in_degrees[k_angle]])
+                farray_angles[k_angle].SetTuple1(
+                    k_tuple,
+                    angles_in_degrees[k_angle])
 
     return (farray_angle_helix,
             farray_angle_trans,

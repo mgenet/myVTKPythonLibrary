@@ -41,7 +41,7 @@ def computeHelixAngles(
         eF -= numpy.dot(eF, eRR) * eRR
         eF /= numpy.linalg.norm(eF)
         helix_angle = math.copysign(1., numpy.dot(eF, eCC)) * math.asin(min(1., max(-1., numpy.dot(eF, eLL)))) * (180./math.pi)
-        farray_angle_helix.InsertTuple(k_tuple, [helix_angle])
+        farray_angle_helix.SetTuple1(k_tuple, helix_angle)
 
     return farray_angle_helix
 

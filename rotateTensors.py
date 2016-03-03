@@ -50,6 +50,6 @@ def rotateTensors(
         elif (storage == "Fmat"):
             new_tensor = numpy.reshape(new_tensor, 9, order='F')
 
-        new_tensors.InsertTuple(k_tuple, new_tensor)
+        new_tensors.SetTuple(k_tuple, new_tensor)
 
     return new_tensors

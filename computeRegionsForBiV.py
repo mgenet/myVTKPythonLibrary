@@ -81,11 +81,11 @@ def computeRegionsForBiV(
             dist_epi)
 
         if   (dist_endRV == max(dist_endLV, dist_endRV, dist_epi)):
-            iarray_region.SetTuple(k_point, [0])
+            iarray_region.SetTuple1(k_point, 0)
         elif (dist_epi == max(dist_endLV, dist_endRV, dist_epi)):
-            iarray_region.SetTuple(k_point, [1])
+            iarray_region.SetTuple1(k_point, 1)
         elif (dist_endLV == max(dist_endLV, dist_endRV, dist_epi)):
-            iarray_region.SetTuple(k_point, [2])
+            iarray_region.SetTuple1(k_point, 2)
 
     return iarray_region
 

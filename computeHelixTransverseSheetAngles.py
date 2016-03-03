@@ -49,13 +49,13 @@ def computeHelixTransverseSheetAngles(
         eF -= numpy.dot(eF, eRR) * eRR
         eF /= numpy.linalg.norm(eF)
         angle_helix = math.copysign(1., numpy.dot(eF, eCC)) * math.asin(min(1., max(-1., numpy.dot(eF, eLL)))) * (180./math.pi)
-        farray_angle_helix.InsertTuple(k_tuple, [angle_helix])
+        farray_angle_helix.SetTuple1(k_tuple, angle_helix)
 
         eF  = numpy.array(farray_eF.GetTuple(k_tuple))
         eF -= numpy.dot(eF, eLL) * eLL
         eF /= numpy.linalg.norm(eF)
         angle_trans = math.copysign(-1., numpy.dot(eF, eCC)) * math.asin(min(1., max(-1., numpy.dot(eF, eRR)))) * (180./math.pi)
-        farray_angle_trans.InsertTuple(k_tuple, [angle_trans])
+        farray_angle_trans.SetTuple1(k_tuple, angle_trans)
 
         #if (use_new_definition):
             #assert 0, "TODO"

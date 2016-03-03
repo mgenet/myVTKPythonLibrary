@@ -25,8 +25,8 @@ def computeCylindricalCoordinatesAndBasis(
     myVTK.myPrint(verbose, "*** computeCylindricalCoordinatesAndBasis ***")
 
     assert (points_AB.GetNumberOfPoints() >= 2), "points_AB must have at least two points. Aborting."
-    point_A = numpy.array([0.]*3)
-    point_B = numpy.array([0.]*3)
+    point_A = numpy.empty(3)
+    point_B = numpy.empty(3)
     points_AB.GetPoint(                              0, point_A)
     points_AB.GetPoint(points_AB.GetNumberOfPoints()-1, point_B)
     eL  = point_B - point_A
@@ -63,19 +63,19 @@ def computeCylindricalCoordinatesAndBasis(
         eC /= numpy.linalg.norm(eC)
         eR  = numpy.cross(eC, eL)
 
-        farray_eR.InsertTuple(k_point, eR)
-        farray_eC.InsertTuple(k_point, eC)
-        farray_eL.InsertTuple(k_point, eL)
+        farray_eR.SetTuple(k_point, eR)
+        farray_eC.SetTuple(k_point, eC)
+        farray_eL.SetTuple(k_point, eL)
 
         r = numpy.dot(point - point_A, eR)
-        farray_r.InsertTuple(k_point, [r])
+        farray_r.SetTuple1(k_point, r)
 
         c  = math.atan2(numpy.dot(eR, AD), numpy.dot(eR, AC))
         c += (c<0.)*(2*math.pi)
-        farray_c.InsertTuple(k_point, [c])
+        farray_c.SetTuple1(k_point, c)
 
         l = numpy.dot(point - point_A, eL)
-        farray_l.InsertTuple(k_point, [l])
+        farray_l.SetTuple1(k_point, l)
 
     return (farray_r,
             farray_c,

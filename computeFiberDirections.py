@@ -73,9 +73,9 @@ def computeFiberDirections(
         assert (round(numpy.linalg.norm(eN),1) == 1.0),\
             "|eN| = " + str(numpy.linalg.norm(eN)) + "≠ 1. Aborting"
 
-        farray_eF.InsertTuple(k_tuple, eF)
-        farray_eS.InsertTuple(k_tuple, eS)
-        farray_eN.InsertTuple(k_tuple, eN)
+        farray_eF.SetTuple(k_tuple, eF)
+        farray_eS.SetTuple(k_tuple, eS)
+        farray_eN.SetTuple(k_tuple, eN)
 
     return (farray_eF,
             farray_eS,

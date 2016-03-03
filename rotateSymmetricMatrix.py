@@ -63,6 +63,6 @@ def rotateSymmetricMatrix(
         elif (old_array_storage == "Fmat"):
             new_matrix = numpy.reshape(new_matrix, 9, order='F')
 
-        new_array.InsertTuple(k_tuple, new_matrix)
+        new_array.SetTuple(k_tuple, new_matrix)
 
     return new_array

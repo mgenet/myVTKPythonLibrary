@@ -50,9 +50,9 @@ def computeCartesianCoordinates(
         yy = (point[1] - ymin) / dy
         zz = (point[2] - zmin) / dz
 
-        farray_xx.InsertTuple(k_point, [xx])
-        farray_yy.InsertTuple(k_point, [yy])
-        farray_zz.InsertTuple(k_point, [zz])
+        farray_xx.SetTuple1(k_point, xx)
+        farray_yy.SetTuple1(k_point, yy)
+        farray_zz.SetTuple1(k_point, zz)
 
     return (farray_xx,
             farray_yy,

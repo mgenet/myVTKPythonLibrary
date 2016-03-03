@@ -45,7 +45,7 @@ def computeSectorsForLV(
 
             sector_id = k_l * n_c * n_r + k_c * n_r + k_r
 
-        iarray_sector.SetTuple(k_cell, [sector_id])
+        iarray_sector.SetTuple1(k_cell, sector_id)
 
     return iarray_sector
 
@@ -118,7 +118,7 @@ def computeSectorsForBiV(
             if (region_id >= 2):
                 sector_id += n_r[1] * n_c[1] * n_l[1]
 
-        iarray_sector.SetTuple(k_cell, [sector_id])
+        iarray_sector.SetTuple1(k_cell, sector_id)
 
     return iarray_sector
 

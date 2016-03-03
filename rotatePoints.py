@@ -30,8 +30,7 @@ def rotatePoints(
     new_points = vtk.vtkPoints()
     new_points.SetNumberOfPoints(n_points)
 
-    old_point = numpy.array([0.]*3)
-
+    old_point = numpy.empty(3)
     for k_point in xrange(n_points):
         old_points.GetPoint(k_point, old_point)
         #print old_point

@@ -300,9 +300,9 @@ def computeHelixTransverseSheetAngles2(
         trans *= 180/math.pi
         sheet *= 180/math.pi
 
-        farray_angle_helix.InsertTuple(k_tuple, [helix])
-        farray_angle_trans.InsertTuple(k_tuple, [trans])
-        farray_angle_sheet.InsertTuple(k_tuple, [sheet])
+        farray_angle_helix.SetTuple1(k_tuple, helix)
+        farray_angle_trans.SetTuple1(k_tuple, trans)
+        farray_angle_sheet.SetTuple1(k_tuple, sheet)
 
     return (farray_angle_helix,
             farray_angle_trans,

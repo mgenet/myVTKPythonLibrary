@@ -130,12 +130,12 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
 
             eLL = numpy.cross(eRR, eCC)
 
-        farray_rr.InsertTuple(k_point, [rr])
-        farray_cc.InsertTuple(k_point, [cc])
-        farray_ll.InsertTuple(k_point, [ll])
-        farray_eRR.InsertTuple(k_point, eRR)
-        farray_eCC.InsertTuple(k_point, eCC)
-        farray_eLL.InsertTuple(k_point, eLL)
+        farray_rr.SetTuple1(k_point, rr)
+        farray_cc.SetTuple1(k_point, cc)
+        farray_ll.SetTuple1(k_point, ll)
+        farray_eRR.SetTuple(k_point, eRR)
+        farray_eCC.SetTuple(k_point, eCC)
+        farray_eLL.SetTuple(k_point, eLL)
 
     return (farray_rr,
             farray_cc,
@@ -425,12 +425,12 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
 
                 eLL = numpy.cross(eRR, eCC)
 
-        farray_rr.InsertTuple(k_point, [rr])
-        farray_cc.InsertTuple(k_point, [cc])
-        farray_ll.InsertTuple(k_point, [ll])
-        farray_eRR.InsertTuple(k_point, eRR)
-        farray_eCC.InsertTuple(k_point, eCC)
-        farray_eLL.InsertTuple(k_point, eLL)
+        farray_rr.SetTuple1(k_point, rr)
+        farray_cc.SetTuple1(k_point, cc)
+        farray_ll.SetTuple1(k_point, ll)
+        farray_eRR.SetTuple(k_point, eRR)
+        farray_eCC.SetTuple(k_point, eCC)
+        farray_eLL.SetTuple(k_point, eLL)
 
     return (farray_rr,
             farray_cc,

@@ -95,9 +95,9 @@ def mapDataSetToPointData(
                 avg = [0]*n_components
                 std = [0]*n_components
                 rat = [0]*n_components
-            farrays_avg[farray_name].InsertTuple(k_point, avg)
-            farrays_std[farray_name].InsertTuple(k_point, std)
-            farrays_rat[farray_name].InsertTuple(k_point, rat)
+            farrays_avg[farray_name].SetTuple(k_point, avg)
+            farrays_std[farray_name].SetTuple(k_point, std)
+            farrays_rat[farray_name].SetTuple(k_point, rat)
 
     for farray_name in farray_names:
         mesh_to.GetPointData().AddArray(farrays_avg[farray_name])

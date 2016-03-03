@@ -25,11 +25,11 @@ def computeABPointsFromOrientedBoundingBox(
 
     center = numpy.array(mesh.GetCenter())
 
-    res_corner = numpy.array([0.]*3)
-    res_max = numpy.array([0.]*3)
-    res_mid = numpy.array([0.]*3)
-    res_min = numpy.array([0.]*3)
-    res_size = numpy.array([0.]*3)
+    res_corner = numpy.empty(3)
+    res_max = numpy.empty(3)
+    res_mid = numpy.empty(3)
+    res_min = numpy.empty(3)
+    res_size = numpy.empty(3)
     obb_tree = vtk.vtkOBBTree()
     obb_tree.ComputeOBB(
         mesh,

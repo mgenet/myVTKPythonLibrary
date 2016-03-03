@@ -44,9 +44,15 @@ def readMatLabImage(
     #cell = vtk.vtkVertex()
 
     if (field_type == "int"):
-        array_data = myVTK.createIntArray(field_name, 1, n_pixels)
+        array_data = myVTK.createIntArray(
+            name=field_name,
+            n_components=1,
+            n_tuples=n_pixels)
     elif (field_type == "double"):
-        array_data = myVTK.createFloatArray(field_name, 1, n_pixels)
+        array_data = myVTK.createFloatArray(
+            name=field_name,
+            n_components=1,
+            n_tuples=n_pixels)
 
     k_pixel = 0
     for k_z in xrange(n_pixels_z):
@@ -59,14 +65,14 @@ def readMatLabImage(
                 #cell.GetPointIds().SetId(0, k_pixel)
                 #cell_array.InsertNextCell(cell)
 
-                #array_data.InsertTuple(k_pixel, [data[n_pixels_y-1-k_y][n_pixels_x-1-k_x][k_z]])
-                #array_data.InsertTuple(k_pixel, [data[n_pixels_y-1-k_y][k_x][k_z]])
-                #array_data.InsertTuple(k_pixel, [data[k_y][n_pixels_x-1-k_x][k_z]])
-                array_data.InsertTuple(k_pixel, [data[k_y][k_x][k_z]])
-                #array_data.InsertTuple(k_pixel, [data[n_pixels_x-1-k_x][n_pixels_y-1-k_y][k_z]])
-                #array_data.InsertTuple(k_pixel, [data[n_pixels_x-1-k_x][k_y][k_z]])
-                #array_data.InsertTuple(k_pixel, [data[k_x][n_pixels_y-1-k_y][k_z]])
-                #array_data.InsertTuple(k_pixel, [data[k_x][k_y][k_z]])
+                #array_data.SetTuple1(k_pixel, data[n_pixels_y-1-k_y][n_pixels_x-1-k_x][k_z])
+                #array_data.SetTuple1(k_pixel, data[n_pixels_y-1-k_y][k_x][k_z])
+                #array_data.SetTuple1(k_pixel, data[k_y][n_pixels_x-1-k_x][k_z])
+                array_data.SetTuple1(k_pixel, data[k_y][k_x][k_z])
+                #array_data.SetTuple1(k_pixel, data[n_pixels_x-1-k_x][n_pixels_y-1-k_y][k_z])
+                #array_data.SetTuple1(k_pixel, data[n_pixels_x-1-k_x][k_y][k_z])
+                #array_data.SetTuple1(k_pixel, data[k_x][n_pixels_y-1-k_y][k_z])
+                #array_data.SetTuple1(k_pixel, data[k_x][k_y][k_z])
 
                 k_pixel += 1
 

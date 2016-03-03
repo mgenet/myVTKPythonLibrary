@@ -39,7 +39,7 @@ def readDynaDeformationGradients(
     F_array = myVTK.createFloatArray(array_name, 9, n_cells)
 
     for k_cell in xrange(n_cells):
-        F_array.InsertTuple(k_cell, F_list[k_cell])
+        F_array.SetTuple(k_cell, F_list[k_cell])
 
     myVTK.myPrint(verbose, "n_tuples = " + str(F_array.GetNumberOfTuples()))
 

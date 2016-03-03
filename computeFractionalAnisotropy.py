@@ -36,9 +36,9 @@ def computeFractionalAnisotropy(
         FA12 = ((e1-e2)**2)**(0.5) / (e1**2+e2**2)**(0.5)
         FA23 = ((e2-e3)**2)**(0.5) / (e2**2+e3**2)**(0.5)
 
-        farray_FA.InsertTuple(k_tuple, [FA])
-        farray_FA12.InsertTuple(k_tuple, [FA12])
-        farray_FA23.InsertTuple(k_tuple, [FA23])
+        farray_FA.SetTuple1(k_tuple, FA)
+        farray_FA12.SetTuple1(k_tuple, FA12)
+        farray_FA23.SetTuple1(k_tuple, FA23)
 
     return (farray_FA,
             farray_FA12,

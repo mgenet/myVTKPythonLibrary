@@ -39,19 +39,19 @@ def computeSystolicStrains(
 
         C = numpy.dot(numpy.transpose(F_dia), F_dia)
         E = (C - numpy.eye(3))/2
-        farray_E_dia.InsertTuple(k_tuple, mat_sym_to_vec_col(E))
+        farray_E_dia.SetTuple(k_tuple, mat_sym_to_vec_col(E))
 
         C = numpy.dot(numpy.transpose(F_sys), F_sys)
         E = (C - numpy.eye(3))/2
-        farray_E_sys.InsertTuple(k_tuple, mat_sym_to_vec_col(E))
+        farray_E_sys.SetTuple(k_tuple, mat_sym_to_vec_col(E))
 
         F = numpy.dot(F_sys, numpy.linalg.inv(F_dia))
-        farray_F_num.InsertTuple(k_tuple, numpy.reshape(F, 9, order='C'))
+        farray_F_num.SetTuple(k_tuple, numpy.reshape(F, 9, order='C'))
         #print 'F =', F
 
         C = numpy.dot(numpy.transpose(F), F)
         E = (C - numpy.eye(3))/2
-        farray_E_num.InsertTuple(k_tuple, mat_sym_to_vec_col(E))
+        farray_E_num.SetTuple(k_tuple, mat_sym_to_vec_col(E))
 
     return (farray_E_dia,
             farray_E_sys,

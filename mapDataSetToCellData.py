@@ -111,8 +111,8 @@ def mapDataSetToCellData(
             else:
                 avg = [0]*farray_n_components
                 std = [0]*farray_n_components
-            farrays_avg[farray_name].InsertTuple(k_cell, avg)
-            farrays_std[farray_name].InsertTuple(k_cell, std)
+            farrays_avg[farray_name].SetTuple(k_cell, avg)
+            farrays_std[farray_name].SetTuple(k_cell, std)
 
     for farray_name in farray_names:
         mesh_to.GetCellData().AddArray(farrays_avg[farray_name])

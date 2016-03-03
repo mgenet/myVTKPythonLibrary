@@ -49,9 +49,9 @@ def computeSyntheticHelixAngles2(
 
     if (farray_angle_helix == None):
         farray_angle_helix = myVTK.createFloatArray(
-            "angle_helix",
-            1,
-            n_tuples)
+            name="angle_helix",
+            n_components=1,
+            n_tuples=n_tuples)
     else:
         assert (farray_angle_helix.GetNumberOfTuples() == n_tuples)
 
@@ -106,9 +106,9 @@ def computeSyntheticHelixAngles2(
             helix_angle_in_degrees += random.normalvariate(0., sigma)
             helix_angle_in_degrees  = (helix_angle_in_degrees+90.)%180.-90.
 
-        farray_angle_helix.InsertTuple(
+        farray_angle_helix.SetTuple1(
             k_tuple,
-            [helix_angle_in_degrees])
+            helix_angle_in_degrees)
 
     return farray_angle_helix
 
