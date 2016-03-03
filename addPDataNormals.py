@@ -19,6 +19,7 @@ import myVTKPythonLibrary as myVTK
 
 def addPDataNormals(
         pdata,
+        orient_outward=1,
         verbose=1):
 
     myVTK.myPrint(verbose, "*** addPDataNormals ***")
@@ -33,29 +34,31 @@ def addPDataNormals(
     poly_data_normals.Update()
     pdata = poly_data_normals.GetOutput()
 
-    mesh_center = numpy.array(pdata.GetCenter())
-    #print mesh_center
+    if (orient_outward):
+        cell_centers = myVTK.getCellCenters(
+            mesh=pdata,
+            verbose=verbose-1)
 
-    cell_centers = myVTK.getCellCenters(
-        mesh=pdata,
-        verbose=verbose-1)
+        mesh_center = numpy.array(pdata.GetCenter())
 
-    cnt_pos = 0
-    cnt_neg = 0
-    for k_cell in xrange(pdata.GetNumberOfCells()):
-        cell_center = cell_centers.GetPoint(k_cell)
-        outward  = cell_center-mesh_center
-        outward /= numpy.linalg.norm(outward)
-        normal = pdata.GetCellData().GetNormals().GetTuple(k_cell)
-        proj = numpy.dot(outward, normal)
-        if (proj > 0): cnt_pos += 1
-        else:          cnt_neg += 1
-    #print cnt_pos
-    #print cnt_neg
+        normals = pdata.GetCellData().GetNormals()
 
-    if (cnt_neg > cnt_pos):
-        poly_data_normals.FlipNormalsOn()
-        poly_data_normals.Update()
-        pdata = poly_data_normals.GetOutput()
+        cnt_pos = 0
+        cnt_neg = 0
+        for k_cell in xrange(pdata.GetNumberOfCells()):
+            cell_center = cell_centers.GetPoint(k_cell)
+            outward  = cell_center-mesh_center
+            outward /= numpy.linalg.norm(outward)
+            normal = normals.GetTuple(k_cell)
+            proj = numpy.dot(outward, normal)
+            if (proj > 0): cnt_pos += 1
+            else:          cnt_neg += 1
+        #print cnt_pos
+        #print cnt_neg
+
+        if (cnt_neg > cnt_pos):
+            poly_data_normals.FlipNormalsOn()
+            poly_data_normals.Update()
+            pdata = poly_data_normals.GetOutput()
 
     return pdata
