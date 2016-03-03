@@ -446,6 +446,13 @@ def warpMesh(
     n_points = mesh.GetNumberOfPoints()
     n_cells = mesh.GetNumberOfCells()
 
+    if os.path.exists(images["images_folder"]+"/"+mesh_basename+"-WithLocalBasis.vtk"):
+        ref_mesh = myVTK.readUGrid(
+            filename=images["images_folder"]+"/"+mesh_basename+"-WithLocalBasis.vtk",
+            verbose=0)
+    else:
+        ref_mesh = None
+
     farray_disp = myVTK.createFloatArray(
         name="displacement",
         n_components=3,
@@ -468,10 +475,18 @@ def warpMesh(
             U[:] = x[:] - X[:]
             farray_disp.SetTuple(k_point, U)
 
+        myVTK.computeStrainsFromDisplacements(
+            mesh=mesh,
+            displacement_array_name="displacement",
+            ref_mesh=ref_mesh,
+            verbose=0)
+
         myVTK.writeUGrid(
             ugrid=mesh,
             filename=images["images_folder"]+"/"+mesh_basename+"_"+str(k_frame).zfill(2)+".vtk",
             verbose=0)
+
+
 
 
 
