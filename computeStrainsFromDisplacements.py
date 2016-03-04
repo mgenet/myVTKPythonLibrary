@@ -20,7 +20,7 @@ from mat_vec_tools import *
 
 def computeStrainsFromDisplacements(
         mesh,
-        displacement_array_name="displacement",
+        disp_array_name="displacement",
         ref_mesh=None,
         verbose=1):
 
@@ -29,8 +29,8 @@ def computeStrainsFromDisplacements(
     n_points = mesh.GetNumberOfPoints()
     n_cells = mesh.GetNumberOfCells()
 
-    assert (mesh.GetPointData().HasArray(displacement_array_name))
-    mesh.GetPointData().SetActiveVectors(displacement_array_name)
+    assert (mesh.GetPointData().HasArray(disp_array_name))
+    mesh.GetPointData().SetActiveVectors(disp_array_name)
     cell_derivatives = vtk.vtkCellDerivatives()
     cell_derivatives.SetVectorModeToPassVectors()
     cell_derivatives.SetTensorModeToComputeGradient()
@@ -41,14 +41,14 @@ def computeStrainsFromDisplacements(
     cell_derivatives.Update()
     farray_gu = cell_derivatives.GetOutput().GetCellData().GetArray("VectorGradient")
 
-    if (ref_mesh is None):
+    if (ref_mesh is not None):
         farray_strain = myVTK.createFloatArray(
-            name="Strain",
+            name="Strain_CAR",
             n_components=6,
             n_tuples=n_cells)
     else:
         farray_strain = myVTK.createFloatArray(
-            name="Strain_CAR",
+            name="Strain",
             n_components=6,
             n_tuples=n_cells)
     mesh.GetCellData().AddArray(farray_strain)
