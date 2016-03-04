@@ -10,6 +10,7 @@
 ###                                                                  ###
 ########################################################################
 
+import os
 import vtk
 
 import myVTKPythonLibrary as myVTK
@@ -21,6 +22,8 @@ def readImage(
         verbose=1):
 
     myVTK.myPrint(verbose, "*** readImage: " + filename + " ***")
+
+    assert (os.path.isfile(filename)), "Wrong filename. Aborting."
 
     if ('vtk' in filename):
         image_reader = vtk.vtkImageDataReader()
