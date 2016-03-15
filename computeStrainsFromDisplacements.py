@@ -52,19 +52,20 @@ def computeStrainsFromDisplacements(
             n_components=6,
             n_tuples=n_cells)
     mesh.GetCellData().AddArray(farray_strain)
+    I = numpy.eye(3)
     for k_cell in range(n_cells):
         GU = numpy.reshape(farray_gu.GetTuple(k_cell), (3,3), "F")
-        E = (GU + numpy.transpose(GU) + numpy.dot(numpy.transpose(GU), GU))/2
+        F = I + GU
+        C = numpy.dot(numpy.transpose(F), F)
+        E = (C - I)/2
         farray_strain.SetTuple(k_cell, mat_sym_to_vec_col(E))
+        #if (add_almansi_strain):
+            #Finv = numpy.linalg.inv(F)
+            #c = numpy.dot(numpy.transpose(Finv), Finv)
+            #e = (I - c)/2
+            #farray_almansi.SetTuple(k_cell, mat_sym_to_vec_col(e))
 
-    if (ref_mesh is not None):
-        assert (ref_mesh.GetCellData().HasArray("eR"))
-        assert (ref_mesh.GetCellData().HasArray("eC"))
-        assert (ref_mesh.GetCellData().HasArray("eL"))
-        assert (ref_mesh.GetCellData().HasArray("eRR"))
-        assert (ref_mesh.GetCellData().HasArray("eCC"))
-        assert (ref_mesh.GetCellData().HasArray("eLL"))
-
+    if (ref_mesh is not None) and (ref_mesh.GetCellData().HasArray("eR")) and (ref_mesh.GetCellData().HasArray("eC")) and (ref_mesh.GetCellData().HasArray("eL")):
         farray_strain_cyl = myVTK.rotateSymmetricMatrix(
             old_array=mesh.GetCellData().GetArray("Strain_CAR"),
             out_vecs=[ref_mesh.GetCellData().GetArray("eR"),
@@ -74,6 +75,7 @@ def computeStrainsFromDisplacements(
         farray_strain_cyl.SetName("Strain_CYL")
         mesh.GetCellData().AddArray(farray_strain_cyl)
 
+    if (ref_mesh is not None) and (ref_mesh.GetCellData().HasArray("eRR")) and (ref_mesh.GetCellData().HasArray("eCC")) and (ref_mesh.GetCellData().HasArray("eLL")):
         farray_strain_pps = myVTK.rotateSymmetricMatrix(
             old_array=mesh.GetCellData().GetArray("Strain_CAR"),
             out_vecs=[ref_mesh.GetCellData().GetArray("eRR"),
@@ -82,4 +84,3 @@ def computeStrainsFromDisplacements(
             verbose=0)
         farray_strain_pps.SetName("Strain_PPS")
         mesh.GetCellData().AddArray(farray_strain_pps)
-
