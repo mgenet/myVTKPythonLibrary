@@ -20,93 +20,162 @@ import myVTKPythonLibrary as myVTK
 
 ########################################################################
 
-class ImageData():
-    def __init__(self, images, structure, texture, noise):
-        self.images = images
+#class ImagesInfo():
+    #def __init__(self, n_dim, L, n_voxels, n_integration, T, n_frames, data_type, images_folder, images_basename):
+        #assert (n_dim in (1,2,3))
+        #self.n_dim = n_dim
 
-        self.structure = structure
-        if (self.structure["type"] == "no"):
+        #if (type(L) == float):
+            #assert (L>0)
+            #self.L = numpy.array([L]*self.n_dim)
+        #elif (type(L) == int):
+            #assert (L>0)
+            #self.L = numpy.array([float(L)]*self.n_dim)
+        #else:
+            #assert (len(L) == self.n_dim)
+            #self.L = numpy.array(L)
+            #assert ((self.L>0).all())
+
+        #if (type(n_voxels) == int):
+            #assert (n_voxels>0)
+            #self.n_voxels = numpy.array([n_voxels]*self.n_dim)
+        #else:
+            #assert (len(n_voxels) == self.n_dim)
+            #self.n_voxels = numpy.array(n_voxels)
+            #assert ((self.n_voxels>0).all())
+
+        #if (type(n_integration) == int):
+            #assert (n_integration>0)
+            #self.n_integration = numpy.array([n_integration]*self.n_dim)
+        #else:
+            #assert (len(n_integration) == self.n_dim)
+            #self.n_integration = numpy.array(n_integration)
+            #assert ((self.n_integration>0).all())
+
+        #assert (T>0.)
+        #self.T = T
+
+        #assert (n_frames>0)
+        #self.n_frames = n_frames
+
+        #assert (data_type in ("int", "float", "unsigned char", "unsigned short", "unsigned int", "unsigned long", "unsigned float" "uint8", "uint16", "uint32", "uint64", "ufloat"))
+        #self.data_type = data_type
+
+        #self.images_folder = images_folder
+        #self.images_basename = images_basename
+
+#class StructureInfo():
+    #def __init__(self, images, type, **kwargs):
+        #assert (type in ("no", "heart"))
+        #self["type"] = type
+        #if (self["type"] == "heart"):
+            #self.Ri = kwargs["Ri"]
+            #self.Re = kwargs["Re"]
+            #if (images.n_dim == 3):
+                #self.Zmin = kwargs["Zmin"] if ("Zmin" in kwargs.keys()) else 0.
+                #self.Zmax = kwargs["Zmax"] if ("Zmax" in kwargs.keys()) else images.L[2]
+
+#class TextureInfo():
+    #def __init__(self, type, **kwargs):
+        #assert (type in ("no", "sine", "sinX", "sinY", "sinZ", "taggX", "taggY", "taggZ"))
+        #self["type"] = type
+
+#class NoiseInfo():
+    #def __init__(self, type, **kwargs):
+        #self["type"] = type
+
+#class DeformationInfo():
+    #def __init__(self, type, **kwargs):
+        #self["type"] = type
+
+#class EvolutionInfo():
+    #def __init__(self, type, **kwargs):
+        #self["type"] = type
+
+########################################################################
+
+class Image():
+    def __init__(self, images, structure, texture, noise):
+        if (structure["type"] == "no"):
             self.I0_structure = self.I0_structure_no
-        elif (self.structure["type"] == "heart"):
-            if (self.images["n_dim"] == 2):
+        elif (structure["type"] == "heart"):
+            if (images["n_dim"] == 2):
+                #self.I0_structure = self.I0_structure_no
                 self.I0_structure = self.I0_structure_heart_2
-                self.L0 = self.images["L"][0]
-                self.L1 = self.images["L"][1]
+                self.L = [images["L"][0], images["L"][1]]
                 self.R = float()
-                self.Ri = self.structure["Ri"]
-                self.Re = self.structure["Re"]
-            elif (self.images["n_dim"] == 3):
+                self.Ri = structure["Ri"]
+                self.Re = structure["Re"]
+            elif (images["n_dim"] == 3):
                 self.I0_structure = self.I0_structure_heart_3
-                self.L0 = self.images["L"][0]
-                self.L1 = self.images["L"][1]
+                self.L = [images["L"][0], images["L"][1], images["L"][2]]
                 self.R = float()
-                self.Ri = self.structure["Ri"]
-                self.Re = self.structure["Re"]
-                self.Zmin = self.structure["Zmin"] if ("Zmin" in self.structure.keys()) else 0.
-                self.Zmax = self.structure["Zmax"] if ("Zmax" in self.structure.keys()) else self.images["L"][2]
+                self.Ri = structure["Ri"]
+                self.Re = structure["Re"]
+                self.Zmin = structure.Zmin if ("Zmin" in structure.keys()) else 0.
+                self.Zmax = structure.Zmax if ("Zmax" in structure.keys()) else images["L"][2]
             else:
                 assert (0), "n_dim must be \"2\" or \"3 for \"heart\" type structure. Aborting."
         else:
             assert (0), "structure type must be \"no\" or \"heart\". Aborting."
 
-        self.texture = texture
-        if (self.texture["type"] == "no"):
+        texture = texture
+        if (texture["type"] == "no"):
             self.I0_texture = self.I0_texture_no
-        elif (self.texture["type"] == "sine"):
-            if   (self.images["n_dim"] == 1):
+        elif (texture["type"] == "sine"):
+            if   (images["n_dim"] == 1):
                 self.I0_texture = self.I0_texture_sine_X
-                self.L0 = self.images["L"][0]
-            elif (self.images["n_dim"] == 2):
+                self.L[0] = images["L"][0]
+            elif (images["n_dim"] == 2):
                 self.I0_texture = self.I0_texture_sine_XY
-                self.L0 = self.images["L"][0]
-                self.L1 = self.images["L"][1]
-            elif (self.images["n_dim"] == 3):
+                self.L[0] = images["L"][0]
+                self.L[1] = images["L"][1]
+            elif (images["n_dim"] == 3):
                 self.I0_texture = self.I0_texture_sine_XYZ
-                self.L0 = self.images["L"][0]
-                self.L1 = self.images["L"][1]
-                self.L2 = self.images["L"][2]
+                self.L[0] = images["L"][0]
+                self.L[1] = images["L"][1]
+                self.L[2] = images["L"][2]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
-        elif (self.texture["type"] == "sinX"):
+        elif (texture["type"] == "sinX"):
             self.I0_texture = self.I0_texture_sine_X
-            self.L0 = self.images["L"][0]
-        elif (self.texture["type"] == "sinY"):
+            self.L[0] = images["L"][0]
+        elif (texture["type"] == "sinY"):
             self.I0_texture = self.I0_texture_sine_Y
-            self.L1 = self.images["L"][1]
-        elif (self.texture["type"] == "sinZ"):
+            self.L[1] = images["L"][1]
+        elif (texture["type"] == "sinZ"):
             self.I0_texture = self.I0_texture_sine_Z
-            self.L2 = self.images["L"][2]
-        elif (self.texture["type"] == "tagging"):
-            if   (self.images["n_dim"] == 1):
+            self.L[2] = images["L"][2]
+        elif (texture["type"] == "tagging"):
+            if   (images["n_dim"] == 1):
                 self.I0_texture = self.I0_texture_tagging_X
-                self.s = self.texture["s"]
-            elif (self.images["n_dim"] == 2):
+                self.s = texture["s"]
+            elif (images["n_dim"] == 2):
                 self.I0_texture = self.I0_texture_tagging_XY
-                self.s = self.texture["s"]
-            elif (self.images["n_dim"] == 3):
+                self.s = texture["s"]
+            elif (images["n_dim"] == 3):
                 self.I0_texture = self.I0_texture_tagging_XYZ
-                self.s = self.texture["s"]
+                self.s = texture["s"]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
-        elif (self.texture["type"] == "taggX"):
+        elif (texture["type"] == "taggX"):
             self.I0_texture = self.I0_texture_tagging_X
-            self.s = self.texture["s"]
-        elif (self.texture["type"] == "taggY"):
+            self.s = texture["s"]
+        elif (texture["type"] == "taggY"):
             self.I0_texture = self.I0_texture_tagging_Y
-            self.s = self.texture["s"]
-        elif (self.texture["type"] == "taggZ"):
+            self.s = texture["s"]
+        elif (texture["type"] == "taggZ"):
             self.I0_texture = self.I0_texture_tagging_Z
-            self.s = self.texture["s"]
+            self.s = texture["s"]
         else:
             assert (0), "texture type must be \"no\", \"sine\", \"sinX\", \"sinY\", \"sinZ\", \"tagging\", \"taggX\", \"taggY\" or \"taggZ\". Aborting."
 
-        self.noise = noise
-        if (self.noise["type"] == "no"):
+        if (noise["type"] == "no"):
             self.I0_noise = self.I0_noise_no
-        elif (self.noise["type"] == "normal"):
+        elif (noise["type"] == "normal"):
             self.I0_noise = self.I0_noise_normal
-            self.avg = self.noise["avg"]  if ("avg" in self.noise.keys()) else 0.
-            self.std = self.noise["std"]
+            self.avg = noise.avg  if ("avg" in noise.keys()) else 0.
+            self.std = noise.std
         else:
             assert (0), "noise type must be \"no\" or \"normal\". Aborting."
 
@@ -117,14 +186,14 @@ class ImageData():
         return 1.
 
     def I0_structure_heart_2(self, X):
-        self.R = ((X[0]-self.L0/2)**2 + (X[1]-self.L1/2)**2)**(1./2)
+        self.R = ((X[0]-self.L[0]/2)**2 + (X[1]-self.L[1]/2)**2)**(1./2)
         if (self.R >= self.Ri) and (self.R <= self.Re):
             return 1.
         else:
             return 0.
 
     def I0_structure_heart_3(self, X):
-        self.R = ((X[0]-self.L0/2)**2 + (X[1]-self.L1/2)**2)**(1./2)
+        self.R = ((X[0]-self.L[0]/2)**2 + (X[1]-self.L[1]/2)**2)**(1./2)
         if (self.R >= self.Ri) and (self.R <= self.Re) and (X[2] >= self.Zmin) and (X[2] <= self.Zmax):
             return 1.
         else:
@@ -134,19 +203,19 @@ class ImageData():
         return 1.
 
     def I0_texture_sine_X(self, X):
-        return math.sin(math.pi*X[0]/self.L0)**2
+        return math.sin(math.pi*X[0]/self.L[0])**2
 
     def I0_texture_sine_Y(self, X):
-        return math.sin(math.pi*X[1]/self.L1)**2
+        return math.sin(math.pi*X[1]/self.L[1])**2
 
     def I0_texture_sine_Z(self, X):
-        return math.sin(math.pi*X[2]/self.L2)**2
+        return math.sin(math.pi*X[2]/self.L[2])**2
 
     def I0_texture_sine_XY(self, X):
-        return math.sin(math.pi*X[0]/self.L0)**2 * math.sin(math.pi*X[1]/self.L1)**2
+        return math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2
 
     def I0_texture_sine_XYZ(self, X):
-        return math.sin(math.pi*X[0]/self.L0)**2 * math.sin(math.pi*X[1]/self.L1)**2 * math.sin(math.pi*X[2]/self.L2)**2
+        return math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2 * math.sin(math.pi*X[2]/self.L[2])**2
 
     def I0_texture_tagging_X(self, X):
         return math.sin(math.pi*X[0]/self.s)**2
@@ -173,10 +242,6 @@ class ImageData():
 
 class Mapping:
     def __init__(self, images, structure, deformation, evolution):
-        self.images = images
-
-        self.structure = structure
-
         self.deformation = deformation
         if (self.deformation["type"] == "no"):
             self.init_t = self.init_t_no
@@ -187,7 +252,7 @@ class Mapping:
             self.X = self.X_homogeneous
             self.x = self.x_homogeneous
         elif (self.deformation["type"] == "heart"):
-            assert (self.structure["type"] == "heart"), "structure type must be \"heart\" for \"heart\" type deformation. Aborting."
+            assert (structure["type"] == "heart"), "structure type must be \"heart\" for \"heart\" type deformation. Aborting."
             self.init_t = self.init_t_heart
             self.X = self.X_heart
             self.x = self.x_heart
@@ -197,16 +262,18 @@ class Mapping:
             self.RT = numpy.empty(2)
             self.X_full = numpy.empty(3)
             self.x_full = numpy.empty(3)
-            self.L0 = self.images["L"][0]
-            self.L1 = self.images["L"][1]
+            self.L = images["L"]
+            self.Ri = structure["Ri"]
+            self.Re = structure["Re"]
         else:
             assert (0), "deformation type must be \"no\", \"homogeneous\" or \"heart\". Aborting."
 
-        self.evolution = evolution
-        if (self.evolution["type"] == "linear"):
+        if (evolution["type"] == "linear"):
             self.phi = self.phi_linear
-        elif (self.evolution["type"] == "sine"):
+            self.T = evolution.T
+        elif (evolution["type"] == "sine"):
             self.phi = self.phi_sine
+            self.T = evolution["T"]
         else:
             assert (0), "evolution type must be \"linear\" or \"sine\". Aborting."
 
@@ -214,7 +281,7 @@ class Mapping:
         return t
 
     def phi_sine(self, t):
-        return math.sin(math.pi*t/self.evolution["T"])**2
+        return math.sin(math.pi*t/self.T)**2
 
     def init_t_no(self, t):
         pass
@@ -235,8 +302,8 @@ class Mapping:
         self.Finv = numpy.linalg.inv(self.F)
 
     def init_t_heart(self, t):
-        Ri = self.structure["Ri"]
-        Re = self.structure["Re"]
+        Ri = self.Ri
+        Re = self.Re
         dRi = self.deformation["dRi"]*self.phi(t) if ("dRi" in self.deformation.keys()) else 0.
         dRe = self.deformation["dRi"]*self.phi(t) if ("dRi" in self.deformation.keys()) else 0.
         dTi = self.deformation["dTi"]*self.phi(t) if ("dTi" in self.deformation.keys()) else 0.
@@ -254,16 +321,16 @@ class Mapping:
 
     def X_heart(self, x):
         #print "x = " + str(x)
-        self.x_inplane[0] = x[0] - self.L0/2
-        self.x_inplane[1] = x[1] - self.L1/2
+        self.x_inplane[0] = x[0] - self.L[0]/2
+        self.x_inplane[1] = x[1] - self.L[1]/2
         #print "x_inplane = " + str(self.x_inplane)
         self.rt[0] = numpy.linalg.norm(self.x_inplane)
         self.rt[1] = math.atan2(self.x_inplane[1], self.x_inplane[0])
         #print "rt = " + str(self.rt)
         self.RT[:] = numpy.dot(self.Ainv, self.rt-self.B)
         #print "RT = " + str(self.RT)
-        self.X_full[0] = self.RT[0] * math.cos(self.RT[1]) + self.L0/2
-        self.X_full[1] = self.RT[0] * math.sin(self.RT[1]) + self.L1/2
+        self.X_full[0] = self.RT[0] * math.cos(self.RT[1]) + self.L[0]/2
+        self.X_full[1] = self.RT[0] * math.sin(self.RT[1]) + self.L[1]/2
         self.X_full[2] = x[2]
         #print "X_full = " + str(self.X_full)
         return self.X_full
@@ -276,16 +343,16 @@ class Mapping:
 
     def x_heart(self, X):
         #print "X = " + str(X)
-        self.X_inplane[0] = X[0] - self.L0/2
-        self.X_inplane[1] = X[1] - self.L1/2
+        self.X_inplane[0] = X[0] - self.L[0]/2
+        self.X_inplane[1] = X[1] - self.L[1]/2
         #print "X_inplane = " + str(self.X_inplane)
         self.RT[0] = numpy.linalg.norm(self.X_inplane)
         self.RT[1] = math.atan2(self.X_inplane[1], self.X_inplane[0])
         #print "RT = " + str(self.RT)
         self.rt[:] = numpy.dot(self.A, self.RT) + self.B
         #print "rt = " + str(self.rt)
-        self.x_full[0] = self.rt[0] * math.cos(self.rt[1]) + self.L0/2
-        self.x_full[1] = self.rt[0] * math.sin(self.rt[1]) + self.L1/2
+        self.x_full[0] = self.rt[0] * math.cos(self.rt[1]) + self.L[0]/2
+        self.x_full[1] = self.rt[0] * math.sin(self.rt[1]) + self.L[1]/2
         self.x_full[2] = X[2]
         #print "x_full = " + str(self.x_full)
         return self.x_full
@@ -303,14 +370,14 @@ def generateImages(
 
     myVTK.myPrint(verbose, "*** generateImages ***")
 
-    image = vtk.vtkImageData()
+    vtk_image = vtk.vtkImageData()
 
     if   (images["n_dim"] == 1):
-        image.SetExtent([0, images["n_voxels"][0]-1, 0,                       0, 0,                       0])
+        vtk_image.SetExtent([0, images["n_voxels"][0]-1, 0,                       0, 0,                       0])
     elif (images["n_dim"] == 2):
-        image.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0,                       0])
+        vtk_image.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0,                       0])
     elif (images["n_dim"] == 3):
-        image.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0, images["n_voxels"][2]-1])
+        vtk_image.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0, images["n_voxels"][2]-1])
     else:
         assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
 
@@ -319,17 +386,22 @@ def generateImages(
         spacing = [spacing[0], 1., 1.]
     elif (images["n_dim"] == 2):
         spacing = [spacing[0], spacing[1], 1.]
-    image.SetSpacing(spacing)
+    vtk_image.SetSpacing(spacing)
 
-    origin = numpy.array(image.GetSpacing())/2
+    origin = numpy.array(vtk_image.GetSpacing())/2
     if   (images["n_dim"] == 1):
         origin[1] = 0.
         origin[2] = 0.
     elif (images["n_dim"] == 2):
         origin[2] = 0.
-    image.SetOrigin(origin)
-    image.AllocateScalars(vtk.VTK_FLOAT, 1)
-    image_scalars = image.GetPointData().GetScalars()
+    vtk_image.SetOrigin(origin)
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        vtk_image.AllocateScalars(vtk.VTK_FLOAT, 1)
+    else:
+        vtk_image.SetScalarTypeToFloat();
+        vtk_image.SetNumberOfScalarComponents(1);
+        vtk_image.AllocateScalars()
+    vtk_image_scalars = vtk_image.GetPointData().GetScalars()
 
     if not os.path.exists(images["images_folder"]):
         os.mkdir(images["images_folder"])
@@ -337,58 +409,58 @@ def generateImages(
     x0 = numpy.empty(3)
     x  = numpy.empty(3)
     if   (images["n_dim"] == 1):
-        dx = spacing[0]/images["n_int"][0]
+        dx = spacing[0]/images["n_integration"][0]
     elif (images["n_dim"] == 2):
-        dx = spacing[0]/images["n_int"][0]
-        dy = spacing[1]/images["n_int"][1]
+        dx = spacing[0]/images["n_integration"][0]
+        dy = spacing[1]/images["n_integration"][1]
     elif (images["n_dim"] == 3):
-        dx = spacing[0]/images["n_int"][0]
-        dy = spacing[1]/images["n_int"][1]
-        dz = spacing[2]/images["n_int"][2]
+        dx = spacing[0]/images["n_integration"][0]
+        dy = spacing[1]/images["n_integration"][1]
+        dz = spacing[2]/images["n_integration"][2]
     else:
         assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
     global_min = float("+Inf")
     global_max = float("-Inf")
-    image_data = ImageData(images, structure, texture, noise)
+    image = Image(images, structure, texture, noise)
     mapping = Mapping(images, structure, deformation, evolution)
     for k_frame in xrange(images["n_frames"]):
         t = images["T"]*float(k_frame)/(images["n_frames"]-1)
         mapping.init_t(t)
-        for k_point in xrange(image.GetNumberOfPoints()):
-            image.GetPoint(k_point, x0)
+        for k_point in xrange(vtk_image.GetNumberOfPoints()):
+            vtk_image.GetPoint(k_point, x0)
             #print "x0 = " + str(x0)
             x[:] = x0[:]
             I = 0.
             if   (images["n_dim"] == 1):
-                for k_x in xrange(images["n_int"][0]):
-                    x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_int"][0]
-                    I += image_data.I0(mapping.X(x))
-                I /= images["n_int"][0]
+                for k_x in xrange(images["n_integration"][0]):
+                    x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
+                    I += image.I0(mapping.X(x))
+                I /= images["n_integration"][0]
             elif (images["n_dim"] == 2):
-                for k_y in xrange(images["n_int"][1]):
-                    x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_int"][1]
-                    for k_x in xrange(images["n_int"][0]):
-                        x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_int"][0]
-                        I += image_data.I0(mapping.X(x))
-                I /= images["n_int"][1]*images["n_int"][0]
+                for k_y in xrange(images["n_integration"][1]):
+                    x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_integration"][1]
+                    for k_x in xrange(images["n_integration"][0]):
+                        x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
+                        I += image.I0(mapping.X(x))
+                I /= images["n_integration"][1]*images["n_integration"][0]
             elif (images["n_dim"] == 3):
-                for k_z in xrange(images["n_int"][2]):
-                    x[2] = x0[2] - dz/2 + (k_z+1./2)*dz/images["n_int"][2]
-                    for k_y in xrange(images["n_int"][1]):
-                        x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_int"][1]
-                        for k_x in xrange(images["n_int"][0]):
-                            x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_int"][0]
+                for k_z in xrange(images["n_integration"][2]):
+                    x[2] = x0[2] - dz/2 + (k_z+1./2)*dz/images["n_integration"][2]
+                    for k_y in xrange(images["n_integration"][1]):
+                        x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_integration"][1]
+                        for k_x in xrange(images["n_integration"][0]):
+                            x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
                             #print "x = " + str(x)
-                            I += image_data.I0(mapping.X(x))
+                            I += image.I0(mapping.X(x))
                             #print "I = " + str(I)
-                I /= images["n_int"][2]*images["n_int"][1]*images["n_int"][0]
+                I /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
-            image_scalars.SetTuple1(k_point, I)
+            vtk_image_scalars.SetTuple1(k_point, I)
             if (I < global_min): global_min = I
             if (I > global_max): global_max = I
         myVTK.writeImage(
-            image=image,
+            image=vtk_image,
             filename=images["images_folder"]+"/"+images["images_basename"]+"_"+str(k_frame).zfill(2)+".vti")
 
     if (images["data_type"] in ("float")):
@@ -414,16 +486,16 @@ def generateImages(
             shifter.SetScale(1./(global_max-global_min))
             shifter.SetOutputScalarTypeToFloat()
         for k_frame in xrange(images["n_frames"]):
-            image = myVTK.readImage(
+            vtk_image = myVTK.readImage(
                 filename=images["images_folder"]+"/"+images["images_basename"]+"_"+str(k_frame).zfill(2)+".vti")
             if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-                shifter.SetInputData(image)
+                shifter.SetInputData(vtk_image)
             else:
-                shifter.SetInput(image)
+                shifter.SetInput(vtk_image)
             shifter.Update()
-            image = shifter.GetOutput()
+            vtk_image = shifter.GetOutput()
             myVTK.writeImage(
-                image=image,
+                image=vtk_image,
                 filename=images["images_folder"]+"/"+images["images_basename"]+"_"+str(k_frame).zfill(2)+".vti")
     else:
         assert (0), "Wrong data type. Aborting."
@@ -431,6 +503,7 @@ def generateImages(
 ########################################################################
 
 def warpMesh(
+        mesh_folder,
         mesh_basename,
         images,
         structure,
@@ -441,14 +514,14 @@ def warpMesh(
     myVTK.myPrint(verbose, "*** warpMesh ***")
 
     mesh = myVTK.readUGrid(
-        filename=images["images_folder"]+"/"+mesh_basename+".vtk",
+        filename=mesh_folder+"/"+mesh_basename+".vtk",
         verbose=0)
     n_points = mesh.GetNumberOfPoints()
     n_cells = mesh.GetNumberOfCells()
 
-    if os.path.exists(images["images_folder"]+"/"+mesh_basename+"-WithLocalBasis.vtk"):
+    if os.path.exists(mesh_folder+"/"+mesh_basename+"-WithLocalBasis.vtk"):
         ref_mesh = myVTK.readUGrid(
-            filename=images["images_folder"]+"/"+mesh_basename+"-WithLocalBasis.vtk",
+            filename=mesh_folder+"/"+mesh_basename+"-WithLocalBasis.vtk",
             verbose=0)
     else:
         ref_mesh = None
@@ -477,13 +550,13 @@ def warpMesh(
 
         myVTK.computeStrainsFromDisplacements(
             mesh=mesh,
-            displacement_array_name="displacement",
+            disp_array_name="displacement",
             ref_mesh=ref_mesh,
             verbose=0)
 
         myVTK.writeUGrid(
             ugrid=mesh,
-            filename=images["images_folder"]+"/"+mesh_basename+"_"+str(k_frame).zfill(2)+".vtk",
+            filename=mesh_folder+"/"+mesh_basename+"_"+str(k_frame).zfill(2)+".vtk",
             verbose=0)
 
 
