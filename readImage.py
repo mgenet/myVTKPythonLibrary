@@ -23,7 +23,7 @@ def readImage(
 
     myVTK.myPrint(verbose, "*** readImage: " + filename + " ***")
 
-    assert (os.path.isfile(filename)), "Wrong filename. Aborting."
+    assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
     if ('vtk' in filename):
         image_reader = vtk.vtkImageDataReader()

@@ -23,7 +23,7 @@ def readPData(
 
     myVTK.myPrint(verbose, "*** readPData: " + filename + " ***")
 
-    assert (os.path.isfile(filename)), "Wrong filename. Aborting."
+    assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
     if ('vtk' in filename):
         pdata_reader = vtk.vtkPolyDataReader()

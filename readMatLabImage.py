@@ -27,7 +27,7 @@ def readMatLabImage(
 
     myVTK.myPrint(verbose, "*** readMatLabImage ***")
 
-    assert (os.path.isfile(filename)), "Wrong filename. Aborting."
+    assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
     data = scipy.io.loadmat(filename)[field_name]
 

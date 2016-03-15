@@ -23,7 +23,7 @@ def readSTL(
 
     myVTK.myPrint(verbose, "*** readSTL: " + filename + " ***")
 
-    assert (os.path.isfile(filename)), "Wrong filename. Aborting."
+    assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
     stl_reader = vtk.vtkSTLReader()
     stl_reader.SetFileName(filename)

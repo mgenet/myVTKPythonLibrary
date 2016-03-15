@@ -23,7 +23,7 @@ def readUGrid(
 
     myVTK.myPrint(verbose, "*** readUGrid: " + filename + " ***")
 
-    assert (os.path.isfile(filename)), "Wrong filename. Aborting."
+    assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
     if ('vtk' in filename):
         ugrid_reader = vtk.vtkUnstructuredGridReader()
