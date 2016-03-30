@@ -424,7 +424,7 @@ def generateImages(
     image = Image(images, structure, texture, noise)
     mapping = Mapping(images, structure, deformation, evolution)
     for k_frame in xrange(images["n_frames"]):
-        t = images["T"]*float(k_frame)/(images["n_frames"]-1)
+        t = images["T"]*float(k_frame)/(images["n_frames"]-1) if (images["n_frames"]>1) else 0.
         mapping.init_t(t)
         for k_point in xrange(vtk_image.GetNumberOfPoints()):
             vtk_image.GetPoint(k_point, x0)
@@ -539,7 +539,7 @@ def warpMesh(
     x = numpy.empty(3)
     U = numpy.empty(3)
     for k_frame in xrange(images["n_frames"]):
-        t = images["T"]*float(k_frame)/(images["n_frames"]-1)
+        t = images["T"]*float(k_frame)/(images["n_frames"]-1) if (images["n_frames"]>1) else 0.
         mapping.init_t(t)
 
         for k_point in xrange(n_points):
