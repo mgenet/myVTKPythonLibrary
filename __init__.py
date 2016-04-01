@@ -8,6 +8,7 @@ from writePData import *
 from clipSurfacesForFullBiVMesh import *
 from writeUGrid import *
 from computeSectors import *
+from computeImageDimensionality import *
 from myPrint import *
 from createFloatArray import *
 from computeRegionsForBiV import *
