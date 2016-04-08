@@ -34,6 +34,7 @@ from createImageInterpolator import *
 from getCellLocator import *
 from mapDataSetToPointData import *
 from computeABPointsFromBoundsAndCenter import *
+from computeImageHessian import *
 from readMatLabImage import *
 from getPointLocator import *
 from clipPDataUsingPlane import *
