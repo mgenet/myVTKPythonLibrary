@@ -8,6 +8,7 @@ from writePData import *
 from clipSurfacesForFullBiVMesh import *
 from writeUGrid import *
 from computeSectors import *
+from computeImageDimensionality import *
 from myPrint import *
 from createFloatArray import *
 from computeRegionsForBiV import *
@@ -55,7 +56,6 @@ from computeStrainsFromDisplacements import *
 from readAbaqusMeshFromINP import *
 from createArray import *
 from readAbaqusStressesFromDAT import *
-from rotateTensors import *
 from computeSyntheticHelixTransverseSheetAngles import *
 from getCellCenters import *
 from writeImage import *
@@ -64,9 +64,9 @@ from readAbaqusFibersFromINP import *
 from computeSystolicStrainsFromEndDiastolicAndEndSystolicStates import *
 from findPointsInCell import *
 from computeHelixAngles import *
+from rotateMatrix import *
 from thresholdDataSet import *
 from computePCA import *
-from rotateSymmetricMatrix import *
 from addVoxels import *
 from readDynaDeformationGradients import *
 from mat_vec_tools import *
