@@ -15,8 +15,8 @@ import myVTKPythonLibrary as myVTK
 ########################################################################
 
 def myPrint(
-    verbose,
-    string):
+        verbose,
+        string):
 
     if not hasattr(myPrint, "initialized"):
         myPrint.initialized = True

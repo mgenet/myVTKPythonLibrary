@@ -41,15 +41,19 @@ def computeHelixTransverseSheetAngles2(
     farray_angle_trans = myVTK.createFloatArray("angle_trans", 1, n_tuples)
     farray_angle_sheet = myVTK.createFloatArray("angle_sheet", 1, n_tuples)
 
+    eRR = numpy.empty(3)
+    eCC = numpy.empty(3)
+    eLL = numpy.empty(3)
+    eF = numpy.empty(3)
+    eS = numpy.empty(3)
+    eN = numpy.empty(3)
     for k_tuple in xrange(n_tuples):
-        #print "k_tuple = " + str(k_tuple)
-
-        eRR = numpy.array(farray_eRR.GetTuple(k_tuple))
-        eCC = numpy.array(farray_eCC.GetTuple(k_tuple))
-        eLL = numpy.array(farray_eLL.GetTuple(k_tuple))
-        eF  = numpy.array(farray_eF.GetTuple(k_tuple))
-        eS  = numpy.array(farray_eS.GetTuple(k_tuple))
-        eN  = numpy.array(farray_eN.GetTuple(k_tuple))
+        farray_eRR.GetTuple(k_tuple, eRR)
+        farray_eCC.GetTuple(k_tuple, eCC)
+        farray_eLL.GetTuple(k_tuple, eLL)
+        farray_eF.GetTuple(k_tuple, eF)
+        farray_eS.GetTuple(k_tuple, eS)
+        farray_eN.GetTuple(k_tuple, eN)
 
         #print "eRR = " + str(eRR)
         #print "eCC = " + str(eCC)

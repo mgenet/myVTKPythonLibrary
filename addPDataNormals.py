@@ -38,18 +38,20 @@ def addPDataNormals(
         cell_centers = myVTK.getCellCenters(
             mesh=pdata,
             verbose=verbose-1)
+        cell_center = numpy.empty(3)
 
         mesh_center = numpy.array(pdata.GetCenter())
 
         normals = pdata.GetCellData().GetNormals()
+        normal = numpy.empty(3)
 
         cnt_pos = 0
         cnt_neg = 0
         for k_cell in xrange(pdata.GetNumberOfCells()):
-            cell_center = cell_centers.GetPoint(k_cell)
+            cell_centers.GetPoint(k_cell, cell_center)
             outward  = cell_center-mesh_center
             outward /= numpy.linalg.norm(outward)
-            normal = normals.GetTuple(k_cell)
+            normals.GetTuple(k_cell, normal)
             proj = numpy.dot(outward, normal)
             if (proj > 0): cnt_pos += 1
             else:          cnt_neg += 1

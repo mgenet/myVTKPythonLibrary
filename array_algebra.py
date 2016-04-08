@@ -37,7 +37,7 @@ def addArrays(
     assert (type(array2.GetTuple(0)[0]) is array_type)
     if (verbose >= 2): print "array_type = " + str(array_type)
 
-    if (array3 == None):
+    if (array3 is None):
         array3 = myVTK.createArray(
             name="",
             n_components=n_components,
@@ -77,7 +77,7 @@ def subArrays(
     assert (array_type in [int, float])
     assert (type(array2.GetTuple(0)[0]) is array_type)
 
-    if (array3 == None):
+    if (array3 is None):
         array3 = myVTK.createArray(
             name="",
             n_components=n_components,
@@ -115,7 +115,7 @@ def mulArrays(
     assert (array_type in [int, float])
     assert (type(array2.GetTuple(0)[0]) is array_type)
 
-    if (array3 == None):
+    if (array3 is None):
         array3 = myVTK.createArray(
             name="",
             n_components=n_components,

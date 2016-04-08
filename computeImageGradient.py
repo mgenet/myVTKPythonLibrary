@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #coding=utf8
 
 ########################################################################
@@ -10,6 +11,7 @@
 ###                                                                  ###
 ########################################################################
 
+import argparse
 import vtk
 
 import myVTKPythonLibrary as myVTK
@@ -17,29 +19,47 @@ import myVTKPythonLibrary as myVTK
 ########################################################################
 
 def computeImageGradient(
-        image,
+        image=None,
+        image_filename=None,
         verbose=1):
 
     myVTK.myPrint(verbose, "*** computeImageGradient ***")
+
+    assert ((image is not None) or (image_filename is not None)), "Need an image or an image_filename. Aborting."
+    if image is None:
+        image = myVTK.readImage(
+            filename=image_filename,
+            verbose=verbose-1)
+
+    image_dimensionality = myVTK.computeImageDimensionality(
+        image=image,
+        verbose=verbose-1)
 
     image_gradient = vtk.vtkImageGradient()
     if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
         image_gradient.SetInputData(image)
     else:
         image_gradient.SetInput(image)
-    extent = image.GetExtent()
-    DX = extent[1]+1-extent[0]
-    DY = extent[3]+1-extent[2]
-    DZ = extent[5]+1-extent[4]
-    if   (DX > 1) and (DY > 1) and (DZ > 1):
-        image_gradient.SetDimensionality(3)
-    elif (DX > 1) and (DY > 1) and (DZ == 1):
-        image_gradient.SetDimensionality(2)
-    elif (DX > 1) and (DY == 1) and (DZ == 1):
-        image_gradient.SetDimensionality(1)
-    else:
-        assert (0), "Wrong image dimensionality ("+str(extent)+")"
+    image_gradient.SetDimensionality(image_dimensionality)
     image_gradient.Update()
-    image = image_gradient.GetOutput()
+    image_w_grad = image_gradient.GetOutput()
 
-    return image
+    return image_w_grad
+
+########################################################################
+
+if (__name__ == "__main__"):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("image_filename", type=str)
+    parser.add_argument("--verbose", "-v", type=int, default=1)
+    args = parser.parse_args()
+
+
+    image_w_grad = myVTK.computeImageGradient(
+        image_filename=args.image_filename,
+        verbose=args.verbose)
+
+    myVTK.writeImage(
+        image=image_w_grad,
+        filename=args.image_filename.replace(".vti", "-gradient.vti"),
+        verbose=args.verbose)

@@ -29,9 +29,9 @@ def computeFractionalAnisotropy(
     farray_FA23 = myVTK.createFloatArray("FA_23", 1, n_tuples)
 
     for k_tuple in xrange(n_tuples):
-        e1 = farray_e1.GetTuple(k_tuple)[0]
-        e2 = farray_e2.GetTuple(k_tuple)[0]
-        e3 = farray_e3.GetTuple(k_tuple)[0]
+        e1 = farray_e1.GetTuple1(k_tuple)
+        e2 = farray_e2.GetTuple1(k_tuple)
+        e3 = farray_e3.GetTuple1(k_tuple)
         FA   = ((e1-e2)**2+(e1-e3)**2+(e2-e3)**2)**(0.5) / (2*(e1**2+e2**2+e3**2))**(0.5)
         FA12 = ((e1-e2)**2)**(0.5) / (e1**2+e2**2)**(0.5)
         FA23 = ((e2-e3)**2)**(0.5) / (e2**2+e3**2)**(0.5)

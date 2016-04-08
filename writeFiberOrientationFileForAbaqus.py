@@ -31,10 +31,12 @@ def writeFiberOrientationFileForAbaqus(
 
     eF_array = mesh.GetCellData().GetArray(eF_field_name)
     eS_array = mesh.GetCellData().GetArray(eS_field_name)
+    eF = numpy.empty(3)
+    eS = numpy.empty(3)
 
     for k_cell in xrange(n_cells):
-        eF = eF_array.GetTuple(k_cell)
-        eS = eS_array.GetTuple(k_cell)
+        eF_array.GetTuple(k_cell, eF)
+        eS_array.GetTuple(k_cell, eS)
 
         line = str(k_cell+1)
         for k in xrange(3): line += sep + str(eF[k])

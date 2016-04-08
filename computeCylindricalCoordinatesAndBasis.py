@@ -25,10 +25,8 @@ def computeCylindricalCoordinatesAndBasis(
     myVTK.myPrint(verbose, "*** computeCylindricalCoordinatesAndBasis ***")
 
     assert (points_AB.GetNumberOfPoints() >= 2), "points_AB must have at least two points. Aborting."
-    point_A = numpy.empty(3)
-    point_B = numpy.empty(3)
-    points_AB.GetPoint(                              0, point_A)
-    points_AB.GetPoint(points_AB.GetNumberOfPoints()-1, point_B)
+    point_A = points_AB.GetPoint(                              0)
+    point_B = points_AB.GetPoint(points_AB.GetNumberOfPoints()-1)
     eL  = point_B - point_A
     eL /= numpy.linalg.norm(eL)
     if (verbose >= 2): print "eL =", eL

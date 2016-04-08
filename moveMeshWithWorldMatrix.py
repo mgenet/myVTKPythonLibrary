@@ -26,15 +26,15 @@ def moveMeshWithWorldMatrix(
     myVTK.myPrint(verbose, "*** moveMeshWithWorldMatrix ***")
 
     n_points = mesh.GetNumberOfPoints()
-
+    points = mesh.GetPoints()
     P = numpy.array([0.]*4)
 
     for k_point in xrange(n_points):
-        P[0:3] = mesh.GetPoints().GetPoint(k_point)
+        P[0:3] = points.GetPoint(k_point)
         P[3] = 1.
         #print P
 
         P = numpy.dot(M, P)
         #print new_P
 
-        mesh.GetPoints().SetPoint(k_point, P[0:3])
+        points.SetPoint(k_point, P[0:3])

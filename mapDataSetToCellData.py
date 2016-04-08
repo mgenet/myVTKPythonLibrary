@@ -95,7 +95,7 @@ def mapDataSetToCellData(
 
         for farray_name in farray_names:
             if (points_within_radius.GetNumberOfIds()):
-                values = [numpy.array(dataset.GetArray(farray_name).GetTuple(points_within_radius.GetId(k_id))) for k_id in xrange(points_within_radius.GetNumberOfIds()) if (threshold_dist == None) or (numpy.linalg.norm(numpy.array(datapoints.GetPoint(points_within_radius.GetId(k_id)))-numpy.array(pdata_cell_centers_to.GetPoint(k_cell))) < threshold_dist)]
+                values = [numpy.array(dataset.GetArray(farray_name).GetTuple(points_within_radius.GetId(k_id))) for k_id in xrange(points_within_radius.GetNumberOfIds()) if (threshold_dist is None) or (numpy.linalg.norm(numpy.array(datapoints.GetPoint(points_within_radius.GetId(k_id)))-numpy.array(pdata_cell_centers_to.GetPoint(k_cell))) < threshold_dist)]
                 #print "values = " + str(values)
                 if (threshold_val_min != None):
                     values = [value for value in values if (numpy.linalg.norm(value) > threshold_val_min)]

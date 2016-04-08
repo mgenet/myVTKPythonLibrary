@@ -77,16 +77,24 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
                 farray_eCC,
                 farray_eLL)
 
-    c_lst = [farray_c.GetTuple(k_point)[0] for k_point in xrange(n_points)]
+    c_lst = [farray_c.GetTuple1(k_point) for k_point in xrange(n_points)]
     c_min = min(c_lst)
     c_max = max(c_lst)
 
-    l_lst = [farray_l.GetTuple(k_point)[0] for k_point in xrange(n_points)]
+    l_lst = [farray_l.GetTuple1(k_point) for k_point in xrange(n_points)]
     l_min = min(l_lst)
     l_max = max(l_lst)
 
+    pdata_end_normals = pdata_end.GetCellData().GetNormals()
+    pdata_epi_normals = pdata_epi.GetCellData().GetNormals()
+    pdata_end_normal = numpy.empty((3,1))
+    pdata_epi_normal = numpy.empty((3,1))
+
+    eL = numpy.empty((3,1))
+
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
-        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple(k_point)[0]) > 0):
+        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple1(k_point)) > 0):
             rr = 0.
             cc = 0.
             ll = 0.
@@ -95,7 +103,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
             eLL = [0.,0.,1.]
 
         else:
-            point = numpy.array(points.GetPoint(k_point))
+            points.GetPoint(k_point, point)
             cell_locator_end.FindClosestPoint(
                 point,
                 closest_point_end,
@@ -113,18 +121,18 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
 
             rr = dist_end/(dist_end+dist_epi)
 
-            c = farray_c.GetTuple(k_point)[0]
+            c = farray_c.GetTuple1(k_point)
             cc = (c-c_min) / (c_max-c_min)
 
-            l = farray_l.GetTuple(k_point)[0]
+            l = farray_l.GetTuple1(k_point)
             ll = (l-l_min) / (l_max-l_min)
 
-            normal_end = numpy.reshape(pdata_end.GetCellData().GetNormals().GetTuple(cellId_end), (3))
-            normal_epi = numpy.reshape(pdata_epi.GetCellData().GetNormals().GetTuple(cellId_epi), (3))
-            eRR  = (1.-rr) * normal_end + rr * normal_epi
+            pdata_end_normals.GetTuple(cellId_end, pdata_end_normal)
+            pdata_epi_normals.GetTuple(cellId_epi, pdata_epi_normal)
+            eRR  = (1.-rr) * pdata_end_normal + rr * pdata_epi_normal
             eRR /= numpy.linalg.norm(eRR)
 
-            eL = numpy.reshape(farray_eL.GetTuple(k_point), (3))
+            farray_eL.GetTuple(k_point, eL)
             eCC  = numpy.cross(eL, eRR)
             eCC /= numpy.linalg.norm(eCC)
 
@@ -266,7 +274,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
     farray_eCC = myVTK.createFloatArray("eCC", 3, n_points)
     farray_eLL = myVTK.createFloatArray("eLL", 3, n_points)
 
-    c_lst_FWLV = numpy.array([farray_c.GetTuple(k_point)[0] for k_point in xrange(n_points) if (iarray_regions.GetTuple(k_point)[0] == 0)])
+    c_lst_FWLV = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 0)])
     (c_avg_FWLV, c_std_FWLV) = myVTK.computeMeanStddevAngles(
         angles=c_lst_FWLV,
         angles_in_degrees=False,
@@ -278,7 +286,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
     myVTK.myPrint(verbose, "c_min_FWLV = " + str(c_min_FWLV))
     myVTK.myPrint(verbose, "c_max_FWLV = " + str(c_max_FWLV))
 
-    c_lst_S = numpy.array([farray_c.GetTuple(k_point)[0] for k_point in xrange(n_points) if (iarray_regions.GetTuple(k_point)[0] == 1)])
+    c_lst_S = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 1)])
     (c_avg_S, c_std_S) = myVTK.computeMeanStddevAngles(
         angles=c_lst_S,
         angles_in_degrees=False,
@@ -290,7 +298,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
     myVTK.myPrint(verbose, "c_min_S = " + str(c_min_S))
     myVTK.myPrint(verbose, "c_max_S = " + str(c_max_S))
 
-    c_lst_FWRV = numpy.array([farray_c.GetTuple(k_point)[0] for k_point in xrange(n_points) if (iarray_regions.GetTuple(k_point)[0] == 2)])
+    c_lst_FWRV = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 2)])
     (c_avg_FWRV, c_std_FWRV) = myVTK.computeMeanStddevAngles(
         angles=c_lst_FWRV,
         angles_in_degrees=False,
@@ -302,12 +310,13 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
     myVTK.myPrint(verbose, "c_min_FWRV = " + str(c_min_FWRV))
     myVTK.myPrint(verbose, "c_max_FWRV = " + str(c_max_FWRV))
 
-    l_lst = [farray_l.GetTuple(k_point)[0] for k_point in xrange(n_points)]
+    l_lst = [farray_l.GetTuple1(k_point) for k_point in xrange(n_points)]
     l_min = min(l_lst)
     l_max = max(l_lst)
 
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
-        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple(k_point)[0]) > 0):
+        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple1(k_point)) > 0):
             rr = 0.
             cc = 0.
             ll = 0.
@@ -316,8 +325,8 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
             eLL = [0.,0.,1.]
 
         else:
-            point = numpy.array(points.GetPoint(k_point))
-            region_id = iarray_regions.GetTuple(k_point)[0]
+            points.GetPoint(k_point, point)
+            region_id = iarray_regions.GetTuple1(k_point)
 
             if (region_id == 0):
                 cell_locator_endLV.FindClosestPoint(
@@ -337,11 +346,11 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
 
                 rr = dist_endLV/(dist_endLV+dist_epi)
 
-                c = farray_c.GetTuple(k_point)[0]
+                c = farray_c.GetTuple1(k_point)
                 c = (((c-c_avg_FWLV+math.pi)%(2*math.pi))-math.pi+c_avg_FWLV)
                 cc = (c-c_min_FWLV) / (c_max_FWLV-c_min_FWLV)
 
-                l = farray_l.GetTuple(k_point)[0]
+                l = farray_l.GetTuple1(k_point)
                 ll = (l-l_min) / (l_max-l_min)
 
                 normal_endLV = numpy.reshape(pdata_endLV.GetCellData().GetNormals().GetTuple(cellId_endLV), (3))
@@ -372,11 +381,11 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
 
                 rr = dist_endLV/(dist_endLV+dist_endRV)
 
-                c = farray_c.GetTuple(k_point)[0]
+                c = farray_c.GetTuple1(k_point)
                 c = (((c-c_avg_S+math.pi)%(2*math.pi))-math.pi+c_avg_S)
                 cc = (c-c_min_S) / (c_max_S-c_min_S)
 
-                l = farray_l.GetTuple(k_point)[0]
+                l = farray_l.GetTuple1(k_point)
                 ll = (l-l_min) / (l_max-l_min)
 
                 normal_endLV = numpy.reshape(pdata_endLV.GetCellData().GetNormals().GetTuple(cellId_endLV), (3))
@@ -407,11 +416,11 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
 
                 rr = dist_endRV/(dist_endRV+dist_epi)
 
-                c = farray_c.GetTuple(k_point)[0]
+                c = farray_c.GetTuple1(k_point)
                 c = (((c-c_avg_FWRV+math.pi)%(2*math.pi))-math.pi+c_avg_FWRV)
                 cc = (c-c_min_FWRV) / (c_max_FWRV-c_min_FWRV)
 
-                l = farray_l.GetTuple(k_point)[0]
+                l = farray_l.GetTuple1(k_point)
                 ll = (l-l_min) / (l_max-l_min)
 
                 normal_endRV = numpy.reshape(pdata_endRV.GetCellData().GetNormals().GetTuple(cellId_endRV), (3))

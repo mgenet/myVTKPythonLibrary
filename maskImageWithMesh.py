@@ -47,12 +47,13 @@ def maskImageWithMesh(
         name="scalars",
         n_components=1)
 
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
-        point = image.GetPoint(k_point)
+        image.GetPoint(k_point, point)
 
         k_cell = cell_locator.FindCell(point)
         if (k_cell == -1): continue
-        if (filter_with_field != None) and (field.GetTuple(k_cell)[0] not in field_values): continue
+        if (filter_with_field != None) and (field.GetTuple1(k_cell) not in field_values): continue
 
         points.InsertNextPoint(point)
         farray_scalars.InsertNextTuple(farray_scalars_image.GetTuple(k_point))

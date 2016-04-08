@@ -38,17 +38,20 @@ def computeFiberSheetNormalDirections(
     farray_eS = myVTK.createFloatArray("eS", 3, n_tuples)
     farray_eN = myVTK.createFloatArray("eN", 3, n_tuples)
 
+    eRR = numpy.empty(3)
+    eCC = numpy.empty(3)
+    eLL = numpy.empty(3)
     for k_tuple in xrange(n_tuples):
-        eRR = numpy.array(farray_eRR.GetTuple(k_tuple))
-        eCC = numpy.array(farray_eCC.GetTuple(k_tuple))
-        eLL = numpy.array(farray_eLL.GetTuple(k_tuple))
+        farray_eRR.GetTuple(k_tuple, eRR)
+        farray_eCC.GetTuple(k_tuple, eCC)
+        farray_eLL.GetTuple(k_tuple, eLL)
 
         if (use_new_definition):
             base = numpy.array([eCC,\
                                 eLL,\
                                 eRR])
 
-            helix = farray_helix.GetTuple(k_tuple)[0]
+            helix = farray_helix.GetTuple1(k_tuple)
             if (angles_in_degrees): helix *= math.pi/180
             C = math.cos(helix)
             S = math.sin(helix)
@@ -57,7 +60,7 @@ def computeFiberSheetNormalDirections(
                                    [ 0, 0, 1]])
             base = numpy.dot(R_helix, base)
 
-            trans = farray_trans.GetTuple(k_tuple)[0]
+            trans = farray_trans.GetTuple1(k_tuple)
             if (angles_in_degrees): trans *= math.pi/180
             C = math.cos(trans)
             S = math.sin(trans)
@@ -66,7 +69,7 @@ def computeFiberSheetNormalDirections(
                                    [ S, 0, C]])
             base = numpy.dot(R_trans, base)
 
-            sheet = farray_sheet.GetTuple(k_tuple)[0]
+            sheet = farray_sheet.GetTuple1(k_tuple)
             if (angles_in_degrees): sheet *= math.pi/180
             C = math.cos(sheet)
             S = math.sin(sheet)
@@ -79,7 +82,7 @@ def computeFiberSheetNormalDirections(
                                 +eRR,\
                                 -eLL])
 
-            helix = farray_helix.GetTuple(k_tuple)[0]
+            helix = farray_helix.GetTuple1(k_tuple)
             if (angles_in_degrees): helix *= math.pi/180
             C = math.cos(helix)
             S = math.sin(helix)
@@ -88,7 +91,7 @@ def computeFiberSheetNormalDirections(
                                    [ S, 0, C]])
             base = numpy.dot(R_helix, base)
 
-            trans = farray_trans.GetTuple(k_tuple)[0]
+            trans = farray_trans.GetTuple1(k_tuple)
             if (angles_in_degrees): trans *= math.pi/180
             C = math.cos(trans)
             S = math.sin(trans)
@@ -97,7 +100,7 @@ def computeFiberSheetNormalDirections(
                                    [ 0, 0, 1]])
             base = numpy.dot(R_trans, base)
 
-            sheet = farray_sheet.GetTuple(k_tuple)[0]
+            sheet = farray_sheet.GetTuple1(k_tuple)
             if (angles_in_degrees): sheet *= math.pi/180
             C = math.cos(sheet)
             S = math.sin(sheet)

@@ -51,28 +51,33 @@ def mapDataSetToPointData(
 
         farray_type = dataset.GetArray(farray_name).GetDataTypeAsString()
         farray_n_components = dataset.GetArray(farray_name).GetNumberOfComponents()
-        farrays_avg[farray_name] = createArray(farray_name+"_avg",
-                                               farray_n_components,
-                                               n_points,
-                                               farray_type)
-        farrays_std[farray_name] = createArray(farray_name+"_std",
-                                               farray_n_components,
-                                               n_points,
-                                               farray_type)
-        farrays_rat[farray_name] = createArray(farray_name+"_rat",
-                                               farray_n_components,
-                                               n_points,
-                                               farray_type)
+        farrays_avg[farray_name] = createArray(
+            farray_name+"_avg",
+            farray_n_components,
+            n_points,
+            farray_type)
+        farrays_std[farray_name] = createArray(
+            farray_name+"_std",
+            farray_n_components,
+            n_points,
+            farray_type)
+        farrays_rat[farray_name] = createArray(
+            farray_name+"_rat",
+            farray_n_components,
+            n_points,
+            farray_type)
 
     points_within_radius = vtk.vtkIdList()
 
     for k_point in xrange(n_points):
-        point_locator.FindClosestNPoints(3,
-                                         mesh_to.GetPoints().GetPoint(k_point),
-                                         points_within_radius)
-        #point_locator.FindPointsWithinRadius(radius,
-                                             #mesh_to.GetPoints().GetPoint(k_point),
-                                             #points_within_radius)
+        point_locator.FindClosestNPoints(
+            3,
+            mesh_to.GetPoints().GetPoint(k_point),
+            points_within_radius)
+        #point_locator.FindPointsWithinRadius(
+            #radius,
+            #mesh_to.GetPoints().GetPoint(k_point),
+            #points_within_radius)
 
         for farray_name in farray_names:
             if (points_within_radius.GetNumberOfIds() > 0):

@@ -58,17 +58,17 @@ def computeSyntheticHelixTransverseSheetAngles(
 
     n_tuples = farray_rr.GetNumberOfTuples()
 
-    if (farray_angle_helix == None):
+    if (farray_angle_helix is None):
         farray_angle_helix = myVTK.createFloatArray(
             "angle_helix",
             1,
             n_tuples)
-    if (farray_angle_trans == None):
+    if (farray_angle_trans is None):
         farray_angle_trans = myVTK.createFloatArray(
             "angle_trans",
             1,
             n_tuples)
-    if (farray_angle_sheet == None):
+    if (farray_angle_sheet is None):
         farray_angle_sheet = myVTK.createFloatArray(
             "angle_sheet",
             1,
@@ -84,9 +84,9 @@ def computeSyntheticHelixTransverseSheetAngles(
         for k_angle in xrange(3):
             #print "k_angle = " + str(k_angle)
 
-                rr = farray_rr.GetTuple(k_tuple)[0]
+                rr = farray_rr.GetTuple1(k_tuple)
 
-                cc = farray_cc.GetTuple(k_tuple)[0]
+                cc = farray_cc.GetTuple1(k_tuple)
                 i_c_end = int(cc/d_c[k_angle][0]/1.000001)
                 i_c_epi = int(cc/d_c[k_angle][1]/1.000001)
                 #print "i_c_end = " + str(i_c_end)
@@ -97,7 +97,7 @@ def computeSyntheticHelixTransverseSheetAngles(
                 #print "zeta_end = " + str(zeta_end)
                 #print "zeta_epi = " + str(zeta_epi)
 
-                ll = farray_ll.GetTuple(k_tuple)[0]
+                ll = farray_ll.GetTuple1(k_tuple)
                 i_l_end = int(ll/d_l[k_angle][0]/1.000001)
                 i_l_epi = int(ll/d_l[k_angle][1]/1.000001)
                 #print "i_l_end = " + str(i_l_end)

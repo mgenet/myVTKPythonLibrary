@@ -25,14 +25,14 @@ def computeSyntheticHelixAngles(
 
     n_cells = farray_rr.GetNumberOfTuples()
 
-    if (farray_angle_helix == None):
+    if (farray_angle_helix is None):
         farray_angle_helix = myVTK.createFloatArray(
             name="angle_helix",
             n_components=1,
             n_tuples=n_cells)
 
     for k_cell in xrange(n_cells):
-        rr = farray_rr.GetTuple(k_cell)[0]
+        rr = farray_rr.GetTuple1(k_cell)
 
         helix_angle_in_degrees = (1.-rr) * helix_angle_end \
                                +     rr  * helix_angle_epi

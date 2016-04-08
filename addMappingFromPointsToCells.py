@@ -40,6 +40,8 @@ def addMappingFromPointsToCells(
         n_components=1,
         n_tuples=n_points,
         verbose=verbose-1)
+    ugrid_points.GetPointData().AddArray(iarray_k_cell)
+    ugrid_points.GetCellData().AddArray(iarray_k_cell)
 
     point = numpy.empty(3)
     for k_point in xrange(n_points):
@@ -61,6 +63,3 @@ def addMappingFromPointsToCells(
         iarray_k_cell.SetTuple1(
             k_point,
             k_cell)
-
-    ugrid_points.GetPointData().AddArray(iarray_k_cell)
-    ugrid_points.GetCellData().AddArray(iarray_k_cell)

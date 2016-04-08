@@ -40,10 +40,11 @@ def computeCartesianCoordinates(
     farray_yy = myVTK.createFloatArray("yy", 1, n_points)
     farray_zz = myVTK.createFloatArray("zz", 1, n_points)
 
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
         if (verbose >= 2): print "k_point = " + str(k_point)
 
-        point = points.GetPoint(k_point)
+        points.GetPoint(k_point, point)
         if (verbose >= 2): print "point = " + str(point)
 
         xx = (point[0] - xmin) / dx

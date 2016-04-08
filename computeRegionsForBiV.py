@@ -56,8 +56,9 @@ def computeRegionsForBiV(
 
     iarray_region = myVTK.createIntArray("region_id", 1, n_points)
 
+    point = numpy.empty(3)
     for k_point in range(n_points):
-        point = numpy.array(points.GetPoint(k_point))
+        points.GetPoint(k_point, point)
         cell_locator_endLV.FindClosestPoint(
             point,
             closest_point_endLV,

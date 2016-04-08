@@ -29,7 +29,14 @@ def computePrincipalDirections(
 
     myVTK.myPrint(verbose, "*** computePrincipalDirections ***")
 
-    assert (field_storage in ["vec", "Cmat", "Fmat"]), "\"field_storage\" must be \"vec\", \"Cmat\" or \"Fmat\". Aborting."
+    if   (field_storage == "vec"):
+        assert (field.GetNumberOfComponents() == 6), "Wrong numpber of components ("+str(field.GetNumberOfComponents())+"). Aborting."
+    elif (field_storage == "Cmat"):
+        assert (field.GetNumberOfComponents() == 9), "Wrong numpber of components ("+str(field.GetNumberOfComponents())+"). Aborting."
+    elif (field_storage == "Fmat"):
+        assert (field.GetNumberOfComponents() == 9), "Wrong numpber of components ("+str(field.GetNumberOfComponents())+"). Aborting."
+    else:
+        assert (0), "Wrong storage (field_storage="+str(field_storage)+"). Aborting."
 
     n_tuples = field.GetNumberOfTuples()
 
@@ -41,56 +48,66 @@ def computePrincipalDirections(
     farray_Vmid = myVTK.createFloatArray('Vmid', 3, n_tuples)
     farray_Vmax = myVTK.createFloatArray('Vmax', 3, n_tuples)
 
+    mat = numpy.empty((3,3))
+    if (field_storage == "vec"):
+        vec = numpy.empty(6)
+    elif (field_storage == "Cmat"):
+        vec = numpy.empty(9)
+    elif (field_storage == "Fmat"):
+        vec = numpy.empty(9)
+    if (orient):
+        eCC = numpy.empty(3)
+        eLL = numpy.empty(3)
     for k_tuple in xrange(n_tuples):
         #print "k_tuple: " + str(k_tuple)
-        matrix = field.GetTuple(k_tuple)
+        field.GetTuple(k_tuple, vec)
         if (field_storage == "vec"):
-            matrix = vec_col_to_mat_sym(matrix)
+            vec_col6_to_mat_sym33(vec, mat)
         elif (field_storage == "Cmat"):
-            matrix = numpy.reshape(matrix, (3,3), order='C')
+            cvec9_to_mat33(vec, mat)
         elif (field_storage == "Fmat"):
-            matrix = numpy.reshape(matrix, (3,3), order='F')
+            fvec9_to_mat33(vec, mat)
 
-        if (numpy.linalg.norm(matrix) > 1e-6):
+        if (numpy.linalg.norm(mat) > 1e-6):
             #if (verbose): print + 'k_tuple =', k_tuple
 
-            val, vec = numpy.linalg.eig(matrix)
-            #if (verbose): print + 'val =', val
-            #if (verbose): print + 'vec =', vec
-            #if (verbose): print + 'det =', numpy.linalg.det(vec)
-            idx = val.argsort()
-            val = val[idx]
-            vec = vec[:,idx]
-            #if (verbose): print + 'val =', val
-            #if (verbose): print + 'vec =', vec
-            #if (verbose): print + 'det =', numpy.linalg.det(vec)
+            vals, vecs = numpy.linalg.eig(mat)
+            #if (verbose): print + 'vals =', vals
+            #if (verbose): print + 'vecs =', vecs
+            #if (verbose): print + 'det =', numpy.linalg.det(vecs)
+            idx = vals.argsort()
+            vals = vals[idx]
+            vecs = vecs[:,idx]
+            #if (verbose): print + 'vals =', vals
+            #if (verbose): print + 'vecs =', vecs
+            #if (verbose): print + 'det =', numpy.linalg.det(vecs)
 
-            matrix_Lmin = val[0]
-            matrix_Lmid = val[1]
-            matrix_Lmax = val[2]
+            mat_Lmin = vals[0]
+            mat_Lmid = vals[1]
+            mat_Lmax = vals[2]
 
-            matrix_Vmax = vec[:,2]
-            matrix_Vmid = vec[:,1]
+            mat_Vmax = vecs[:,2]
+            mat_Vmid = vecs[:,1]
             if (orient):
-                eCC = numpy.array(farray_eCC.GetTuple(k_tuple))
-                eLL = numpy.array(farray_eLL.GetTuple(k_tuple))
-                matrix_Vmax = math.copysign(1, numpy.dot(matrix_Vmax, eCC)) * matrix_Vmax
-                matrix_Vmid = math.copysign(1, numpy.dot(matrix_Vmid, eLL)) * matrix_Vmid
-            matrix_Vmin = numpy.cross(matrix_Vmax, matrix_Vmid)
+                farray_eCC.GetTuple(k_tuple, eCC)
+                farray_eLL.GetTuple(k_tuple, eLL)
+                mat_Vmax = math.copysign(1, numpy.dot(mat_Vmax, eCC)) * mat_Vmax
+                mat_Vmid = math.copysign(1, numpy.dot(mat_Vmid, eLL)) * mat_Vmid
+            mat_Vmin = numpy.cross(mat_Vmax, mat_Vmid)
         else:
-            matrix_Lmin = 0.
-            matrix_Lmid = 0.
-            matrix_Lmax = 0.
-            matrix_Vmin = [0.]*3
-            matrix_Vmid = [0.]*3
-            matrix_Vmax = [0.]*3
+            mat_Lmin = 0.
+            mat_Lmid = 0.
+            mat_Lmax = 0.
+            mat_Vmin = [0.]*3
+            mat_Vmid = [0.]*3
+            mat_Vmax = [0.]*3
 
-        farray_Lmin.SetTuple1(k_tuple, matrix_Lmin)
-        farray_Lmid.SetTuple1(k_tuple, matrix_Lmid)
-        farray_Lmax.SetTuple1(k_tuple, matrix_Lmax)
-        farray_Vmin.SetTuple(k_tuple, matrix_Vmin)
-        farray_Vmid.SetTuple(k_tuple, matrix_Vmid)
-        farray_Vmax.SetTuple(k_tuple, matrix_Vmax)
+        farray_Lmin.SetTuple1(k_tuple, mat_Lmin)
+        farray_Lmid.SetTuple1(k_tuple, mat_Lmid)
+        farray_Lmax.SetTuple1(k_tuple, mat_Lmax)
+        farray_Vmin.SetTuple(k_tuple, mat_Vmin)
+        farray_Vmid.SetTuple(k_tuple, mat_Vmid)
+        farray_Vmax.SetTuple(k_tuple, mat_Vmax)
 
     return (farray_Lmin,
             farray_Lmid,

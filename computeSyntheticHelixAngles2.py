@@ -47,7 +47,7 @@ def computeSyntheticHelixAngles2(
     assert (farray_cc.GetNumberOfTuples() == n_tuples)
     assert (farray_ll.GetNumberOfTuples() == n_tuples)
 
-    if (farray_angle_helix == None):
+    if (farray_angle_helix is None):
         farray_angle_helix = myVTK.createFloatArray(
             name="angle_helix",
             n_components=1,
@@ -58,14 +58,14 @@ def computeSyntheticHelixAngles2(
     for k_tuple in xrange(n_tuples):
         #print "k_tuple = " + str(k_tuple)
 
-        cc = farray_cc.GetTuple(k_tuple)[0]
+        cc = farray_cc.GetTuple1(k_tuple)
         i_c = int(cc/d_c/1.000001)
         #print "i_c = " + str(i_c)
 
         zeta = (t - i_c*d_c) / d_c
         #print "zeta = " + str(zeta)
 
-        ll = farray_ll.GetTuple(k_tuple)[0]
+        ll = farray_ll.GetTuple1(k_tuple)
         i_l = int(ll/d_l/1.000001)
         #print "i_l = " + str(i_l)
 
@@ -98,7 +98,7 @@ def computeSyntheticHelixAngles2(
                         + t_ij_epi * (eta - zeta*eta) \
                         + t_jj_epi * (zeta*eta)
 
-        rr = farray_rr.GetTuple(k_tuple)[0]
+        rr = farray_rr.GetTuple1(k_tuple)
         helix_angle_in_degrees = (1.-rr) * helix_angle_end \
                                +     rr  * helix_angle_epi
 

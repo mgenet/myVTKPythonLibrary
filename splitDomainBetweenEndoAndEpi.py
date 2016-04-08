@@ -79,9 +79,9 @@ if (__name__ == "__main__"):
     parser.add_argument("--verbose", "-v" , type=int  , default=1   )
     args = parser.parse_args()
 
-    if (args.endLV_filename == None):
+    if (args.endLV_filename is None):
         args.endLV_filename = args.domain_filename.replace("LV", "EndLV")
-    if (args.epiLV_filename == None):
+    if (args.epiLV_filename is None):
         args.epiLV_filename = args.domain_filename.replace("LV", "EpiLV")
 
     pdata_domain = myVTK.readSTL(

@@ -32,6 +32,8 @@ def computeSystolicStrainsFromEndDiastolicAndEndSystolicStates(
     farray_F_num = myVTK.createFloatArray('F_num', 6, n_tuples)
     farray_E_num = myVTK.createFloatArray('E_num', 6, n_tuples)
 
+    I = numpy.eye(3)
+    E_vec = numpy.empty(6)
     for k_tuple in xrange(n_tuples):
         F_dia = numpy.reshape(farray_F_dia.GetTuple(k_tuple), (3,3), order='C')
         F_sys = numpy.reshape(farray_F_sys.GetTuple(k_tuple), (3,3), order='C')
@@ -39,20 +41,23 @@ def computeSystolicStrainsFromEndDiastolicAndEndSystolicStates(
         #print 'F_sys =', F_sys
 
         C = numpy.dot(numpy.transpose(F_dia), F_dia)
-        E = (C - numpy.eye(3))/2
-        farray_E_dia.SetTuple(k_tuple, mat_sym_to_vec_col(E))
+        E = (C - I)/2
+        mat_sym33_to_vec_col6(E, E_vec)
+        farray_E_dia.SetTuple(k_tuple, E_vec)
 
         C = numpy.dot(numpy.transpose(F_sys), F_sys)
-        E = (C - numpy.eye(3))/2
-        farray_E_sys.SetTuple(k_tuple, mat_sym_to_vec_col(E))
+        E = (C - I)/2
+        mat_sym33_to_vec_col6(E, E_vec)
+        farray_E_sys.SetTuple(k_tuple, E_vec)
 
         F = numpy.dot(F_sys, numpy.linalg.inv(F_dia))
         farray_F_num.SetTuple(k_tuple, numpy.reshape(F, 9, order='C'))
         #print 'F =', F
 
         C = numpy.dot(numpy.transpose(F), F)
-        E = (C - numpy.eye(3))/2
-        farray_E_num.SetTuple(k_tuple, mat_sym_to_vec_col(E))
+        E = (C - I)/2
+        mat_sym33_to_vec_col6(E, E_vec)
+        farray_E_num.SetTuple(k_tuple, E_vec)
 
     return (farray_E_dia,
             farray_E_sys,

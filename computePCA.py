@@ -35,22 +35,22 @@ def discretizeData(
 
     for k_l in xrange(n_l):
         #print "k_l = " + str(k_l)
-        sel_l = [k_tuple for k_tuple in xrange(n_tuples) if (math.floor(n_l*farray_ll.GetTuple(k_tuple)[0]) == k_l)]
+        sel_l = [k_tuple for k_tuple in xrange(n_tuples) if (math.floor(n_l*farray_ll.GetTuple1(k_tuple)) == k_l)]
         #print len(sel_l)
 
         for k_c in xrange(n_c):
             #print "k_c = " + str(k_c)
 
-            sel_c = [k_tuple for k_tuple in sel_l if (math.floor(n_c*farray_cc.GetTuple(k_tuple)[0]) == k_c)]
+            sel_c = [k_tuple for k_tuple in sel_l if (math.floor(n_c*farray_cc.GetTuple1(k_tuple)) == k_c)]
             #print len(sel_c)
 
             for k_r in xrange(n_r):
                 #print "k_r = " + str(k_r)
 
-                sel_r = [k_tuple for k_tuple in sel_c if (math.floor(n_r*farray_rr.GetTuple(k_tuple)[0]) == k_r)]
+                sel_r = [k_tuple for k_tuple in sel_c if (math.floor(n_r*farray_rr.GetTuple1(k_tuple)) == k_r)]
                 #print len(sel_r)
 
-                (m, s) = computeMeanStddevAngles([farray_h.GetTuple(k_tuple)[0] for k_tuple in sel_r], verbose=False)
+                (m, s) = computeMeanStddevAngles([farray_h.GetTuple1(k_tuple) for k_tuple in sel_r], verbose=False)
                 h[k_r, k_c, k_l] = m
 
     if (verbose >= 2): print h

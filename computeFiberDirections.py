@@ -36,10 +36,13 @@ def computeFiberDirections(
     farray_eS = myVTK.createFloatArray("eS", 3, n_tuples)
     farray_eN = myVTK.createFloatArray("eN", 3, n_tuples)
 
+    eRR = numpy.empty(3)
+    eCC = numpy.empty(3)
+    eLL = numpy.empty(3)
     for k_tuple in xrange(n_tuples):
-        eRR = numpy.array(farray_eRR.GetTuple(k_tuple))
-        eCC = numpy.array(farray_eCC.GetTuple(k_tuple))
-        eLL = numpy.array(farray_eLL.GetTuple(k_tuple))
+        farray_eRR.GetTuple(k_tuple, eRR)
+        farray_eCC.GetTuple(k_tuple, eCC)
+        farray_eLL.GetTuple(k_tuple, eLL)
 
         assert (round(numpy.linalg.norm(eRR),1) == 1.0),\
             "|eRR| = " + str(numpy.linalg.norm(eRR)) + "≠ 1. Aborting"
@@ -48,7 +51,7 @@ def computeFiberDirections(
         assert (round(numpy.linalg.norm(eLL),1) == 1.0),\
             "|eLL| = " + str(numpy.linalg.norm(eLL)) + "≠ 1. Aborting"
 
-        angle_helix = farray_angle_helix.GetTuple(k_tuple)[0]
+        angle_helix = farray_angle_helix.GetTuple1(k_tuple)
         if (angles_in_degrees): angle_helix = angle_helix*math.pi/180
         eF = math.cos(angle_helix) * eCC + math.sin(angle_helix) * eLL
         #print "eF = " + str(eF)

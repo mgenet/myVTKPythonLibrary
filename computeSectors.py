@@ -31,13 +31,13 @@ def computeSectorsForLV(
     iarray_sector = myVTK.createIntArray("sector_id", 1, n_cells)
 
     for k_cell in range(n_cells):
-        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple(k_cell)[0]) > 0):
+        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple1(k_cell)) > 0):
             sector_id = -1
 
         else:
-            rr = farray_rr.GetTuple(k_cell)[0]
-            cc = farray_cc.GetTuple(k_cell)[0]
-            ll = farray_ll.GetTuple(k_cell)[0]
+            rr = farray_rr.GetTuple1(k_cell)
+            cc = farray_cc.GetTuple1(k_cell)
+            ll = farray_ll.GetTuple1(k_cell)
 
             k_r = int(rr*n_r/1.000001)
             k_c = int(cc*n_c/1.000001)
@@ -95,15 +95,15 @@ def computeSectorsForBiV(
     iarray_sector = myVTK.createIntArray("sector_id", 1, n_cells)
 
     for k_cell in range(n_cells):
-        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple(k_cell)[0]) > 0):
+        if (iarray_part_id is not None) and (int(iarray_part_id.GetTuple1(k_cell)) > 0):
             sector_id = -1
 
         else:
-            region_id = int(iarray_regions.GetTuple(k_cell)[0])
+            region_id = int(iarray_regions.GetTuple1(k_cell))
 
-            rr = farray_rr.GetTuple(k_cell)[0]
-            cc = farray_cc.GetTuple(k_cell)[0]
-            ll = farray_ll.GetTuple(k_cell)[0]
+            rr = farray_rr.GetTuple1(k_cell)
+            cc = farray_cc.GetTuple1(k_cell)
+            ll = farray_ll.GetTuple1(k_cell)
 
             k_r = int(    rr *n_r[region_id]/1.000001)
             k_c = int(    cc *n_c[region_id]/1.000001)

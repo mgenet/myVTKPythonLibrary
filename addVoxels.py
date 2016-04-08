@@ -99,8 +99,9 @@ def addVoxels(
     cell = vtk.vtkHexahedron()
     cell_array = vtk.vtkCellArray()
 
+    P = numpy.empty(3)
     for k_point in xrange(n_points):
-        P = numpy.array(ugrid.GetPoint(k_point))
+        ugrid.GetPoint(k_point, P)
 
         point_ids = []
         for pm_Z in [-1,+1]:
