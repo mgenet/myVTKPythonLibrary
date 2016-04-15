@@ -80,7 +80,7 @@ def readMatLabImage(
     #ugrid.SetPoints(points)
     #ugrid.SetCells(vtk.VTK_VERTEX, cell_array)
     #ugrid.GetCellData().AddArray(array_data)
-    #writeXMLUGrid(ugrid, case + ".vtu")
+    #writeXMLUGrid(ugrid, case+".vtu")
 
     image = vtk.vtkImageData()
     image.SetExtent(0, n_pixels_x-1, 0, n_pixels_y-1, 0, n_pixels_z-1)

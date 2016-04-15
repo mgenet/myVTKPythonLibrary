@@ -63,7 +63,7 @@ def writeFiberOrientationFileForGNUPlot(
                             + t_ij_epi * (           eta - zeta*eta) \
                             + t_jj_epi * (                 zeta*eta)
 
-            fiber_orientation_file.write(" ".join([str(x) for x in [t, helix_angle_end, helix_angle_epi, z]]) + "\n")
+            fiber_orientation_file.write(" ".join([str(x) for x in [t, helix_angle_end, helix_angle_epi, z]])+"\n")
 
         fiber_orientation_file.write("\n")
 

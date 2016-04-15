@@ -45,19 +45,19 @@ def computeFiberDirections(
         farray_eLL.GetTuple(k_tuple, eLL)
 
         assert (round(numpy.linalg.norm(eRR),1) == 1.0),\
-            "|eRR| = " + str(numpy.linalg.norm(eRR)) + "≠ 1. Aborting"
+            "|eRR| = "+str(numpy.linalg.norm(eRR))+"≠ 1. Aborting"
         assert (round(numpy.linalg.norm(eCC),1) == 1.0),\
-            "|eCC| = " + str(numpy.linalg.norm(eCC)) + "≠ 1. Aborting"
+            "|eCC| = "+str(numpy.linalg.norm(eCC))+"≠ 1. Aborting"
         assert (round(numpy.linalg.norm(eLL),1) == 1.0),\
-            "|eLL| = " + str(numpy.linalg.norm(eLL)) + "≠ 1. Aborting"
+            "|eLL| = "+str(numpy.linalg.norm(eLL))+"≠ 1. Aborting"
 
         angle_helix = farray_angle_helix.GetTuple1(k_tuple)
         if (angles_in_degrees): angle_helix = angle_helix*math.pi/180
         eF = math.cos(angle_helix) * eCC + math.sin(angle_helix) * eLL
-        #print "eF = " + str(eF)
+        #print "eF = "+str(eF)
         if (shuffle_vectors):
             eF *= random.choice([-1,+1])
-            #print "eF = " + str(eF)
+            #print "eF = "+str(eF)
         if (use_new_definition):
             eN = eRR
             if (shuffle_vectors):
@@ -70,11 +70,11 @@ def computeFiberDirections(
             eN = numpy.cross(eF, eS)
 
         assert (round(numpy.linalg.norm(eF),1) == 1.0),\
-            "|eF| = " + str(numpy.linalg.norm(eF)) + "≠ 1. Aborting"
+            "|eF| = "+str(numpy.linalg.norm(eF))+"≠ 1. Aborting"
         assert (round(numpy.linalg.norm(eS),1) == 1.0),\
-            "|eS| = " + str(numpy.linalg.norm(eS)) + "≠ 1. Aborting"
+            "|eS| = "+str(numpy.linalg.norm(eS))+"≠ 1. Aborting"
         assert (round(numpy.linalg.norm(eN),1) == 1.0),\
-            "|eN| = " + str(numpy.linalg.norm(eN)) + "≠ 1. Aborting"
+            "|eN| = "+str(numpy.linalg.norm(eN))+"≠ 1. Aborting"
 
         farray_eF.SetTuple(k_tuple, eF)
         farray_eS.SetTuple(k_tuple, eS)

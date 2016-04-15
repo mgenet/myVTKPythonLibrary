@@ -20,7 +20,7 @@ def readDynaMesh(lsdyna_mesh_filename,
                  cell_type='hexahedron',
                  verbose=1):
 
-    myVTK.myPrint(verbose, "*** readDynaMesh: " + lsdyna_mesh_filename + " ***")
+    myVTK.myPrint(verbose, "*** readDynaMesh: "+lsdyna_mesh_filename+" ***")
 
     points = vtk.vtkPoints()
 

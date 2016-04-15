@@ -23,8 +23,8 @@ def addMappingFromPointsToCells(
 
     n_points = ugrid_points.GetNumberOfPoints()
     n_cells = ugrid_cells.GetNumberOfCells()
-    #print "n_points = " + str(n_points)
-    #print "n_cells = " + str(n_cells)
+    #print "n_points = "+str(n_points)
+    #print "n_cells = "+str(n_cells)
 
     (cell_locator,
      closest_point,
@@ -57,8 +57,8 @@ def addMappingFromPointsToCells(
             subId,
             dist)
         #k_cell = cell_locator.FindCell(point)
-        #print "k_point = " + str(k_point)
-        #print "k_cell = " + str(k_cell)
+        #print "k_point = "+str(k_point)
+        #print "k_cell = "+str(k_cell)
 
         iarray_k_cell.SetTuple1(
             k_point,

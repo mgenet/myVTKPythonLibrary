@@ -18,7 +18,7 @@ def readAbaqusStressFromDAT(
         data_filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readAbaqusStressFromDAT: " + data_filename + " ***")
+    myVTK.myPrint(verbose, "*** readAbaqusStressFromDAT: "+data_filename+" ***")
 
     s_array = myVTK.createFloatArray("", 6)
 
@@ -43,7 +43,7 @@ def readAbaqusStressFromDAT(
 
     data_file.close()
 
-    myVTK.myPrint(verbose, "n_tuples = " + str(s_array.GetNumberOfTuples()))
+    myVTK.myPrint(verbose, "n_tuples = "+str(s_array.GetNumberOfTuples()))
 
     return s_array
 

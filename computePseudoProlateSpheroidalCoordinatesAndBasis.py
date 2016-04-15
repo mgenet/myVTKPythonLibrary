@@ -279,36 +279,36 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
         angles=c_lst_FWLV,
         angles_in_degrees=False,
         angles_in_pm_pi=False)
-    myVTK.myPrint(verbose, "c_avg_FWLV = " + str(c_avg_FWLV))
+    myVTK.myPrint(verbose, "c_avg_FWLV = "+str(c_avg_FWLV))
     c_lst_FWLV = (((c_lst_FWLV-c_avg_FWLV+math.pi)%(2*math.pi))-math.pi+c_avg_FWLV)
     c_min_FWLV = min(c_lst_FWLV)
     c_max_FWLV = max(c_lst_FWLV)
-    myVTK.myPrint(verbose, "c_min_FWLV = " + str(c_min_FWLV))
-    myVTK.myPrint(verbose, "c_max_FWLV = " + str(c_max_FWLV))
+    myVTK.myPrint(verbose, "c_min_FWLV = "+str(c_min_FWLV))
+    myVTK.myPrint(verbose, "c_max_FWLV = "+str(c_max_FWLV))
 
     c_lst_S = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 1)])
     (c_avg_S, c_std_S) = myVTK.computeMeanStddevAngles(
         angles=c_lst_S,
         angles_in_degrees=False,
         angles_in_pm_pi=False)
-    myVTK.myPrint(verbose, "c_avg_S = " + str(c_avg_S))
+    myVTK.myPrint(verbose, "c_avg_S = "+str(c_avg_S))
     c_lst_S = (((c_lst_S-c_avg_S+math.pi)%(2*math.pi))-math.pi+c_avg_S)
     c_min_S = min(c_lst_S)
     c_max_S = max(c_lst_S)
-    myVTK.myPrint(verbose, "c_min_S = " + str(c_min_S))
-    myVTK.myPrint(verbose, "c_max_S = " + str(c_max_S))
+    myVTK.myPrint(verbose, "c_min_S = "+str(c_min_S))
+    myVTK.myPrint(verbose, "c_max_S = "+str(c_max_S))
 
     c_lst_FWRV = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 2)])
     (c_avg_FWRV, c_std_FWRV) = myVTK.computeMeanStddevAngles(
         angles=c_lst_FWRV,
         angles_in_degrees=False,
         angles_in_pm_pi=False)
-    myVTK.myPrint(verbose, "c_avg_FWRV = " + str(c_avg_FWRV))
+    myVTK.myPrint(verbose, "c_avg_FWRV = "+str(c_avg_FWRV))
     c_lst_FWRV = (((c_lst_FWRV-c_avg_FWRV+math.pi)%(2*math.pi))-math.pi+c_avg_FWRV)
     c_min_FWRV = min(c_lst_FWRV)
     c_max_FWRV = max(c_lst_FWRV)
-    myVTK.myPrint(verbose, "c_min_FWRV = " + str(c_min_FWRV))
-    myVTK.myPrint(verbose, "c_max_FWRV = " + str(c_max_FWRV))
+    myVTK.myPrint(verbose, "c_min_FWRV = "+str(c_min_FWRV))
+    myVTK.myPrint(verbose, "c_max_FWRV = "+str(c_max_FWRV))
 
     l_lst = [farray_l.GetTuple1(k_point) for k_point in xrange(n_points)]
     l_min = min(l_lst)

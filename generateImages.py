@@ -320,19 +320,19 @@ class Mapping:
         return numpy.dot(self.Finv, x)
 
     def X_heart(self, x):
-        #print "x = " + str(x)
+        #print "x = "+str(x)
         self.x_inplane[0] = x[0] - self.L[0]/2
         self.x_inplane[1] = x[1] - self.L[1]/2
-        #print "x_inplane = " + str(self.x_inplane)
+        #print "x_inplane = "+str(self.x_inplane)
         self.rt[0] = numpy.linalg.norm(self.x_inplane)
         self.rt[1] = math.atan2(self.x_inplane[1], self.x_inplane[0])
-        #print "rt = " + str(self.rt)
+        #print "rt = "+str(self.rt)
         self.RT[:] = numpy.dot(self.Ainv, self.rt-self.B)
-        #print "RT = " + str(self.RT)
+        #print "RT = "+str(self.RT)
         self.X_full[0] = self.RT[0] * math.cos(self.RT[1]) + self.L[0]/2
         self.X_full[1] = self.RT[0] * math.sin(self.RT[1]) + self.L[1]/2
         self.X_full[2] = x[2]
-        #print "X_full = " + str(self.X_full)
+        #print "X_full = "+str(self.X_full)
         return self.X_full
 
     def x_no(self, X):
@@ -342,19 +342,19 @@ class Mapping:
         return numpy.dot(self.F, X)
 
     def x_heart(self, X):
-        #print "X = " + str(X)
+        #print "X = "+str(X)
         self.X_inplane[0] = X[0] - self.L[0]/2
         self.X_inplane[1] = X[1] - self.L[1]/2
-        #print "X_inplane = " + str(self.X_inplane)
+        #print "X_inplane = "+str(self.X_inplane)
         self.RT[0] = numpy.linalg.norm(self.X_inplane)
         self.RT[1] = math.atan2(self.X_inplane[1], self.X_inplane[0])
-        #print "RT = " + str(self.RT)
+        #print "RT = "+str(self.RT)
         self.rt[:] = numpy.dot(self.A, self.RT) + self.B
-        #print "rt = " + str(self.rt)
+        #print "rt = "+str(self.rt)
         self.x_full[0] = self.rt[0] * math.cos(self.rt[1]) + self.L[0]/2
         self.x_full[1] = self.rt[0] * math.sin(self.rt[1]) + self.L[1]/2
         self.x_full[2] = X[2]
-        #print "x_full = " + str(self.x_full)
+        #print "x_full = "+str(self.x_full)
         return self.x_full
 
 ########################################################################
@@ -428,7 +428,7 @@ def generateImages(
         mapping.init_t(t)
         for k_point in xrange(vtk_image.GetNumberOfPoints()):
             vtk_image.GetPoint(k_point, x0)
-            #print "x0 = " + str(x0)
+            #print "x0 = "+str(x0)
             x[:] = x0[:]
             I = 0.
             if   (images["n_dim"] == 1):
@@ -450,9 +450,9 @@ def generateImages(
                         x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_integration"][1]
                         for k_x in xrange(images["n_integration"][0]):
                             x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
-                            #print "x = " + str(x)
+                            #print "x = "+str(x)
                             I += image.I0(mapping.X(x))
-                            #print "I = " + str(I)
+                            #print "I = "+str(I)
                 I /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
@@ -466,8 +466,8 @@ def generateImages(
     if (images["data_type"] in ("float")):
         pass
     elif (images["data_type"] in ("unsigned char", "unsigned short", "unsigned int", "unsigned long", "unsigned float" "uint8", "uint16", "uint32", "uint64", "ufloat")):
-        print "global_min = " + str(global_min)
-        print "global_max = " + str(global_max)
+        print "global_min = "+str(global_min)
+        print "global_max = "+str(global_max)
         shifter = vtk.vtkImageShiftScale()
         shifter.SetShift(-global_min)
         if   (images["data_type"] in ("unsigned char", "uint8")):

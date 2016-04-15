@@ -21,7 +21,7 @@ def writeSTL(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** writeSTL: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** writeSTL: "+filename+" ***")
 
     stl_writer = vtk.vtkSTLWriter()
     stl_writer.SetFileName(filename)

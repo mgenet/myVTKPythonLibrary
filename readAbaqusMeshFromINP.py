@@ -21,7 +21,7 @@ def readAbaqusMeshFromINP(
         elem_types="all",
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readAbaqusMeshFromINP: " + mesh_filename + " ***")
+    myVTK.myPrint(verbose, "*** readAbaqusMeshFromINP: "+mesh_filename+" ***")
 
     points = vtk.vtkPoints()
     cell_array = vtk.vtkCellArray()
@@ -70,7 +70,7 @@ def readAbaqusMeshFromINP(
                 cell_n_points = 8
                 cell = vtk.vtkHexahedron()
             else:
-                print "Warning: elements not read: " + line + "."
+                print "Warning: elements not read: "+line+"."
 
     mesh_file.close()
 
@@ -78,6 +78,6 @@ def readAbaqusMeshFromINP(
     ugrid.SetPoints(points)
     ugrid.SetCells(cell_vtk_type, cell_array)
 
-    myVTK.myPrint(verbose, "n_cells = " + str(ugrid.GetNumberOfCells()))
+    myVTK.myPrint(verbose, "n_cells = "+str(ugrid.GetNumberOfCells()))
 
     return ugrid

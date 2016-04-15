@@ -21,7 +21,7 @@ def readPData(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readPData: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** readPData: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -36,11 +36,10 @@ def readPData(
     pdata_reader.Update()
     pdata = pdata_reader.GetOutput()
 
-    if (verbose):
-        print "n_points = " + str(pdata.GetNumberOfPoints())
-        print "n_verts = " + str(pdata.GetNumberOfVerts())
-        print "n_lines = " + str(pdata.GetNumberOfLines())
-        print "n_polys = " + str(pdata.GetNumberOfPolys())
-        print "n_strips = " + str(pdata.GetNumberOfStrips())
+    myVTK.myPrint(verbose, "n_points = "+str(pdata.GetNumberOfPoints()))
+    myVTK.myPrint(verbose, "n_verts = "+str(pdata.GetNumberOfVerts()))
+    myVTK.myPrint(verbose, "n_lines = "+str(pdata.GetNumberOfLines()))
+    myVTK.myPrint(verbose, "n_polys = "+str(pdata.GetNumberOfPolys()))
+    myVTK.myPrint(verbose, "n_strips = "+str(pdata.GetNumberOfStrips()))
 
     return pdata

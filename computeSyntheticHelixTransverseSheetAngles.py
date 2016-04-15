@@ -40,21 +40,21 @@ def computeSyntheticHelixTransverseSheetAngles(
     n_c = [[0. for k_r in xrange(2)] for k_angle in xrange(3)]
     d_c = [[0. for k_r in xrange(2)] for k_angle in xrange(3)]
     for k_angle in xrange(3):
-        #print "k_angle = " + str(k_angle)
+        #print "k_angle = "+str(k_angle)
         for k_r in xrange(2):
-            #print "k_r = " + str(k_r)
+            #print "k_r = "+str(k_r)
 
             n_l[k_angle][k_r] = len(angles[k_angle][k_r])
             assert (n_l[k_angle][k_r] > 1), "Must have more than 1 longitudinal dof. Aborting."
-            #print "n_l = " + str(n_l)
+            #print "n_l = "+str(n_l)
             d_l[k_angle][k_r] = 1./(n_l[k_angle][k_r]-1)
-            #print "d_l = " + str(d_l)
+            #print "d_l = "+str(d_l)
 
             n_c[k_angle][k_r] = len(angles[k_angle][k_r][0])
             assert (n_c[k_angle][k_r] > 0), "Must have more than 0 circumferential dof. Aborting."
-            #print "n_c = " + str(n_c)
+            #print "n_c = "+str(n_c)
             d_c[k_angle][k_r] = 1./n_c[k_angle][k_r]
-            #print "d_c = " + str(d_c)
+            #print "d_c = "+str(d_c)
 
     n_tuples = farray_rr.GetNumberOfTuples()
 
@@ -78,35 +78,35 @@ def computeSyntheticHelixTransverseSheetAngles(
                      farray_angle_sheet]
 
     for k_tuple in xrange(n_tuples):
-        #print "k_tuple = " + str(k_tuple)
+        #print "k_tuple = "+str(k_tuple)
 
         angles_in_degrees = numpy.empty(3)
         for k_angle in xrange(3):
-            #print "k_angle = " + str(k_angle)
+            #print "k_angle = "+str(k_angle)
 
                 rr = farray_rr.GetTuple1(k_tuple)
 
                 cc = farray_cc.GetTuple1(k_tuple)
                 i_c_end = int(cc/d_c[k_angle][0]/1.000001)
                 i_c_epi = int(cc/d_c[k_angle][1]/1.000001)
-                #print "i_c_end = " + str(i_c_end)
-                #print "i_c_epi = " + str(i_c_epi)
+                #print "i_c_end = "+str(i_c_end)
+                #print "i_c_epi = "+str(i_c_epi)
 
                 zeta_end = (cc - i_c_end*d_c[k_angle][0])/d_c[k_angle][0]
                 zeta_epi = (cc - i_c_epi*d_c[k_angle][1])/d_c[k_angle][1]
-                #print "zeta_end = " + str(zeta_end)
-                #print "zeta_epi = " + str(zeta_epi)
+                #print "zeta_end = "+str(zeta_end)
+                #print "zeta_epi = "+str(zeta_epi)
 
                 ll = farray_ll.GetTuple1(k_tuple)
                 i_l_end = int(ll/d_l[k_angle][0]/1.000001)
                 i_l_epi = int(ll/d_l[k_angle][1]/1.000001)
-                #print "i_l_end = " + str(i_l_end)
-                #print "i_l_epi = " + str(i_l_epi)
+                #print "i_l_end = "+str(i_l_end)
+                #print "i_l_epi = "+str(i_l_epi)
 
                 eta_end = (ll - i_l_end*d_l[k_angle][0])/d_l[k_angle][0]
                 eta_epi = (ll - i_l_epi*d_l[k_angle][1])/d_l[k_angle][1]
-                #print "eta_end = " + str(eta_end)
-                #print "eta_epi = " + str(eta_epi)
+                #print "eta_end = "+str(eta_end)
+                #print "eta_epi = "+str(eta_epi)
 
                 t_ii_end = angles[k_angle][0][i_l_end  ][ i_c_end   %n_c[k_angle][0]]
                 t_ji_end = angles[k_angle][0][i_l_end  ][(i_c_end+1)%n_c[k_angle][0]]
@@ -116,14 +116,14 @@ def computeSyntheticHelixTransverseSheetAngles(
                 t_ji_epi = angles[k_angle][1][i_l_epi  ][(i_c_epi+1)%n_c[k_angle][1]]
                 t_ij_epi = angles[k_angle][1][i_l_epi+1][ i_c_epi   %n_c[k_angle][1]]
                 t_jj_epi = angles[k_angle][1][i_l_epi+1][(i_c_epi+1)%n_c[k_angle][1]]
-                #print "t_ii_end = " + str(t_ii_end)
-                #print "t_ji_end = " + str(t_ji_end)
-                #print "t_ij_end = " + str(t_ij_end)
-                #print "t_jj_end = " + str(t_jj_end)
-                #print "t_ii_epi = " + str(t_ii_epi)
-                #print "t_ji_epi = " + str(t_ji_epi)
-                #print "t_ij_epi = " + str(t_ij_epi)
-                #print "t_jj_epi = " + str(t_jj_epi)
+                #print "t_ii_end = "+str(t_ii_end)
+                #print "t_ji_end = "+str(t_ji_end)
+                #print "t_ij_end = "+str(t_ij_end)
+                #print "t_jj_end = "+str(t_jj_end)
+                #print "t_ii_epi = "+str(t_ii_epi)
+                #print "t_ji_epi = "+str(t_ji_epi)
+                #print "t_ij_epi = "+str(t_ij_epi)
+                #print "t_jj_epi = "+str(t_jj_epi)
 
                 angle_end = t_ii_end * (1 - zeta_end - eta_end + zeta_end*eta_end) \
                           + t_ji_end * (    zeta_end           - zeta_end*eta_end) \

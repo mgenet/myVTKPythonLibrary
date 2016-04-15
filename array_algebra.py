@@ -26,16 +26,16 @@ def addArrays(
 
     n_components = array1.GetNumberOfComponents()
     assert (array2.GetNumberOfComponents() == n_components)
-    if (verbose >= 2): print "n_components = " + str(n_components)
+    if (verbose >= 2): print "n_components = "+str(n_components)
 
     n_tuples = array1.GetNumberOfTuples()
     assert (array2.GetNumberOfTuples() == n_tuples)
-    if (verbose >= 2): print "n_tuples = " + str(n_tuples)
+    if (verbose >= 2): print "n_tuples = "+str(n_tuples)
 
     array_type = type(array1.GetTuple(0)[0])
     assert (array_type in [int, float])
     assert (type(array2.GetTuple(0)[0]) is array_type)
-    if (verbose >= 2): print "array_type = " + str(array_type)
+    if (verbose >= 2): print "array_type = "+str(array_type)
 
     if (array3 is None):
         array3 = myVTK.createArray(
@@ -49,7 +49,7 @@ def addArrays(
         assert (type(array3.GetTuple(0)[0]) is array_type)
 
     for k_tuple in xrange(n_tuples):
-        if (verbose >= 2): print "k_tuple = " + str(k_tuple)
+        if (verbose >= 2): print "k_tuple = "+str(k_tuple)
 
         array3.SetTuple(
             k_tuple,

@@ -47,7 +47,7 @@ def mapDataSetToPointData(
     farrays_std = {}
     farrays_rat = {}
     for farray_name in farray_names:
-        assert (dataset.HasArray(farray_name)), "mesh has no array named " + farray_name + ". Aborting."
+        assert (dataset.HasArray(farray_name)), "mesh has no array named "+farray_name+". Aborting."
 
         farray_type = dataset.GetArray(farray_name).GetDataTypeAsString()
         farray_n_components = dataset.GetArray(farray_name).GetNumberOfComponents()
@@ -82,12 +82,12 @@ def mapDataSetToPointData(
         for farray_name in farray_names:
             if (points_within_radius.GetNumberOfIds() > 0):
                 values = [numpy.array(dataset.GetArray(farray_name).GetTuple(points_within_radius.GetId(k_id))) for k_id in xrange(points_within_radius.GetNumberOfIds())]
-                #print "values = " + str(values)
+                #print "values = "+str(values)
                 if (threshold_min != None):
                     values = [value for value in values if (numpy.linalg.norm(value) > threshold_min)]
                 if (threshold_max != None):
                     values = [value for value in values if (numpy.linalg.norm(value) < threshold_max)]
-                #print "values = " + str(values)
+                #print "values = "+str(values)
                 if (len(values) > 0):
                     avg = numpy.mean(values, 0)
                     std = numpy.std(values, 0)

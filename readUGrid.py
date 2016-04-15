@@ -21,7 +21,7 @@ def readUGrid(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readUGrid: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** readUGrid: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -36,11 +36,7 @@ def readUGrid(
     ugrid_reader.Update()
     ugrid = ugrid_reader.GetOutput()
 
-    if (verbose):
-        n_points = ugrid.GetNumberOfPoints()
-        print 'n_points =', n_points
-
-        n_cells = ugrid.GetNumberOfCells()
-        print 'n_cells =', n_cells
+    myVTK.myPrint(verbose, "n_points ="+str(ugrid.GetNumberOfPoints()))
+    myVTK.myPrint(verbose, "n_cells ="+str(ugrid.GetNumberOfCells()))
 
     return ugrid

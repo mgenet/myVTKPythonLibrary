@@ -34,18 +34,18 @@ def discretizeData(
     h = numpy.empty((n_r, n_c, n_l))
 
     for k_l in xrange(n_l):
-        #print "k_l = " + str(k_l)
+        #print "k_l = "+str(k_l)
         sel_l = [k_tuple for k_tuple in xrange(n_tuples) if (math.floor(n_l*farray_ll.GetTuple1(k_tuple)) == k_l)]
         #print len(sel_l)
 
         for k_c in xrange(n_c):
-            #print "k_c = " + str(k_c)
+            #print "k_c = "+str(k_c)
 
             sel_c = [k_tuple for k_tuple in sel_l if (math.floor(n_c*farray_cc.GetTuple1(k_tuple)) == k_c)]
             #print len(sel_c)
 
             for k_r in xrange(n_r):
-                #print "k_r = " + str(k_r)
+                #print "k_r = "+str(k_r)
 
                 sel_r = [k_tuple for k_tuple in sel_c if (math.floor(n_r*farray_rr.GetTuple1(k_tuple)) == k_r)]
                 #print len(sel_r)

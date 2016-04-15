@@ -59,7 +59,7 @@ def computePrincipalDirections(
         eCC = numpy.empty(3)
         eLL = numpy.empty(3)
     for k_tuple in xrange(n_tuples):
-        #print "k_tuple: " + str(k_tuple)
+        #print "k_tuple: "+str(k_tuple)
         field.GetTuple(k_tuple, vec)
         if (field_storage == "vec"):
             vec_col6_to_mat_sym33(vec, mat)

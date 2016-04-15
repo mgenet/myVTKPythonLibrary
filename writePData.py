@@ -21,7 +21,7 @@ def writePData(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** writePData: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** writePData: "+filename+" ***")
 
     if ('vtk' in filename):
         pdata_writer = vtk.vtkPolyDataWriter()

@@ -20,7 +20,7 @@ def readAbaqusFibersFromINP(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readAbaqusFibersFromINP: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** readAbaqusFibersFromINP: "+filename+" ***")
 
     eF_array = myVTK.createFloatArray('eF', 3)
     eS_array = myVTK.createFloatArray('eS', 3)
@@ -46,7 +46,7 @@ def readAbaqusFibersFromINP(
 
     file.close()
 
-    myVTK.myPrint(verbose, "n_tuples = " + str(eF_array.GetNumberOfTuples()))
+    myVTK.myPrint(verbose, "n_tuples = "+str(eF_array.GetNumberOfTuples()))
 
     return (eF_array,
             eS_array,

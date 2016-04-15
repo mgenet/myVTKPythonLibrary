@@ -31,8 +31,8 @@ def splitDomainBetweenEndoAndEpi(
     origin = [(1./2)*bounds[0]+(1./2)*bounds[1],
               (1./2)*bounds[2]+(1./2)*bounds[3],
               (1.-r)*bounds[4]+(  r )*bounds[5]]
-    #myVTK.myPrint(verbose, "bounds = " + str(bounds))
-    #myVTK.myPrint(verbose, "origin = " + str(origin))
+    #myVTK.myPrint(verbose, "bounds = "+str(bounds))
+    #myVTK.myPrint(verbose, "origin = "+str(origin))
 
     (pdata_domain,
      cap) = myVTK.clipPDataUsingPlane(

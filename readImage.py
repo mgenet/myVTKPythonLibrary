@@ -21,7 +21,7 @@ def readImage(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readImage: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** readImage: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -36,7 +36,6 @@ def readImage(
     image_reader.Update()
     image = image_reader.GetOutput()
 
-    if (verbose):
-        print "n_points = " + str(image.GetNumberOfPoints())
+    myVTK.myPrint(verbose, "n_points = "+str(image.GetNumberOfPoints()))
 
     return image

@@ -21,7 +21,7 @@ def writeImage(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** writeImage: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** writeImage: "+filename+" ***")
 
     if ('vtk' in filename):
         image_writer = vtk.vtkImageWriter()

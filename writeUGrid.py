@@ -21,7 +21,7 @@ def writeUGrid(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** writeUGrid: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** writeUGrid: "+filename+" ***")
 
     if ('vtk' in filename):
         ugrid_writer = vtk.vtkUnstructuredGridWriter()

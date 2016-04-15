@@ -56,21 +56,21 @@ def computeSyntheticHelixAngles2(
         assert (farray_angle_helix.GetNumberOfTuples() == n_tuples)
 
     for k_tuple in xrange(n_tuples):
-        #print "k_tuple = " + str(k_tuple)
+        #print "k_tuple = "+str(k_tuple)
 
         cc = farray_cc.GetTuple1(k_tuple)
         i_c = int(cc/d_c/1.000001)
-        #print "i_c = " + str(i_c)
+        #print "i_c = "+str(i_c)
 
         zeta = (t - i_c*d_c) / d_c
-        #print "zeta = " + str(zeta)
+        #print "zeta = "+str(zeta)
 
         ll = farray_ll.GetTuple1(k_tuple)
         i_l = int(ll/d_l/1.000001)
-        #print "i_l = " + str(i_l)
+        #print "i_l = "+str(i_l)
 
         eta = (ll - i_l*d_l) / d_l
-        #print "eta = " + str(eta)
+        #print "eta = "+str(eta)
 
         t_ii_end = angles_end[i_l  ][ i_c   %n_c]
         t_ji_end = angles_end[i_l  ][(i_c+1)%n_c]
@@ -80,14 +80,14 @@ def computeSyntheticHelixAngles2(
         t_ji_epi = angles_epi[i_l  ][(i_c+1)%n_c]
         t_ij_epi = angles_epi[i_l+1][ i_c   %n_c]
         t_jj_epi = angles_epi[i_l+1][(i_c+1)%n_c]
-        #print "t_ii_end = " + str(t_ii_end)
-        #print "t_ji_end = " + str(t_ji_end)
-        #print "t_ij_end = " + str(t_ij_end)
-        #print "t_jj_end = " + str(t_jj_end)
-        #print "t_ii_epi = " + str(t_ii_epi)
-        #print "t_ji_epi = " + str(t_ji_epi)
-        #print "t_ij_epi = " + str(t_ij_epi)
-        #print "t_jj_epi = " + str(t_jj_epi)
+        #print "t_ii_end = "+str(t_ii_end)
+        #print "t_ji_end = "+str(t_ji_end)
+        #print "t_ij_end = "+str(t_ij_end)
+        #print "t_jj_end = "+str(t_jj_end)
+        #print "t_ii_epi = "+str(t_ii_epi)
+        #print "t_ji_epi = "+str(t_ji_epi)
+        #print "t_ij_epi = "+str(t_ij_epi)
+        #print "t_jj_epi = "+str(t_jj_epi)
 
         helix_angle_end = t_ii_end * (1 - zeta - eta + zeta*eta) \
                         + t_ji_end * (zeta - zeta*eta) \

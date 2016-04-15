@@ -25,7 +25,7 @@ def writeFiberOrientationFileForAbaqus(
     myVTK.myPrint(verbose, "*** writeFiberOrientationFileForAbaqus ***")
 
     orientation_file = open(filename, "w")
-    orientation_file.write(", 1., 0., 0., 0., 1., 0." + "\n")
+    orientation_file.write(", 1., 0., 0., 0., 1., 0."+"\n")
 
     n_cells = mesh.GetNumberOfCells()
 

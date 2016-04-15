@@ -21,20 +21,16 @@ def readSTL(
         filename,
         verbose=1):
 
-    myVTK.myPrint(verbose, "*** readSTL: " + filename + " ***")
+    myVTK.myPrint(verbose, "*** readSTL: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
     stl_reader = vtk.vtkSTLReader()
     stl_reader.SetFileName(filename)
     stl_reader.Update()
-    pdata_mesh = stl_reader.GetOutput()
+    pdata = stl_reader.GetOutput()
 
-    if (verbose):
-        n_points = pdata_mesh.GetNumberOfPoints()
-        print 'n_points =', n_points
+    myVTK.myPrint(verbose, "n_points ="+str(pdata.GetNumberOfPoints()))
+    myVTK.myPrint(verbose, "n_cells ="+str(pdata.GetNumberOfCells()))
 
-        n_cells = pdata_mesh.GetNumberOfCells()
-        print 'n_cells =', n_cells
-
-    return pdata_mesh
+    return pdata
