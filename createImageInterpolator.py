@@ -18,12 +18,15 @@ import myVTKPythonLibrary as myVTK
 
 def createImageInterpolator(
         image,
+        out_value=None,
         verbose=1):
 
     myVTK.myPrint(verbose, "*** createImageInterpolator ***")
 
     interpolator = vtk.vtkImageInterpolator()
     interpolator.Initialize(image)
+    if (out_value is not None):
+        interpolator.SetOutValue(out_value)
     interpolator.Update()
 
     return interpolator
