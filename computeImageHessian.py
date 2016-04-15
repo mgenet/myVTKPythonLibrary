@@ -25,7 +25,7 @@ def computeImageHessian(
 
     myVTK.myPrint(verbose, "*** computeImageHessian ***")
 
-    image = myVTK.initImage(image, image_filename)
+    image = myVTK.initImage(image, image_filename, verbose-1)
 
     image_dimensionality = myVTK.computeImageDimensionality(
         image=image,
@@ -67,9 +67,10 @@ def computeImageHessian(
     image_append_components.Update()
     image_w_hessian = image_append_components.GetOutput()
 
-    image.GetPointData().AddArray(image_w_gradient.GetPointData().GetArray("ImageScalarsGradient"))
-    image.GetPointData().AddArray(image_w_hessian.GetPointData().GetArray("ImageScalarsGradientGradient"))
-    image.GetPointData().SetActiveScalars("ImageScalarsGradientGradient")
+    name = image.GetPointData().GetScalars().GetName()
+    image.GetPointData().AddArray(image_w_gradient.GetPointData().GetArray(name+"Gradient"))
+    image.GetPointData().AddArray(image_w_hessian.GetPointData().GetArray(name+"GradientGradient"))
+    image.GetPointData().SetActiveScalars(name+"GradientGradient")
 
     return image
 
@@ -81,11 +82,15 @@ if (__name__ == "__main__"):
     parser.add_argument("--verbose", "-v", type=int, default=1)
     args = parser.parse_args()
 
-    image_w_hess = myVTK.computeImageHessian(
-        image_filename=args.image_filename,
+    image = myVTK.readImage(
+        filename=args.image_filename,
+        verbose=args.verbose)
+
+    image_w_hessian = myVTK.computeImageHessian(
+        image=image,
         verbose=args.verbose)
 
     myVTK.writeImage(
-        image=image_w_hess,
+        image=image_w_hessian,
         filename=args.image_filename.replace(".vti", "-hessian.vti"),
         verbose=args.verbose)

@@ -25,7 +25,7 @@ def computeImageGradient(
 
     myVTK.myPrint(verbose, "*** computeImageGradient ***")
 
-    image = myVTK.initImage(image, image_filename)
+    image = myVTK.initImage(image, image_filename, verbose-1)
 
     image_dimensionality = myVTK.computeImageDimensionality(
         image=image,
@@ -50,9 +50,12 @@ if (__name__ == "__main__"):
     parser.add_argument("--verbose", "-v", type=int, default=1)
     args = parser.parse_args()
 
+    image = myVTK.readImage(
+        filename=args.image_filename,
+        verbose=args.verbose)
 
     image_w_grad = myVTK.computeImageGradient(
-        image_filename=args.image_filename,
+        image=image,
         verbose=args.verbose)
 
     myVTK.writeImage(
