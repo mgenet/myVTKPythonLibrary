@@ -25,11 +25,7 @@ def computeImageGradient(
 
     myVTK.myPrint(verbose, "*** computeImageGradient ***")
 
-    assert ((image is not None) or (image_filename is not None)), "Need an image or an image_filename. Aborting."
-    if image is None:
-        image = myVTK.readImage(
-            filename=image_filename,
-            verbose=verbose-1)
+    image = myVTK.initImage(image, image_filename)
 
     image_dimensionality = myVTK.computeImageDimensionality(
         image=image,

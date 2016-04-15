@@ -78,4 +78,5 @@ from createShortArray import *
 from createIntArray import *
 from computeMeanStddevAngles import *
 from array_algebra import *
+from initImage import *
 from addMappingFromPointsToCells import *
