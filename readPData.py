@@ -36,10 +36,10 @@ def readPData(
     pdata_reader.Update()
     pdata = pdata_reader.GetOutput()
 
-    myVTK.myPrint(verbose, "n_points = "+str(pdata.GetNumberOfPoints()))
-    myVTK.myPrint(verbose, "n_verts = "+str(pdata.GetNumberOfVerts()))
-    myVTK.myPrint(verbose, "n_lines = "+str(pdata.GetNumberOfLines()))
-    myVTK.myPrint(verbose, "n_polys = "+str(pdata.GetNumberOfPolys()))
-    myVTK.myPrint(verbose, "n_strips = "+str(pdata.GetNumberOfStrips()))
+    myVTK.myPrint(verbose-1, "n_points = "+str(pdata.GetNumberOfPoints()))
+    myVTK.myPrint(verbose-1, "n_verts = "+str(pdata.GetNumberOfVerts()))
+    myVTK.myPrint(verbose-1, "n_lines = "+str(pdata.GetNumberOfLines()))
+    myVTK.myPrint(verbose-1, "n_polys = "+str(pdata.GetNumberOfPolys()))
+    myVTK.myPrint(verbose-1, "n_strips = "+str(pdata.GetNumberOfStrips()))
 
     return pdata

@@ -36,6 +36,6 @@ def readImage(
     image_reader.Update()
     image = image_reader.GetOutput()
 
-    myVTK.myPrint(verbose, "n_points = "+str(image.GetNumberOfPoints()))
+    myVTK.myPrint(verbose-1, "n_points = "+str(image.GetNumberOfPoints()))
 
     return image

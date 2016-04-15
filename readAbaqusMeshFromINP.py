@@ -31,7 +31,7 @@ def readAbaqusMeshFromINP(
     context = ""
     for line in mesh_file:
         if (line[-1:] == "\n"): line = line[:-1]
-        #myVTK.myPrint(verbose, "line =", line)
+        #myVTK.myPrint(verbose-1, "line =", line)
 
         if line.startswith("**"): continue
 
@@ -78,6 +78,6 @@ def readAbaqusMeshFromINP(
     ugrid.SetPoints(points)
     ugrid.SetCells(cell_vtk_type, cell_array)
 
-    myVTK.myPrint(verbose, "n_cells = "+str(ugrid.GetNumberOfCells()))
+    myVTK.myPrint(verbose-1, "n_cells = "+str(ugrid.GetNumberOfCells()))
 
     return ugrid

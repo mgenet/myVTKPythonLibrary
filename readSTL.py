@@ -30,7 +30,7 @@ def readSTL(
     stl_reader.Update()
     pdata = stl_reader.GetOutput()
 
-    myVTK.myPrint(verbose, "n_points ="+str(pdata.GetNumberOfPoints()))
-    myVTK.myPrint(verbose, "n_cells ="+str(pdata.GetNumberOfCells()))
+    myVTK.myPrint(verbose-1, "n_points ="+str(pdata.GetNumberOfPoints()))
+    myVTK.myPrint(verbose-1, "n_cells ="+str(pdata.GetNumberOfCells()))
 
     return pdata

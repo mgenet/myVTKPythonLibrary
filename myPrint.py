@@ -21,4 +21,4 @@ def myPrint(
     if not hasattr(myPrint, "initialized"):
         myPrint.initialized = True
         myPrint.verbose_ini = verbose
-    if (verbose > 0): print (myPrint.verbose_ini - verbose) * 4 * " "+string
+    if (verbose > 0): print (myPrint.verbose_ini - verbose)*" |  "+string

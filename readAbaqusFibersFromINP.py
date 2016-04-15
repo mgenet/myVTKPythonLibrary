@@ -46,7 +46,7 @@ def readAbaqusFibersFromINP(
 
     file.close()
 
-    myVTK.myPrint(verbose, "n_tuples = "+str(eF_array.GetNumberOfTuples()))
+    myVTK.myPrint(verbose-1, "n_tuples = "+str(eF_array.GetNumberOfTuples()))
 
     return (eF_array,
             eS_array,

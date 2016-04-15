@@ -29,16 +29,16 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
 
     myVTK.myPrint(verbose, "*** computePseudoProlateSpheroidalCoordinatesAndBasisForLV ***")
 
-    myVTK.myPrint(verbose, "Computing surface cell normals...")
+    myVTK.myPrint(verbose-1, "Computing surface cell normals...")
 
     pdata_end = myVTK.addPDataNormals(
         pdata=pdata_end,
         verbose=verbose-1)
     pdata_epi = myVTK.addPDataNormals(
         pdata=pdata_epi,
-        verbose=verbose)
+        verbose=verbose-1)
 
-    myVTK.myPrint(verbose, "Initializing surface cell locators...")
+    myVTK.myPrint(verbose-1, "Initializing surface cell locators...")
 
     (cell_locator_end,
      closest_point_end,
@@ -57,7 +57,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
          mesh=pdata_epi,
          verbose=verbose-1)
 
-    myVTK.myPrint(verbose, "Computing local prolate spheroidal directions...")
+    myVTK.myPrint(verbose-1, "Computing local prolate spheroidal directions...")
 
     n_points = points.GetNumberOfPoints()
 
@@ -223,7 +223,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
 
     myVTK.myPrint(verbose, "*** computePseudoProlateSpheroidalCoordinatesAndBasisForBiV ***")
 
-    myVTK.myPrint(verbose, "Computing surface cell normals...")
+    myVTK.myPrint(verbose-1, "Computing surface cell normals...")
 
     pdata_endLV = myVTK.addPDataNormals(
         pdata=pdata_endLV,
@@ -233,9 +233,9 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
         verbose=verbose-1)
     pdata_epi = myVTK.addPDataNormals(
         pdata=pdata_epi,
-        verbose=verbose)
+        verbose=verbose-1)
 
-    myVTK.myPrint(verbose, "Initializing surface cell locators...")
+    myVTK.myPrint(verbose-1, "Initializing surface cell locators...")
 
     (cell_locator_endLV,
      closest_point_endLV,
@@ -262,7 +262,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
          mesh=pdata_epi,
          verbose=verbose-1)
 
-    myVTK.myPrint(verbose, "Computing local prolate spheroidal directions...")
+    myVTK.myPrint(verbose-1, "Computing local prolate spheroidal directions...")
 
     n_points = points.GetNumberOfPoints()
 
@@ -279,36 +279,36 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
         angles=c_lst_FWLV,
         angles_in_degrees=False,
         angles_in_pm_pi=False)
-    myVTK.myPrint(verbose, "c_avg_FWLV = "+str(c_avg_FWLV))
+    myVTK.myPrint(verbose-1, "c_avg_FWLV = "+str(c_avg_FWLV))
     c_lst_FWLV = (((c_lst_FWLV-c_avg_FWLV+math.pi)%(2*math.pi))-math.pi+c_avg_FWLV)
     c_min_FWLV = min(c_lst_FWLV)
     c_max_FWLV = max(c_lst_FWLV)
-    myVTK.myPrint(verbose, "c_min_FWLV = "+str(c_min_FWLV))
-    myVTK.myPrint(verbose, "c_max_FWLV = "+str(c_max_FWLV))
+    myVTK.myPrint(verbose-1, "c_min_FWLV = "+str(c_min_FWLV))
+    myVTK.myPrint(verbose-1, "c_max_FWLV = "+str(c_max_FWLV))
 
     c_lst_S = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 1)])
     (c_avg_S, c_std_S) = myVTK.computeMeanStddevAngles(
         angles=c_lst_S,
         angles_in_degrees=False,
         angles_in_pm_pi=False)
-    myVTK.myPrint(verbose, "c_avg_S = "+str(c_avg_S))
+    myVTK.myPrint(verbose-1, "c_avg_S = "+str(c_avg_S))
     c_lst_S = (((c_lst_S-c_avg_S+math.pi)%(2*math.pi))-math.pi+c_avg_S)
     c_min_S = min(c_lst_S)
     c_max_S = max(c_lst_S)
-    myVTK.myPrint(verbose, "c_min_S = "+str(c_min_S))
-    myVTK.myPrint(verbose, "c_max_S = "+str(c_max_S))
+    myVTK.myPrint(verbose-1, "c_min_S = "+str(c_min_S))
+    myVTK.myPrint(verbose-1, "c_max_S = "+str(c_max_S))
 
     c_lst_FWRV = numpy.array([farray_c.GetTuple1(k_point) for k_point in xrange(n_points) if (iarray_regions.GetTuple1(k_point) == 2)])
     (c_avg_FWRV, c_std_FWRV) = myVTK.computeMeanStddevAngles(
         angles=c_lst_FWRV,
         angles_in_degrees=False,
         angles_in_pm_pi=False)
-    myVTK.myPrint(verbose, "c_avg_FWRV = "+str(c_avg_FWRV))
+    myVTK.myPrint(verbose-1, "c_avg_FWRV = "+str(c_avg_FWRV))
     c_lst_FWRV = (((c_lst_FWRV-c_avg_FWRV+math.pi)%(2*math.pi))-math.pi+c_avg_FWRV)
     c_min_FWRV = min(c_lst_FWRV)
     c_max_FWRV = max(c_lst_FWRV)
-    myVTK.myPrint(verbose, "c_min_FWRV = "+str(c_min_FWRV))
-    myVTK.myPrint(verbose, "c_max_FWRV = "+str(c_max_FWRV))
+    myVTK.myPrint(verbose-1, "c_min_FWRV = "+str(c_min_FWRV))
+    myVTK.myPrint(verbose-1, "c_max_FWRV = "+str(c_max_FWRV))
 
     l_lst = [farray_l.GetTuple1(k_point) for k_point in xrange(n_points)]
     l_min = min(l_lst)

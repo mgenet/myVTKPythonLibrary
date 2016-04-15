@@ -36,14 +36,14 @@ def readDynaMesh(lsdyna_mesh_filename,
         print 'Wrong cell type. Aborting.'
         exit()
 
-    myVTK.myPrint(verbose, "Reading Dyna mesh file...")
+    myVTK.myPrint(verbose-1, "Reading Dyna mesh file...")
 
     mesh_file = open(lsdyna_mesh_filename, 'r')
 
     context = ''
     for line in mesh_file:
         if (line[-1:] == '\n'): line = line[:-1]
-        #myVTK.myPrint(verbose, "line ="+line)
+        #myVTK.myPrint(verbose-1, "line ="+line)
 
         if line.startswith('$'): continue
 
@@ -73,7 +73,7 @@ def readDynaMesh(lsdyna_mesh_filename,
 
     mesh_file.close()
 
-    myVTK.myPrint(verbose, "Creating VTK mesh...")
+    myVTK.myPrint(verbose-1, "Creating VTK mesh...")
 
     ugrid = vtk.vtkUnstructuredGrid()
     ugrid.SetPoints(points)

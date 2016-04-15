@@ -28,13 +28,13 @@ def computeABPointsFromTTTSectors(
     n_csects = 12
     n_rsects = 3
     n_slices = n_points / (n_rsects+1) / (n_csects+1)
-    myVTK.myPrint(verbose, "n_slices =", n_slices)
+    myVTK.myPrint(verbose-1, "n_slices =", n_slices)
 
     zmin = ugrid_sectors.GetPoint(0)[2]
     zmax = ugrid_sectors.GetPoint(ugrid_sectors.GetNumberOfPoints()-1)[2]
 
     dist_btw_slices = abs(zmin-zmax)/(n_slices-1)
-    myVTK.myPrint(verbose, "dist_btw_slices =", dist_btw_slices)
+    myVTK.myPrint(verbose-1, "dist_btw_slices =", dist_btw_slices)
 
     A = ugrid_sectors.GetPoints().GetPoint(0)
     B = ugrid_sectors.GetPoints().GetPoint(6)
@@ -55,8 +55,8 @@ def computeABPointsFromTTTSectors(
     A = [Px, Py, zmin]
     B = [Px, Py, zmax]
 
-    myVTK.myPrint(verbose, "A =", A)
-    myVTK.myPrint(verbose, "B =", B)
+    myVTK.myPrint(verbose-1, "A =", A)
+    myVTK.myPrint(verbose-1, "B =", B)
 
     points_AB = vtk.vtkPoints()
     points_AB.InsertNextPoint(A)

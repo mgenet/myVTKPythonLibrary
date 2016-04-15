@@ -29,9 +29,9 @@ def clipPDataUsingPlane(
     plane.SetOrigin(plane_O)
     plane.SetNormal(plane_N)
 
-    #myVTK.myPrint(verbose, "pdata_mesh.GetBounds() = "+str(pdata_mesh.GetBounds()))
-    #myVTK.myPrint(verbose, "plane_O = "+str(plane_O))
-    #myVTK.myPrint(verbose, "plane_N = "+str(plane_N))
+    #myVTK.myPrint(verbose-1, "pdata_mesh.GetBounds() = "+str(pdata_mesh.GetBounds()))
+    #myVTK.myPrint(verbose-1, "plane_O = "+str(plane_O))
+    #myVTK.myPrint(verbose-1, "plane_N = "+str(plane_N))
 
     clip = vtk.vtkClipPolyData()
     clip.SetClipFunction(plane)
@@ -44,10 +44,10 @@ def clipPDataUsingPlane(
     clipped0 = clip.GetOutput(0)
     clipped1 = clip.GetOutput(1)
 
-    #myVTK.myPrint(verbose, "clipped0.GetNumberOfPoints() = "+str(clipped0.GetNumberOfPoints()))
-    #myVTK.myPrint(verbose, "clipped1.GetNumberOfPoints() = "+str(clipped1.GetNumberOfPoints()))
-    #myVTK.myPrint(verbose, "clipped0.GetNumberOfCells() = "+str(clipped0.GetNumberOfCells()))
-    #myVTK.myPrint(verbose, "clipped1.GetNumberOfCells() = "+str(clipped1.GetNumberOfCells()))
+    #myVTK.myPrint(verbose-1, "clipped0.GetNumberOfPoints() = "+str(clipped0.GetNumberOfPoints()))
+    #myVTK.myPrint(verbose-1, "clipped1.GetNumberOfPoints() = "+str(clipped1.GetNumberOfPoints()))
+    #myVTK.myPrint(verbose-1, "clipped0.GetNumberOfCells() = "+str(clipped0.GetNumberOfCells()))
+    #myVTK.myPrint(verbose-1, "clipped1.GetNumberOfCells() = "+str(clipped1.GetNumberOfCells()))
 
     if (clipped0.GetNumberOfCells() > clipped1.GetNumberOfCells()):
         return clipped0, clipped1

@@ -41,6 +41,6 @@ def readDynaDeformationGradients(
     for k_cell in xrange(n_cells):
         F_array.SetTuple(k_cell, F_list[k_cell])
 
-    myVTK.myPrint(verbose, "n_tuples = "+str(F_array.GetNumberOfTuples()))
+    myVTK.myPrint(verbose-1, "n_tuples = "+str(F_array.GetNumberOfTuples()))
 
     mesh.GetCellData().AddArray(F_array)

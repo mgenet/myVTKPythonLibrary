@@ -25,7 +25,7 @@ def computeRegionsForBiV(
 
     myVTK.myPrint(verbose, "*** computeRegionsForBiV ***")
 
-    myVTK.myPrint(verbose, "Initializing cell locators...")
+    myVTK.myPrint(verbose-1, "Initializing cell locators...")
 
     (cell_locator_endLV,
      closest_point_endLV,

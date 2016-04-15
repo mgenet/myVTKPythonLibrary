@@ -96,19 +96,18 @@ import myVTKPythonLibrary as myVTK
 
 class Image():
     def __init__(self, images, structure, texture, noise):
+        self.L = images["L"]
+
         if (structure["type"] == "no"):
             self.I0_structure = self.I0_structure_no
         elif (structure["type"] == "heart"):
             if (images["n_dim"] == 2):
-                #self.I0_structure = self.I0_structure_no
                 self.I0_structure = self.I0_structure_heart_2
-                self.L = [images["L"][0], images["L"][1]]
                 self.R = float()
                 self.Ri = structure["Ri"]
                 self.Re = structure["Re"]
             elif (images["n_dim"] == 3):
                 self.I0_structure = self.I0_structure_heart_3
-                self.L = [images["L"][0], images["L"][1], images["L"][2]]
                 self.R = float()
                 self.Ri = structure["Ri"]
                 self.Re = structure["Re"]
@@ -125,27 +124,18 @@ class Image():
         elif (texture["type"] == "sine"):
             if   (images["n_dim"] == 1):
                 self.I0_texture = self.I0_texture_sine_X
-                self.L[0] = images["L"][0]
             elif (images["n_dim"] == 2):
                 self.I0_texture = self.I0_texture_sine_XY
-                self.L[0] = images["L"][0]
-                self.L[1] = images["L"][1]
             elif (images["n_dim"] == 3):
                 self.I0_texture = self.I0_texture_sine_XYZ
-                self.L[0] = images["L"][0]
-                self.L[1] = images["L"][1]
-                self.L[2] = images["L"][2]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
         elif (texture["type"] == "sinX"):
             self.I0_texture = self.I0_texture_sine_X
-            self.L[0] = images["L"][0]
         elif (texture["type"] == "sinY"):
             self.I0_texture = self.I0_texture_sine_Y
-            self.L[1] = images["L"][1]
         elif (texture["type"] == "sinZ"):
             self.I0_texture = self.I0_texture_sine_Z
-            self.L[2] = images["L"][2]
         elif (texture["type"] == "tagging"):
             if   (images["n_dim"] == 1):
                 self.I0_texture = self.I0_texture_tagging_X
@@ -270,7 +260,6 @@ class Mapping:
 
         if (evolution["type"] == "linear"):
             self.phi = self.phi_linear
-            self.T = evolution.T
         elif (evolution["type"] == "sine"):
             self.phi = self.phi_sine
             self.T = evolution["T"]
@@ -465,7 +454,7 @@ def generateImages(
 
     if (images["data_type"] in ("float")):
         pass
-    elif (images["data_type"] in ("unsigned char", "unsigned short", "unsigned int", "unsigned long", "unsigned float" "uint8", "uint16", "uint32", "uint64", "ufloat")):
+    elif (images["data_type"] in ("unsigned char", "unsigned short", "unsigned int", "unsigned long", "unsigned float", "uint8", "uint16", "uint32", "uint64", "ufloat")):
         print "global_min = "+str(global_min)
         print "global_max = "+str(global_max)
         shifter = vtk.vtkImageShiftScale()

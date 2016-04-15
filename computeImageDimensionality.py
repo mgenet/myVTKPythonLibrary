@@ -23,7 +23,7 @@ def computeImageDimensionality(
 
     myVTK.myPrint(verbose, "*** computeImageDimensionality ***")
 
-    image = myVTK.initImage(image, image_filename)
+    image = myVTK.initImage(image, image_filename, verbose-1)
 
     extent = image.GetExtent()
     DX = extent[1]+1-extent[0]
@@ -40,6 +40,6 @@ def computeImageDimensionality(
 
     #dimensionality = sum([extent[2*k_dim+1]>extent[2*k_dim] for k_dim in range(3)])
 
-    #print "dimensionality = "+str(dimensionality)
+    myVTK.myPrint(verbose-1, "dimensionality = "+str(dimensionality))
 
     return dimensionality

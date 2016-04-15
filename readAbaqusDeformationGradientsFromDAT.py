@@ -45,7 +45,7 @@ def readAbaqusDeformationGradientsFromDAT(
 
     data_file.close()
 
-    myVTK.myPrint(verbose, "n_tuples = "+str(farray_F.GetNumberOfTuples()))
+    myVTK.myPrint(verbose-1, "n_tuples = "+str(farray_F.GetNumberOfTuples()))
 
     return farray_F
 

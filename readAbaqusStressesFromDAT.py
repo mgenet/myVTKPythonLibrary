@@ -43,7 +43,7 @@ def readAbaqusStressFromDAT(
 
     data_file.close()
 
-    myVTK.myPrint(verbose, "n_tuples = "+str(s_array.GetNumberOfTuples()))
+    myVTK.myPrint(verbose-1, "n_tuples = "+str(s_array.GetNumberOfTuples()))
 
     return s_array
 
