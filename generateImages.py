@@ -10,6 +10,7 @@
 ###                                                                  ###
 ########################################################################
 
+import glob
 import math
 import numpy
 import os
@@ -169,64 +170,109 @@ class Image():
         else:
             assert (0), "noise type must be \"no\" or \"normal\". Aborting."
 
-    def I0(self, X):
-        return self.I0_structure(X) * self.I0_texture(X) + self.I0_noise()
+    def I0(self, X, i, g=None):
+        self.I0_structure(X, i, g)
+        self.I0_texture(X, i, g)
+        self.I0_noise(i, g)
 
-    def I0_structure_no(self, X):
-        return 1.
+    def I0_structure_no(self, X, i, g=None):
+        i[0] = 1.
+        if (g is not None): g[:] = 1.
 
-    def I0_structure_heart_2(self, X):
+    def I0_structure_heart_2(self, X, i, g=None):
         self.R = ((X[0]-self.L[0]/2)**2 + (X[1]-self.L[1]/2)**2)**(1./2)
         if (self.R >= self.Ri) and (self.R <= self.Re):
-            return 1.
+            i[0] = 1.
+            if (g is not None): g[:] = 1.
         else:
-            return 0.
+            i[0] = 0.
+            if (g is not None): g[:] = 0.
 
-    def I0_structure_heart_3(self, X):
+    def I0_structure_heart_3(self, X, i, g=None):
         self.R = ((X[0]-self.L[0]/2)**2 + (X[1]-self.L[1]/2)**2)**(1./2)
         if (self.R >= self.Ri) and (self.R <= self.Re) and (X[2] >= self.Zmin) and (X[2] <= self.Zmax):
-            return 1.
+            i[0] = 1.
+            if (g is not None): g[:] = 1.
         else:
-            return 0.
+            i[0] = 0.
+            if (g is not None): g[:] = 0.
 
-    def I0_texture_no(self, X):
-        return 1.
+    def I0_texture_no(self, X, i, g=None):
+        i[0] *= 1.
+        if (g is not None): g[:] *= 0.
 
-    def I0_texture_sine_X(self, X):
-        return math.sin(math.pi*X[0]/self.L[0])**2
+    def I0_texture_sine_X(self, X, i, g=None):
+        i[0]  *= math.sin(math.pi*X[0]/self.L[0])**2
+        if (g is not None):
+            g[0]  *= 2 * (math.pi/self.L[0]) * math.cos(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[0]/self.L[0])
+            g[1:] *= 0.
 
-    def I0_texture_sine_Y(self, X):
-        return math.sin(math.pi*X[1]/self.L[1])**2
+    def I0_texture_sine_Y(self, X, i, g=None):
+        i[0]  *= math.sin(math.pi*X[1]/self.L[1])**2
+        if (g is not None):
+            g[0]  *= 0.
+            g[1]  *= 2 * (math.pi/self.L[1]) * math.cos(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[1]/self.L[1])
+            g[2:] *= 0.
 
-    def I0_texture_sine_Z(self, X):
-        return math.sin(math.pi*X[2]/self.L[2])**2
+    def I0_texture_sine_Z(self, X, i, g=None):
+        i[0]   *= math.sin(math.pi*X[2]/self.L[2])**2
+        if (g is not None):
+            g[0:2] *= 0.
+            g[2]   *= 2 * (math.pi/self.L[2]) * math.cos(math.pi*X[2]/self.L[2]) * math.sin(math.pi*X[2]/self.L[2])
 
-    def I0_texture_sine_XY(self, X):
-        return math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2
+    def I0_texture_sine_XY(self, X, i, g=None):
+        i[0]  *= (math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2)**(0.5)
+        if (g is not None):
+            g[0]  *= (math.pi/self.L[0]) * math.cos(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[1]/self.L[1])**2 / i[0]
+            g[1]  *= math.sin(math.pi*X[0]/self.L[0])**2 * (math.pi/self.L[1]) * math.cos(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[1]/self.L[1]) / i[0]
+            g[2:] *= 0.
 
-    def I0_texture_sine_XYZ(self, X):
-        return math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2 * math.sin(math.pi*X[2]/self.L[2])**2
+    def I0_texture_sine_XYZ(self, X, i, g=None):
+        i[0] *= (math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2 * math.sin(math.pi*X[2]/self.L[2])**2)**(1./3)
+        if (g is not None):
+            g[0] *= (2./3) * (math.pi/self.L[0]) * math.cos(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[1]/self.L[1])**2 * math.sin(math.pi*X[2]/self.L[2])**2 / i[0]**2
+            g[1] *= math.sin(math.pi*X[0]/self.L[0])**2 * (2./3) * (math.pi/self.L[1]) * math.cos(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[2]/self.L[2])**2 / i[0]**2
+            g[2] *= math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2 * (2./3) * (math.pi/self.L[2]) * math.cos(math.pi*X[2]/self.L[2]) * math.sin(math.pi*X[2]/self.L[2]) / i[0]**2
 
-    def I0_texture_tagging_X(self, X):
-        return math.sin(math.pi*X[0]/self.s)**2
+    def I0_texture_tagging_X(self, X, i, g=None):
+        i[0] *= math.sin(math.pi*X[0]/self.s)**2
+        if (g is not None):
+            g[0] *= 2 * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s)
+            g[1:] *= 0.
 
-    def I0_texture_tagging_Y(self, X):
-        return math.sin(math.pi*X[1]/self.s)**2
+    def I0_texture_tagging_Y(self, X, i, g=None):
+        i[0] *= math.sin(math.pi*X[1]/self.s)**2
+        if (g is not None):
+            g[0]  *= 0.
+            g[1]  *= 2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s)
+            g[2:] *= 0.
 
-    def I0_texture_tagging_Z(self, X):
-        return math.sin(math.pi*X[2]/self.s)**2
+    def I0_texture_tagging_Z(self, X, i, g=None):
+        i[0] *= math.sin(math.pi*X[2]/self.s)**2
+        if (g is not None):
+            g[0:2] *= 0.
+            g[2]   *= 2 * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s)
 
-    def I0_texture_tagging_XY(self, X):
-        return math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2
+    def I0_texture_tagging_XY(self, X, i, g=None):
+        i[0] *= (math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2)**(0.5)
+        if (g is not None):
+            g[0]  *= (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 / i[0]
+            g[1]  *= math.sin(math.pi*X[0]/self.s)**2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) / i[0]
+            g[2:] *= 0.
 
-    def I0_texture_tagging_XYZ(self, X):
-        return math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2
+    def I0_texture_tagging_XYZ(self, X, i, g=None):
+        i[0] *= (math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2)**(1./3)
+        if (g is not None):
+            g[0] *= (2./3) * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2
+            g[1] *= math.sin(math.pi*X[0]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2
+            g[2] *= math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s) / i[0]**2
 
-    def I0_noise_no(self):
-        return 0.
+    def I0_noise_no(self, i, g=None):
+        pass
 
-    def I0_noise_normal(self):
-        return random.normalvariate(self.avg, self.std)
+    def I0_noise_normal(self, i, g=None):
+        i[0] += random.normalvariate(self.avg, self.std)
+        if (g is not None): g[k] += [2*random.normalvariate(self.avg, self.std) for k in xrange(len(g))]
 
 ########################################################################
 
@@ -237,6 +283,18 @@ class Mapping:
             self.init_t = self.init_t_no
             self.X = self.X_no
             self.x = self.x_no
+        elif (self.deformation["type"] == "trans"):
+            self.init_t = self.init_t_trans
+            self.X = self.X_trans
+            self.x = self.x_trans
+            self.D = numpy.empty(3)
+        elif (self.deformation["type"] == "rot"):
+            self.init_t = self.init_t_rot
+            self.X = self.X_rot
+            self.x = self.x_rot
+            self.C = numpy.empty(3)
+            self.R = numpy.empty((3,3))
+            self.Rinv = numpy.empty((3,3))
         elif (self.deformation["type"] == "homogeneous"):
             self.init_t = self.init_t_homogeneous
             self.X = self.X_homogeneous
@@ -250,13 +308,12 @@ class Mapping:
             self.X_inplane = numpy.empty(2)
             self.rt = numpy.empty(2)
             self.RT = numpy.empty(2)
-            self.X_full = numpy.empty(3)
-            self.x_full = numpy.empty(3)
             self.L = images["L"]
             self.Ri = structure["Ri"]
             self.Re = structure["Re"]
+            self.R = numpy.empty((3,3))
         else:
-            assert (0), "deformation type must be \"no\", \"homogeneous\" or \"heart\". Aborting."
+            assert (0), "deformation type must be \"no\", \"trans\", \"rot\", \"homogeneous\" or \"heart\". Aborting."
 
         if (evolution["type"] == "linear"):
             self.phi = self.phi_linear
@@ -275,6 +332,30 @@ class Mapping:
     def init_t_no(self, t):
         pass
 
+    def init_t_trans(self, t):
+        self.D[0] = self.deformation["Dx"]*self.phi(t) if ("Dx" in self.deformation.keys()) else 0.
+        self.D[1] = self.deformation["Dy"]*self.phi(t) if ("Dy" in self.deformation.keys()) else 0.
+        self.D[2] = self.deformation["Dz"]*self.phi(t) if ("Dz" in self.deformation.keys()) else 0.
+
+    def init_t_rot(self, t):
+        self.C[0] = self.deformation["Cx"] if ("Cx" in self.deformation.keys()) else 0.
+        self.C[1] = self.deformation["Cy"] if ("Cy" in self.deformation.keys()) else 0.
+        self.C[2] = self.deformation["Cz"] if ("Cz" in self.deformation.keys()) else 0.
+        Rx = self.deformation["Rx"]*math.pi/180*self.phi(t) if ("Rx" in self.deformation.keys()) else 0.
+        Ry = self.deformation["Ry"]*math.pi/180*self.phi(t) if ("Ry" in self.deformation.keys()) else 0.
+        Rz = self.deformation["Rz"]*math.pi/180*self.phi(t) if ("Rz" in self.deformation.keys()) else 0.
+        RRx = numpy.array([[          1. ,           0. ,           0. ],
+                           [          0. , +math.cos(Rx), -math.sin(Rx)],
+                           [          0. , +math.sin(Rx), +math.cos(Rx)]])
+        RRy = numpy.array([[+math.cos(Ry),           0. , +math.sin(Ry)],
+                           [          0. ,           1. ,           0. ],
+                           [-math.sin(Ry),           0. , +math.cos(Ry)]])
+        RRz = numpy.array([[+math.cos(Rz), -math.sin(Rz),           0. ],
+                           [+math.sin(Rz), +math.cos(Rz),           0. ],
+                           [          0. ,           0. ,           1. ]])
+        self.R[:,:] = numpy.dot(numpy.dot(RRx, RRy), RRz)
+        self.Rinv[:,:] = numpy.linalg.inv(self.R)
+
     def init_t_homogeneous(self, t):
         Exx = self.deformation["Exx"]*self.phi(t) if ("Exx" in self.deformation.keys()) else 0.
         Eyy = self.deformation["Eyy"]*self.phi(t) if ("Eyy" in self.deformation.keys()) else 0.
@@ -291,24 +372,33 @@ class Mapping:
         self.Finv = numpy.linalg.inv(self.F)
 
     def init_t_heart(self, t):
-        Ri = self.Ri
-        Re = self.Re
-        dRi = self.deformation["dRi"]*self.phi(t) if ("dRi" in self.deformation.keys()) else 0.
-        dRe = self.deformation["dRi"]*self.phi(t) if ("dRi" in self.deformation.keys()) else 0.
-        dTi = self.deformation["dTi"]*self.phi(t) if ("dTi" in self.deformation.keys()) else 0.
-        dTe = self.deformation["dTe"]*self.phi(t) if ("dTe" in self.deformation.keys()) else 0.
-        self.A = numpy.array([[1.-(dRi-dRe)/(Re-Ri), 0.],
-                              [  -(dTi-dTe)/(Re-Ri), 1.]])
+        self.dRi = self.deformation["dRi"]*self.phi(t) if ("dRi" in self.deformation.keys()) else 0.
+        self.dRe = self.deformation["dRi"]*self.phi(t) if ("dRi" in self.deformation.keys()) else 0.
+        self.dTi = self.deformation["dTi"]*self.phi(t) if ("dTi" in self.deformation.keys()) else 0.
+        self.dTe = self.deformation["dTe"]*self.phi(t) if ("dTe" in self.deformation.keys()) else 0.
+        self.A = numpy.array([[1.-(self.dRi-self.dRe)/(self.Re-self.Ri), 0.],
+                              [  -(self.dTi-self.dTe)/(self.Re-self.Ri), 1.]])
         self.Ainv = numpy.linalg.inv(self.A)
-        self.B = numpy.array([(1.+Ri/(Re-Ri))*dRi-Ri/(Re-Ri)*dRe, (1.+Ri/(Re-Ri))*dTi-Ri/(Re-Ri)*dTe])
+        self.B = numpy.array([(1.+self.Ri/(self.Re-self.Ri))*self.dRi-self.Ri/(self.Re-self.Ri)*self.dRe,
+                              (1.+self.Ri/(self.Re-self.Ri))*self.dTi-self.Ri/(self.Re-self.Ri)*self.dTe])
 
-    def X_no(self, x):
-        return x
+    def X_no(self, x, X, Finv=None):
+        X[:] = x
+        if (Finv is not None): Finv[:,:] = numpy.identity(numpy.sqrt(numpy.size(Finv)))
 
-    def X_homogeneous(self, x):
-        return numpy.dot(self.Finv, x)
+    def X_trans(self, x, X, Finv=None):
+        X[:] = x - self.D
+        if (Finv is not None): Finv[:,:] = numpy.identity(numpy.sqrt(numpy.size(Finv)))
 
-    def X_heart(self, x):
+    def X_rot(self, x, X, Finv=None):
+        X[:] = numpy.dot(self.Rinv, x - self.C) + self.C
+        if (Finv is not None): Finv[:,:] = self.Rinv
+
+    def X_homogeneous(self, x, X, Finv=None):
+        X[:] = numpy.dot(self.Finv, x)
+        if (Finv is not None): Finv[:,:] = self.Finv
+
+    def X_heart(self, x, X, Finv=None):
         #print "x = "+str(x)
         self.x_inplane[0] = x[0] - self.L[0]/2
         self.x_inplane[1] = x[1] - self.L[1]/2
@@ -318,19 +408,53 @@ class Mapping:
         #print "rt = "+str(self.rt)
         self.RT[:] = numpy.dot(self.Ainv, self.rt-self.B)
         #print "RT = "+str(self.RT)
-        self.X_full[0] = self.RT[0] * math.cos(self.RT[1]) + self.L[0]/2
-        self.X_full[1] = self.RT[0] * math.sin(self.RT[1]) + self.L[1]/2
-        self.X_full[2] = x[2]
-        #print "X_full = "+str(self.X_full)
-        return self.X_full
+        X[0] = self.RT[0] * math.cos(self.RT[1]) + self.L[0]/2
+        X[1] = self.RT[0] * math.sin(self.RT[1]) + self.L[1]/2
+        X[2] = x[2]
+        #print "X = "+str(X)
+        if (Finv is not None):
+            Finv[0,0] = 1.+(self.dRe-self.dRi)/(self.Re-self.Ri)
+            Finv[0,1] = 0.
+            Finv[0,2] = 0.
+            Finv[1,0] = (self.dTe-self.dTi)/(self.Re-self.Ri)*self.rt[0]
+            Finv[1,1] = self.rt[0]/self.RT[0]
+            Finv[1,2] = 0.
+            Finv[2,0] = 0.
+            Finv[2,1] = 0.
+            Finv[2,2] = 1.
+            #print "F = "+str(Finv)
+            Finv[:,:] = numpy.linalg.inv(Finv)
+            #print "Finv = "+str(Finv)
+            self.R[0,0] = +math.cos(self.RT[1])
+            self.R[0,1] = +math.sin(self.RT[1])
+            self.R[0,2] = 0.
+            self.R[1,0] = -math.sin(self.RT[1])
+            self.R[1,1] = +math.cos(self.RT[1])
+            self.R[1,2] = 0.
+            self.R[2,0] = 0.
+            self.R[2,1] = 0.
+            self.R[2,2] = 1.
+            #print "R = "+str(self.R)
+            Finv[:] = numpy.dot(numpy.transpose(self.R), numpy.dot(Finv, self.R))
+            #print "Finv = "+str(Finv)
 
-    def x_no(self, X):
-        return X
+    def x_no(self, X, x, F=None):
+        x[:] = X
+        if (Finv is not None): F[:,:] = numpy.identity(numpy.sqrt(numpy.size(F)))
 
-    def x_homogeneous(self, X):
-        return numpy.dot(self.F, X)
+    def x_trans(self, X, x, F=None):
+        x[:] = X + self.D
+        if (Finv is not None): F[:,:] = numpy.identity(numpy.sqrt(numpy.size(F)))
 
-    def x_heart(self, X):
+    def x_rot(self, X, x, F=None):
+        x[:] = numpy.dot(self.R, X - self.C) + self.C
+        if (Finv is not None): F[:,:] = self.R
+
+    def x_homogeneous(self, X, x, F=None):
+        x[:] = numpy.dot(self.F, X)
+        if (Finv is not None): F[:,:] = self.F
+
+    def x_heart(self, X, x, F=None):
         #print "X = "+str(X)
         self.X_inplane[0] = X[0] - self.L[0]/2
         self.X_inplane[1] = X[1] - self.L[1]/2
@@ -340,11 +464,32 @@ class Mapping:
         #print "RT = "+str(self.RT)
         self.rt[:] = numpy.dot(self.A, self.RT) + self.B
         #print "rt = "+str(self.rt)
-        self.x_full[0] = self.rt[0] * math.cos(self.rt[1]) + self.L[0]/2
-        self.x_full[1] = self.rt[0] * math.sin(self.rt[1]) + self.L[1]/2
-        self.x_full[2] = X[2]
-        #print "x_full = "+str(self.x_full)
-        return self.x_full
+        x[0] = self.rt[0] * math.cos(self.rt[1]) + self.L[0]/2
+        x[1] = self.rt[0] * math.sin(self.rt[1]) + self.L[1]/2
+        x[2] = X[2]
+        #print "x = "+str(x)
+        if (Finv is not None):
+            F[0,0] = 1.+(self.dRe-self.dRi)/(self.Re-self.Ri)
+            F[0,1] = 0.
+            F[0,2] = 0.
+            F[1,0] = (self.dTe-self.dTi)/(self.Re-self.Ri)*self.rt[0]
+            F[1,1] = self.rt[0]/self.RT[0]
+            F[1,2] = 0.
+            F[2,0] = 0.
+            F[2,1] = 0.
+            F[2,2] = 1.
+            #print "F = "+str(F)
+            self.R[0,0] = +math.cos(self.RT[1])
+            self.R[0,1] = +math.sin(self.RT[1])
+            self.R[0,2] = 0.
+            self.R[1,0] = -math.sin(self.RT[1])
+            self.R[1,1] = +math.cos(self.RT[1])
+            self.R[1,2] = 0.
+            self.R[2,0] = 0.
+            self.R[2,1] = 0.
+            self.R[2,2] = 1.
+            F[:] = numpy.dot(numpy.transpose(self.R), numpy.dot(F, self.R))
+            #print "F = "+str(F)
 
 ########################################################################
 
@@ -355,7 +500,8 @@ def generateImages(
         noise,
         deformation,
         evolution,
-        verbose=1):
+        generate_image_gradient=False,
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** generateImages ***")
 
@@ -371,10 +517,12 @@ def generateImages(
         assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
 
     spacing = numpy.array(images["L"])/numpy.array(images["n_voxels"])
-    if (images["n_dim"] == 1):
-        spacing = [spacing[0], 1., 1.]
+    if   (images["n_dim"] == 1):
+        spacing = numpy.array([images["L"][0]/images["n_voxels"][0], 1., 1.])
     elif (images["n_dim"] == 2):
-        spacing = [spacing[0], spacing[1], 1.]
+        spacing = numpy.array([images["L"][0]/images["n_voxels"][0], images["L"][1]/images["n_voxels"][1], 1.])
+    elif (images["n_dim"] == 2):
+        spacing = numpy.array([images["L"][0]/images["n_voxels"][0], images["L"][1]/images["n_voxels"][1], images["L"][2]/images["n_voxels"][2]])
     vtk_image.SetSpacing(spacing)
 
     origin = numpy.array(vtk_image.GetSpacing())/2
@@ -384,79 +532,116 @@ def generateImages(
     elif (images["n_dim"] == 2):
         origin[2] = 0.
     vtk_image.SetOrigin(origin)
-    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        vtk_image.AllocateScalars(vtk.VTK_FLOAT, 1)
-    else:
-        vtk_image.SetScalarTypeToFloat();
-        vtk_image.SetNumberOfScalarComponents(1);
-        vtk_image.AllocateScalars()
-    vtk_image_scalars = vtk_image.GetPointData().GetScalars()
 
-    if not os.path.exists(images["images_folder"]):
-        os.mkdir(images["images_folder"])
+    n_points = vtk_image.GetNumberOfPoints()
+    vtk_image_scalars = myVTK.createFloatArray(
+        name="ImageScalars",
+        n_components=1,
+        n_tuples=n_points,
+        verbose=verbose-1)
+    vtk_image.GetPointData().SetScalars(vtk_image_scalars)
+    if (generate_image_gradient):
+        vtk_image_gradient = myVTK.createFloatArray(
+            name="ImageScalarsGradient",
+            n_components=images["n_dim"],
+            n_tuples=n_points,
+            verbose=verbose-1)
+        vtk_image.GetPointData().SetVectors(vtk_image_gradient)
 
-    x0 = numpy.empty(3)
-    x  = numpy.empty(3)
-    if   (images["n_dim"] == 1):
-        dx = spacing[0]/images["n_integration"][0]
-    elif (images["n_dim"] == 2):
-        dx = spacing[0]/images["n_integration"][0]
-        dy = spacing[1]/images["n_integration"][1]
-    elif (images["n_dim"] == 3):
-        dx = spacing[0]/images["n_integration"][0]
-        dy = spacing[1]/images["n_integration"][1]
-        dz = spacing[2]/images["n_integration"][2]
+    if not os.path.exists(images["folder"]):
+        os.mkdir(images["folder"])
+
+    x0   = numpy.empty(3)
+    x    = numpy.empty(3)
+    X    = numpy.empty(3)
+    if (generate_image_gradient):
+        F    = numpy.empty((3,3))
+        Finv = numpy.empty((3,3))
     else:
-        assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
+        F    = None
+        Finv = None
+    dx   = spacing[0:images["n_dim"]]/images["n_integration"][0:images["n_dim"]]
     global_min = float("+Inf")
     global_max = float("-Inf")
+    I = numpy.empty(1)
+    i = numpy.empty(1)
+    if (generate_image_gradient):
+        G = numpy.empty(images["n_dim"])
+        g = numpy.empty(images["n_dim"])
+    else:
+        G = None
+        g = None
     image = Image(images, structure, texture, noise)
     mapping = Mapping(images, structure, deformation, evolution)
+    if ("zfill" not in images.keys()):
+        images["zfill"] = len(str(images["n_frames"]))
     for k_frame in xrange(images["n_frames"]):
         t = images["T"]*float(k_frame)/(images["n_frames"]-1) if (images["n_frames"]>1) else 0.
+        print "t = "+str(t)
         mapping.init_t(t)
-        for k_point in xrange(vtk_image.GetNumberOfPoints()):
+        for k_point in xrange(n_points):
             vtk_image.GetPoint(k_point, x0)
             #print "x0 = "+str(x0)
             x[:] = x0[:]
-            I = 0.
+            #print "x = "+str(x)
+            I[0] = 0.
+            #print "I = "+str(I)
+            if (generate_image_gradient): G[:] = 0.
+                #print "G = "+str(G)
             if   (images["n_dim"] == 1):
                 for k_x in xrange(images["n_integration"][0]):
-                    x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
-                    I += image.I0(mapping.X(x))
+                    x[0] = x0[0] - dx[0]/2 + (k_x+1./2)*dx[0]/images["n_integration"][0]
+                    mapping.X(x, X, Finv)
+                    image.I0(X, i, g)
+                    I += i
+                    if (generate_image_gradient): G += numpy.dot(g, Finv)
                 I /= images["n_integration"][0]
+                if (generate_image_gradient): G /= images["n_integration"][0]
             elif (images["n_dim"] == 2):
                 for k_y in xrange(images["n_integration"][1]):
-                    x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_integration"][1]
+                    x[1] = x0[1] - dx[1]/2 + (k_y+1./2)*dx[1]/images["n_integration"][1]
                     for k_x in xrange(images["n_integration"][0]):
-                        x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
-                        I += image.I0(mapping.X(x))
+                        x[0] = x0[0] - dx[0]/2 + (k_x+1./2)*dx[0]/images["n_integration"][0]
+                        #print "x = "+str(x)
+                        mapping.X(x, X, Finv)
+                        #print "X = "+str(X)
+                        #print "Finv = "+str(Finv)
+                        image.I0(X, i, g)
+                        #print "i = "+str(i)
+                        #print "g = "+str(g)
+                        I += i
+                        if (generate_image_gradient): G += numpy.dot(g, Finv)
                 I /= images["n_integration"][1]*images["n_integration"][0]
+                if (generate_image_gradient):G /= images["n_integration"][1]*images["n_integration"][0]
             elif (images["n_dim"] == 3):
                 for k_z in xrange(images["n_integration"][2]):
-                    x[2] = x0[2] - dz/2 + (k_z+1./2)*dz/images["n_integration"][2]
+                    x[2] = x0[2] - dx[2]/2 + (k_z+1./2)*dx[2]/images["n_integration"][2]
                     for k_y in xrange(images["n_integration"][1]):
-                        x[1] = x0[1] - dy/2 + (k_y+1./2)*dy/images["n_integration"][1]
+                        x[1] = x0[1] - dx[1]/2 + (k_y+1./2)*dx[1]/images["n_integration"][1]
                         for k_x in xrange(images["n_integration"][0]):
-                            x[0] = x0[0] - dx/2 + (k_x+1./2)*dx/images["n_integration"][0]
-                            #print "x = "+str(x)
-                            I += image.I0(mapping.X(x))
-                            #print "I = "+str(I)
+                            x[0] = x0[0] - dx[0]/2 + (k_x+1./2)*dx[0]/images["n_integration"][0]
+                            mapping.X(x, X, Finv)
+                            image.I0(X, i, g)
+                            I += i
+                            if (generate_image_gradient): G += numpy.dot(g, Finv)
                 I /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
+                if (generate_image_gradient): G /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
-            vtk_image_scalars.SetTuple1(k_point, I)
-            if (I < global_min): global_min = I
-            if (I > global_max): global_max = I
+            vtk_image_scalars.SetTuple(k_point, I)
+            if (generate_image_gradient): vtk_image_gradient.SetTuple(k_point, G)
+            if (I[0] < global_min): global_min = I[0]
+            if (I[0] > global_max): global_max = I[0]
         myVTK.writeImage(
             image=vtk_image,
-            filename=images["images_folder"]+"/"+images["images_basename"]+"_"+str(k_frame).zfill(2)+".vti")
+            filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
+            verbose=verbose-1)
 
     if (images["data_type"] in ("float")):
         pass
     elif (images["data_type"] in ("unsigned char", "unsigned short", "unsigned int", "unsigned long", "unsigned float", "uint8", "uint16", "uint32", "uint64", "ufloat")):
-        print "global_min = "+str(global_min)
-        print "global_max = "+str(global_max)
+        #print "global_min = "+str(global_min)
+        #print "global_max = "+str(global_max)
         shifter = vtk.vtkImageShiftScale()
         shifter.SetShift(-global_min)
         if   (images["data_type"] in ("unsigned char", "uint8")):
@@ -476,7 +661,8 @@ def generateImages(
             shifter.SetOutputScalarTypeToFloat()
         for k_frame in xrange(images["n_frames"]):
             vtk_image = myVTK.readImage(
-                filename=images["images_folder"]+"/"+images["images_basename"]+"_"+str(k_frame).zfill(2)+".vti")
+                filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
+                verbose=verbose-1)
             if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
                 shifter.SetInputData(vtk_image)
             else:
@@ -485,9 +671,326 @@ def generateImages(
             vtk_image = shifter.GetOutput()
             myVTK.writeImage(
                 image=vtk_image,
-                filename=images["images_folder"]+"/"+images["images_basename"]+"_"+str(k_frame).zfill(2)+".vti")
+                filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
+                verbose=verbose-1)
     else:
         assert (0), "Wrong data type. Aborting."
+
+########################################################################
+
+def generateUndersampledImages(
+        images,
+        structure,
+        texture,
+        noise,
+        deformation,
+        evolution,
+        undersampling_level,
+        keep_temporary_images=0,
+        verbose=0):
+
+    myVTK.myPrint(verbose, "*** generateUndersampledImages ***")
+
+    images_basename = images["basename"]
+    images_n_voxels = images["n_voxels"][:]
+
+    images["n_voxels"][1] /= undersampling_level
+    if (images["n_dim"] >= 3):
+        images["n_voxels"][2] /= undersampling_level
+    images["basename"] = images_basename+"-X"
+    texture["type"] = "taggX"
+    myVTK.generateImages(
+        images=images,
+        structure=structure,
+        texture=texture,
+        noise=noise,
+        deformation=deformation,
+        evolution=evolution,
+        verbose=verbose-1)
+    images["n_voxels"] = images_n_voxels[:]
+    images["basename"] = images_basename
+
+    images["n_voxels"][0] /= undersampling_level
+    if (images["n_dim"] >= 3):
+        images["n_voxels"][2] /= undersampling_level
+    images["basename"] = images_basename+"-Y"
+    texture["type"] = "taggY"
+    myVTK.generateImages(
+        images=images,
+        structure=structure,
+        texture=texture,
+        noise=noise,
+        deformation=deformation,
+        evolution=evolution,
+        verbose=verbose-1)
+    images["n_voxels"] = images_n_voxels[:]
+    images["basename"] = images_basename
+
+    if (images["n_dim"] >= 3):
+        images["n_voxels"][0] /= undersampling_level
+        images["n_voxels"][1] /= undersampling_level
+        images["basename"] = images_basename+"-Z"
+        texture["type"] = "taggZ"
+        myVTK.generateImages(
+            images=images,
+            structure=structure,
+            texture=texture,
+            noise=noise,
+            deformation=deformation,
+            evolution=evolution,
+            verbose=verbose-1)
+        images["n_voxels"] = images_n_voxels
+        images["basename"] = images_basename
+
+    if ("zfill" not in images.keys()):
+        images["zfill"] = len(str(images["n_frames"]))
+    for k_frame in xrange(images["n_frames"]):
+        imageX = myVTK.readImage(
+            filename=images["folder"]+"/"+images["basename"]+"-X_"+str(k_frame).zfill(images["zfill"])+".vti",
+            verbose=verbose-1)
+        interpolatorX = myVTK.createImageInterpolator(
+            image=imageX,
+            verbose=verbose-1)
+        iX = numpy.empty(1)
+
+        imageY = myVTK.readImage(
+            filename=images["folder"]+"/"+images["basename"]+"-Y_"+str(k_frame).zfill(images["zfill"])+".vti",
+            verbose=verbose-1)
+        interpolatorY = myVTK.createImageInterpolator(
+            image=imageY,
+            verbose=verbose-1)
+        iY = numpy.empty(1)
+
+        if (images["n_dim"] == 2):
+            imageXY = vtk.vtkImageData()
+            imageXY.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0, 0])
+            imageXY.SetSpacing([images["L"][0]/images["n_voxels"][0], images["L"][1]/images["n_voxels"][1], 1.])
+            imageXY.SetOrigin([images["L"][0]/images["n_voxels"][0]/2, images["L"][1]/images["n_voxels"][1]/2, 0.])
+            if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+                imageXY.AllocateScalars(vtk.VTK_FLOAT, 1)
+            else:
+                imageXY.SetScalarTypeToFloat()
+                imageXY.SetNumberOfScalarComponents(1)
+                imageXY.AllocateScalars()
+            scalars = imageXY.GetPointData().GetScalars()
+            x = numpy.empty(3)
+            for k_point in xrange(imageXY.GetNumberOfPoints()):
+                imageXY.GetPoint(k_point, x)
+                interpolatorX.Interpolate(x, iX)
+                interpolatorY.Interpolate(x, iY)
+                scalars.SetTuple(k_point, (iX*iY)**(1./2))
+            myVTK.writeImage(
+                image=imageXY,
+                filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
+                verbose=verbose-1)
+            if not (keep_temporary_images):
+                os.system("rm "+images["folder"]+"/"+images["basename"]+"-X_"+str(k_frame).zfill(images["zfill"])+".vti")
+                os.system("rm "+images["folder"]+"/"+images["basename"]+"-Y_"+str(k_frame).zfill(images["zfill"])+".vti")
+
+        elif (images["n_dim"] == 3):
+            imageZ = myVTK.readImage(
+                filename=images["folder"]+"/"+images["basename"]+"-Z_"+str(k_frame).zfill(images["zfill"])+".vti",
+                verbose=verbose-1)
+            interpolatorZ = myVTK.createImageInterpolator(
+                image=imageZ,
+                verbose=verbose-1)
+            iZ = numpy.empty(1)
+
+            imageXYZ = vtk.vtkImageData()
+            imageXYZ.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0, images["n_voxels"][2]-1])
+            imageXYZ.SetSpacing([images["L"][0]/images["n_voxels"][0], images["L"][1]/images["n_voxels"][1], images["L"][2]/images["n_voxels"][2]])
+            imageXYZ.SetOrigin([images["L"][0]/images["n_voxels"][0]/2, images["L"][1]/images["n_voxels"][1]/2, images["L"][2]/images["n_voxels"][2]/2])
+            if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+                imageXYZ.AllocateScalars(vtk.VTK_FLOAT, 1)
+            else:
+                imageXYZ.SetScalarTypeToFloat()
+                imageXYZ.SetNumberOfScalarComponents(1)
+                imageXYZ.AllocateScalars()
+            scalars = imageXYZ.GetPointData().GetScalars()
+            x = numpy.empty(3)
+            for k_point in xrange(imageXYZ.GetNumberOfPoints()):
+                imageXYZ.GetPoint(k_point, x)
+                interpolatorX.Interpolate(x, iX)
+                interpolatorY.Interpolate(x, iY)
+                interpolatorZ.Interpolate(x, iZ)
+                scalars.SetTuple(k_point, (iX*iY*iZ)**(1./3))
+            myVTK.writeImage(
+                image=imageXYZ,
+                filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
+                verbose=verbose-1)
+            if not (keep_temporary_images):
+                os.system("rm "+images["folder"]+"/"+images["basename"]+"-X_"+str(k_frame).zfill(images["zfill"])+".vti")
+                os.system("rm "+images["folder"]+"/"+images["basename"]+"-Y_"+str(k_frame).zfill(images["zfill"])+".vti")
+                os.system("rm "+images["folder"]+"/"+images["basename"]+"-Z_"+str(k_frame).zfill(images["zfill"])+".vti")
+
+########################################################################
+
+def generateWarpedImages(
+        ref_image_folder,
+        ref_image_basename,
+        sol_folder,
+        sol_basename,
+        ref_frame=0,
+        sol_ext="vtu",
+        verbose=0):
+
+    myVTK.myPrint(verbose, "*** generateWarpedImages ***")
+
+    ref_image_zfill = len(glob.glob(ref_image_folder+"/"+ref_image_basename+"_*.vti")[0].rsplit("_")[-1].split(".")[0])
+    ref_image_filename = ref_image_folder+"/"+ref_image_basename+"_"+str(ref_frame).zfill(ref_image_zfill)+".vti"
+    ref_image = myVTK.readImage(
+        filename=ref_image_filename)
+
+    interpolator = myVTK.createImageInterpolator(
+        image=ref_image)
+    #I = numpy.empty(1)
+    #interpolator.Interpolate([0.35, 0.25, 0.], I)
+
+    image = vtk.vtkImageData()
+    image.SetOrigin(ref_image.GetOrigin())
+    image.SetSpacing(ref_image.GetSpacing())
+    image.SetExtent(ref_image.GetExtent())
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        image.AllocateScalars(vtk.VTK_FLOAT, 1)
+    else:
+        image.SetScalarTypeToFloat()
+        image.SetNumberOfScalarComponents(1)
+        image.AllocateScalars()
+    scalars = image.GetPointData().GetScalars()
+
+    sol_zfill = len(glob.glob(sol_folder+"/"+sol_basename+"_*."+sol_ext)[0].rsplit("_")[-1].split(".")[0])
+    n_frames = len(glob.glob(sol_folder+"/"+sol_basename+"_"+"[0-9]"*sol_zfill+"."+sol_ext))
+    #n_frames = 1
+
+    X = numpy.empty(3)
+    U = numpy.empty(3)
+    x = numpy.empty(3)
+    I = numpy.empty(1)
+    m = numpy.empty(1)
+    for k_frame in xrange(n_frames):
+        myVTK.myPrint(verbose, "k_frame = "+str(k_frame))
+
+        mesh = myVTK.readUGrid(
+            filename=sol_folder+"/"+sol_basename+"_"+str(k_frame).zfill(sol_zfill)+"."+sol_ext)
+        #print mesh
+
+        warp = vtk.vtkWarpVector()
+        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+            warp.SetInputData(mesh)
+        else:
+            warp.SetInput(mesh)
+        warp.Update()
+        warped_mesh = warp.GetOutput()
+        #myVTK.writeUGrid(
+            #ugrid=warped_mesh,
+            #filename=sol_folder+"/"+sol_basename+"-warped_"+str(k_frame).zfill(sol_zfill)+"."+sol_ext)
+
+        probe = vtk.vtkProbeFilter()
+        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+            probe.SetInputData(image)
+            probe.SetSourceData(warped_mesh)
+        else:
+            probe.SetInput(image)
+            probe.SetSource(warped_mesh)
+        probe.Update()
+        probed_image = probe.GetOutput()
+        scalars_mask = probed_image.GetPointData().GetArray("vtkValidPointMask")
+        scalars_U = probed_image.GetPointData().GetArray("displacement")
+        #myVTK.writeImage(
+            #image=probed_image,
+            #filename=sol_folder+"/"+sol_basename+"_"+str(k_frame).zfill(sol_zfill)+".vti")
+
+        for k_point in xrange(image.GetNumberOfPoints()):
+            scalars_mask.GetTuple(k_point, m)
+            if (m[0] == 0):
+                I[0] = 0.
+            else:
+                image.GetPoint(k_point, x)
+                scalars_U.GetTuple(k_point, U)
+                X = x - U
+                interpolator.Interpolate(X, I)
+            scalars.SetTuple(k_point, I)
+
+        myVTK.writeImage(
+            image=image,
+            filename=sol_folder+"/"+sol_basename+"-warped_"+str(k_frame).zfill(sol_zfill)+".vti")
+
+########################################################################
+
+def generateUnwarpedImages(
+        images_folder,
+        images_basename,
+        sol_folder,
+        sol_basename,
+        sol_ext="vtu",
+        verbose=0):
+
+    myVTK.myPrint(verbose, "*** generateUnwarpedImages ***")
+
+    ref_image_zfill = len(glob.glob(images_folder+"/"+images_basename+"_*.vti")[0].rsplit("_")[-1].split(".")[0])
+    ref_image_filename = images_folder+"/"+images_basename+"_"+str(0).zfill(ref_image_zfill)+".vti"
+    ref_image = myVTK.readImage(
+        filename=ref_image_filename)
+
+    image = vtk.vtkImageData()
+    image.SetOrigin(ref_image.GetOrigin())
+    image.SetSpacing(ref_image.GetSpacing())
+    image.SetExtent(ref_image.GetExtent())
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        image.AllocateScalars(vtk.VTK_FLOAT, 1)
+    else:
+        image.SetScalarTypeToFloat()
+        image.SetNumberOfScalarComponents(1)
+        image.AllocateScalars()
+    scalars = image.GetPointData().GetScalars()
+
+    sol_zfill = len(glob.glob(sol_folder+"/"+sol_basename+"_*."+sol_ext)[0].rsplit("_")[-1].split(".")[0])
+    n_frames = len(glob.glob(sol_folder+"/"+sol_basename+"_"+"[0-9]"*sol_zfill+"."+sol_ext))
+    #n_frames = 1
+
+    X = numpy.empty(3)
+    U = numpy.empty(3)
+    x = numpy.empty(3)
+    I = numpy.empty(1)
+    m = numpy.empty(1)
+    for k_frame in xrange(n_frames):
+        myVTK.myPrint(verbose, "k_frame = "+str(k_frame))
+
+        def_image = myVTK.readImage(
+            filename=images_folder+"/"+images_basename+"_"+str(k_frame).zfill(ref_image_zfill)+".vti")
+
+        interpolator = myVTK.createImageInterpolator(
+            image=def_image)
+
+        mesh = myVTK.readUGrid(
+            filename=sol_folder+"/"+sol_basename+"_"+str(k_frame).zfill(sol_zfill)+"."+sol_ext)
+
+        probe = vtk.vtkProbeFilter()
+        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+            probe.SetInputData(image)
+            probe.SetSourceData(mesh)
+        else:
+            probe.SetInput(image)
+            probe.SetSource(mesh)
+        probe.Update()
+        probed_image = probe.GetOutput()
+        scalars_mask = probed_image.GetPointData().GetArray("vtkValidPointMask")
+        scalars_U = probed_image.GetPointData().GetArray("displacement")
+
+        for k_point in xrange(image.GetNumberOfPoints()):
+            scalars_mask.GetTuple(k_point, m)
+            if (m[0] == 0):
+                I[0] = 0.
+            else:
+                image.GetPoint(k_point, X)
+                scalars_U.GetTuple(k_point, U)
+                x = X + U
+                interpolator.Interpolate(x, I)
+            scalars.SetTuple(k_point, I)
+
+        myVTK.writeImage(
+            image=image,
+            filename=sol_folder+"/"+sol_basename+"-unwarped_"+str(k_frame).zfill(sol_zfill)+".vti")
 
 ########################################################################
 
@@ -527,26 +1030,28 @@ def warpMesh(
     X = numpy.empty(3)
     x = numpy.empty(3)
     U = numpy.empty(3)
+    if ("zfill" not in images.keys()):
+        images["zfill"] = len(str(images["n_frames"]))
     for k_frame in xrange(images["n_frames"]):
         t = images["T"]*float(k_frame)/(images["n_frames"]-1) if (images["n_frames"]>1) else 0.
         mapping.init_t(t)
 
         for k_point in xrange(n_points):
             mesh.GetPoint(k_point, X)
-            x[:] = mapping.x(X)
-            U[:] = x[:] - X[:]
+            mapping.x(X, x)
+            U = x - X
             farray_disp.SetTuple(k_point, U)
 
         myVTK.computeStrainsFromDisplacements(
             mesh=mesh,
             disp_array_name="displacement",
             ref_mesh=ref_mesh,
-            verbose=0)
+            verbose=verbose-1)
 
         myVTK.writeUGrid(
             ugrid=mesh,
-            filename=mesh_folder+"/"+mesh_basename+"_"+str(k_frame).zfill(2)+".vtk",
-            verbose=0)
+            filename=mesh_folder+"/"+mesh_basename+"_"+str(k_frame).zfill(images["zfill"])+".vtk",
+            verbose=verbose-1)
 
 
 
