@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 
 def createImageInterpolator(
         image,
-        mode="linear"
+        mode="linear",
         out_value=None,
         verbose=0):
 
