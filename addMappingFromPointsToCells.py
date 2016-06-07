@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+import numpy
+
 import myVTKPythonLibrary as myVTK
 
 ########################################################################
@@ -45,9 +47,7 @@ def addMappingFromPointsToCells(
 
     point = numpy.empty(3)
     for k_point in xrange(n_points):
-        ugrid_points.GetPoint(
-            k_point,
-            point)
+        ugrid_points.GetPoint(k_point, point)
 
         cell_locator.FindClosestPoint(
             point,

@@ -20,19 +20,22 @@ import myVTKPythonLibrary as myVTK
 def computeCylindricalCoordinatesAndBasis(
         points,
         points_AB,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeCylindricalCoordinatesAndBasis ***")
 
     assert (points_AB.GetNumberOfPoints() >= 2), "points_AB must have at least two points. Aborting."
-    point_A = points_AB.GetPoint(                              0)
-    point_B = points_AB.GetPoint(points_AB.GetNumberOfPoints()-1)
+    point_A = numpy.empty(3)
+    point_B = numpy.empty(3)
+    points_AB.GetPoint(                              0, point_A)
+    points_AB.GetPoint(points_AB.GetNumberOfPoints()-1, point_B)
     eL  = point_B - point_A
     eL /= numpy.linalg.norm(eL)
     if (verbose >= 2): print "eL =", eL
 
     point_C = point_A+numpy.array([1.,0.,0.])
-    #point_C = numpy.array(points.GetPoint(0))
+    #point_C = numpy.empty(3)
+    #points.GetPoint(0, point_C)
 
     AC  = point_C - point_A
     AD  = numpy.cross(eL, AC)
@@ -49,10 +52,11 @@ def computeCylindricalCoordinatesAndBasis(
     farray_eC = myVTK.createFloatArray("eC", 3, n_points)
     farray_eL = myVTK.createFloatArray("eL", 3, n_points)
 
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
         if (verbose >= 2): print "k_point =", k_point
 
-        point = points.GetPoint(k_point)
+        points.GetPoint(k_point, point)
 
         if (verbose >= 2): print "point =", point
 

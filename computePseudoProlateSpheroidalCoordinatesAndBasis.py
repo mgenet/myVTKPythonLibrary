@@ -87,10 +87,10 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
 
     pdata_end_normals = pdata_end.GetCellData().GetNormals()
     pdata_epi_normals = pdata_epi.GetCellData().GetNormals()
-    pdata_end_normal = numpy.empty((3,1))
-    pdata_epi_normal = numpy.empty((3,1))
+    pdata_end_normal = numpy.empty(3)
+    pdata_epi_normal = numpy.empty(3)
 
-    eL = numpy.empty((3,1))
+    eL = numpy.empty(3)
 
     point = numpy.empty(3)
     for k_point in xrange(n_points):
@@ -98,9 +98,9 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
             rr = 0.
             cc = 0.
             ll = 0.
-            eRR = [1.,0.,0.]
-            eCC = [0.,1.,0.]
-            eLL = [0.,0.,1.]
+            eRR = numpy.array([1.,0.,0.])
+            eCC = numpy.array([0.,1.,0.])
+            eLL = numpy.array([0.,0.,1.])
 
         else:
             points.GetPoint(k_point, point)

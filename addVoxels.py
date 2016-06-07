@@ -35,10 +35,15 @@ def addVoxels(
         ugrid.GetPoint(seed_point),
         closest_points)
 
-    P0 = numpy.array(ugrid.GetPoint(closest_points.GetId(0)))
+    P0 = numpy.empty(3)
+    P1 = numpy.empty(3)
+    P2 = numpy.empty(3)
+    P3 = numpy.empty(3)
+
+    ugrid.GetPoint(closest_points.GetId(0), P0)
     #print "P0 = "+str(P0)
 
-    P1 = numpy.array(ugrid.GetPoint(closest_points.GetId(1)))
+    ugrid.GetPoint(closest_points.GetId(1), P1)
     #print "P1 = "+str(P1)
 
     X = P1-P0
@@ -49,7 +54,7 @@ def addVoxels(
 
     for k_point in xrange(2, n_closest_points):
         #print "k_point = "+str(k_point)
-        P2 = numpy.array(ugrid.GetPoint(closest_points.GetId(k_point)))
+        ugrid.GetPoint(closest_points.GetId(k_point), P2)
 
         Y = P2-P0
         dY = numpy.linalg.norm(Y)
@@ -71,7 +76,7 @@ def addVoxels(
 
     for k_point in xrange(2, n_closest_points):
         #print "k_point = "+str(k_point)
-        P3 = numpy.array(ugrid.GetPoint(closest_points.GetId(k_point)))
+        ugrid.GetPoint(closest_points.GetId(k_point), P3)
 
         ZZ = P3-P0
         dZ = numpy.linalg.norm(ZZ)
@@ -100,6 +105,7 @@ def addVoxels(
     cell_array = vtk.vtkCellArray()
 
     P = numpy.empty(3)
+    PPP = numpy.empty(3)
     for k_point in xrange(n_points):
         ugrid.GetPoint(k_point, P)
 
@@ -115,7 +121,8 @@ def addVoxels(
                         point_id = point_locator.InsertNextPoint(PP)
                     else:
                         point_id = point_locator.FindClosestInsertedPoint(PP)
-                        dist = numpy.linalg.norm(points.GetPoint(point_id)-PP)
+                        points.GetPoint(point_id, PPP)
+                        dist = numpy.linalg.norm(PPP-PP)
                         if (dist > radius):
                             point_id = point_locator.InsertNextPoint(PP)
 
