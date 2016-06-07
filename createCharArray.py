@@ -21,7 +21,7 @@ def createCharArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     carray = vtk.vtkCharArray()
     carray.SetName(name)
@@ -39,7 +39,7 @@ def createUnsignedCharArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     ucarray = vtk.vtkUnsignedCharArray()
     ucarray.SetName(name)

@@ -21,7 +21,7 @@ def clipPDataUsingPlane(
         pdata_mesh,
         plane_O,
         plane_N,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** clipPDataUsingPlane ***")
 

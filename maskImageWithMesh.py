@@ -21,7 +21,7 @@ def maskImageWithMesh(
     image,
     mesh,
     filter_with_field=None,
-    verbose=1):
+    verbose=0):
 
     myVTK.myPrint(verbose, "*** maskImageWithMesh ***")
 

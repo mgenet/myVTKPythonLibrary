@@ -22,7 +22,7 @@ def thresholdUGrid(
         field_name,
         threshold_value,
         threshold_by_upper_or_lower,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** thresholdUGrid ***")
 
@@ -49,7 +49,7 @@ def thresholdPData(pdata_mesh,
                    field_name,
                    threshold_value,
                    threshold_by_upper_or_lower,
-                   verbose=1):
+                   verbose=0):
     myVTK.myPrint(verbose, "*** thresholdPData ***")
 
     ugrid_thresholded_mesh = thresholdUGrid(pdata_mesh,

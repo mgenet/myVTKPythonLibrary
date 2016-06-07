@@ -19,7 +19,7 @@ import myVTKPythonLibrary as myVTK
 def readAbaqusMeshFromINP(
         mesh_filename,
         elem_types="all",
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** readAbaqusMeshFromINP: "+mesh_filename+" ***")
 

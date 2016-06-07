@@ -22,7 +22,7 @@ def clipSurfacesForFullBiVMesh(
         pdata_endLV,
         pdata_endRV,
         pdata_epi,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** clipSurfacesForFullBiVMesh ***")
 

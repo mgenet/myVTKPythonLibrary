@@ -18,7 +18,7 @@ def readDynaDeformationGradients(
         mesh,
         hystory_files_basename,
         array_name,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** readDynaDeformationGradients ***")
 

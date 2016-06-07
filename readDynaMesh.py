@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 
 def readDynaMesh(lsdyna_mesh_filename,
                  cell_type='hexahedron',
-                 verbose=1):
+                 verbose=0):
 
     myVTK.myPrint(verbose, "*** readDynaMesh: "+lsdyna_mesh_filename+" ***")
 

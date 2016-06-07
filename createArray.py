@@ -20,7 +20,7 @@ def createArray(
         n_tuples=0,
         array_type="float",
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     assert (type(array_type) in (type, str)), "array_type must be a type or a str. Aborting."
 

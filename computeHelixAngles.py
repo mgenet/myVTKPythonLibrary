@@ -22,7 +22,7 @@ def computeHelixAngles(
         farray_eCC,
         farray_eLL,
         farray_eF,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeHelixAngles ***")
 
@@ -54,7 +54,7 @@ def computeHelixAngles(
 def addHelixAngles(
         ugrid,
         type_of_support="cell",
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addHelixAngles ***")
 

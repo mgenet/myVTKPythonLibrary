@@ -16,7 +16,7 @@ import myVTKPythonLibrary as myVTK
 
 def getPDataSurfaceArea(
         pdata,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** getPDataSurfaceArea ***")
 

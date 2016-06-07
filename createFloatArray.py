@@ -21,7 +21,7 @@ def createFloatArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     farray = vtk.vtkFloatArray()
     farray.SetName(name)

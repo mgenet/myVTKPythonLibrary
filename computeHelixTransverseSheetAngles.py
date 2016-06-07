@@ -25,7 +25,7 @@ def computeHelixTransverseSheetAngles(
         farray_eS,
         farray_eN,
         use_new_definition=False,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeHelixTransverseSheetAngles ***")
 
@@ -76,7 +76,7 @@ def addHelixTransverseSheetAngles(
         ugrid,
         type_of_support="cell",
         use_new_definition=False,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addHelixTransverseSheetAngles ***")
 

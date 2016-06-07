@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 
 def createMassProperties(
         pdata,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** createMassProperties ***")
 

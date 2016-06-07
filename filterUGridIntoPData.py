@@ -19,7 +19,7 @@ import myVTKPythonLibrary as myVTK
 def filterUGridIntoPData(
         ugrid,
         only_trianlges=False,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** filterUGridIntoPData ***")
 

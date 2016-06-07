@@ -498,20 +498,20 @@ def warpMesh(
         structure,
         deformation,
         evolution,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** warpMesh ***")
 
     mesh = myVTK.readUGrid(
         filename=mesh_folder+"/"+mesh_basename+".vtk",
-        verbose=0)
+        verbose=verbose-1)
     n_points = mesh.GetNumberOfPoints()
     n_cells = mesh.GetNumberOfCells()
 
     if os.path.exists(mesh_folder+"/"+mesh_basename+"-WithLocalBasis.vtk"):
         ref_mesh = myVTK.readUGrid(
             filename=mesh_folder+"/"+mesh_basename+"-WithLocalBasis.vtk",
-            verbose=0)
+            verbose=verbose-1)
     else:
         ref_mesh = None
 
@@ -519,7 +519,7 @@ def warpMesh(
         name="displacement",
         n_components=3,
         n_tuples=n_points,
-        verbose=0)
+        verbose=verbose-1)
     mesh.GetPointData().AddArray(farray_disp)
 
     mapping = Mapping(images, structure, deformation, evolution)

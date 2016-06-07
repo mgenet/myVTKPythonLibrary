@@ -19,7 +19,7 @@ import myVTKPythonLibrary as myVTK
 
 def readUGrid(
         filename,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** readUGrid: "+filename+" ***")
 

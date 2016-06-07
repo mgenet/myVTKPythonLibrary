@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 
 def computeABPointsFromTTTSectors(
         ugrid_sectors,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeABPointsFromTTTSectors ***")
 

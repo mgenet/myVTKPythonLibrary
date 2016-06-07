@@ -18,7 +18,7 @@ def writeFiberOrientationFileForGNUPlot(
         angles_end,
         angles_epi,
         filename,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** writeFiberOrientationFileForGNUPlot ***")
 

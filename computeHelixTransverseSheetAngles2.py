@@ -26,7 +26,7 @@ def computeHelixTransverseSheetAngles2(
         farray_eN,
         use_new_definition=False,
         ref_vectors_are_material_basis=False,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeHelixTransverseSheetAngles2 ***")
 
@@ -319,7 +319,7 @@ def addHelixTransverseSheetAngles2(
         type_of_support="cell",
         use_new_definition=False,
         ref_vectors_are_material_basis=False,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addHelixTransverseSheetAngles2 ***")
 

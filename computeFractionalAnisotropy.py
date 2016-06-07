@@ -18,7 +18,7 @@ def computeFractionalAnisotropy(
         farray_e1,
         farray_e2,
         farray_e3,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeFractionalAnisotropy ***")
 
@@ -50,7 +50,7 @@ def addFractionalAnisotropy(
         ugrid,
         field_name,
         type_of_support="cell",
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addFractionalAnisotropy ***")
 

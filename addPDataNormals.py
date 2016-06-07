@@ -20,7 +20,7 @@ import myVTKPythonLibrary as myVTK
 def addPDataNormals(
         pdata,
         orient_outward=1,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addPDataNormals ***")
 

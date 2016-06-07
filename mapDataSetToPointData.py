@@ -25,7 +25,7 @@ def mapDataSetToPointData(
         radius=1.,
         threshold_min=None,
         threshold_max=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** mapDataSetToPointData ***")
 

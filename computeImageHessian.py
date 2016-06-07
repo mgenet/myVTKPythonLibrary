@@ -21,7 +21,7 @@ import myVTKPythonLibrary as myVTK
 def computeImageHessian(
         image=None,
         image_filename=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeImageHessian ***")
 

@@ -25,7 +25,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForLV(
         pdata_end,
         pdata_epi,
         iarray_part_id=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computePseudoProlateSpheroidalCoordinatesAndBasisForLV ***")
 
@@ -158,7 +158,7 @@ def addPseudoProlateSpheroidalCoordinatesAndBasisToLV(
         ugrid,
         pdata_end,
         pdata_epi,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addPseudoProlateSpheroidalCoordinatesAndBasisToLV ***")
 
@@ -219,7 +219,7 @@ def computePseudoProlateSpheroidalCoordinatesAndBasisForBiV(
         pdata_endRV,
         pdata_epi,
         iarray_part_id=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computePseudoProlateSpheroidalCoordinatesAndBasisForBiV ***")
 
@@ -455,7 +455,7 @@ def addPseudoProlateSpheroidalCoordinatesAndBasisToBiV(
         pdata_endLV,
         pdata_endRV,
         pdata_epi,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addPseudoProlateSpheroidalCoordinatesAndBasisToBiV ***")
 

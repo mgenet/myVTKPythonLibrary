@@ -21,7 +21,7 @@ def createIntArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     iarray = vtk.vtkIntArray()
     iarray.SetName(name)
@@ -39,7 +39,7 @@ def createUnsignedIntArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     uiarray = vtk.vtkUnsignedIntArray()
     uiarray.SetName(name)

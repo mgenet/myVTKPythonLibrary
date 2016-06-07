@@ -19,7 +19,7 @@ import myVTKPythonLibrary as myVTK
 
 def addVoxels(
         ugrid,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addVoxels ***")
 

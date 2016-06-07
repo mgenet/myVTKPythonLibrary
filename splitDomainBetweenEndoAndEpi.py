@@ -21,7 +21,7 @@ import myVTKPythonLibrary as myVTK
 def splitDomainBetweenEndoAndEpi(
         pdata_domain,
         r=0.99,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** splitDomainBetweenEndoAndEpi ***")
 

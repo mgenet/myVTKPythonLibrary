@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 
 def addVertices(
         ugrid,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addVertices ***")
 

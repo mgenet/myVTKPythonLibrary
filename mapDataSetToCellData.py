@@ -29,7 +29,7 @@ def mapDataSetToCellData(
         threshold_dist=None,
         threshold_val_min=None,
         threshold_val_max=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** mapDataSetToCellData ***")
 

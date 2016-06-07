@@ -20,7 +20,7 @@ def writeFiberOrientationFileForAbaqus(
         eF_field_name="eF",
         eS_field_name="eS",
         sep=", ",
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** writeFiberOrientationFileForAbaqus ***")
 

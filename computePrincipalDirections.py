@@ -25,7 +25,7 @@ def computePrincipalDirections(
         farray_eRR=None,
         farray_eCC=None,
         farray_eLL=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computePrincipalDirections ***")
 
@@ -124,7 +124,7 @@ def addPrincipalDirections(
         field_support="cell",
         field_storage="vec",
         orient=0,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addPrincipalDirections ***")
 

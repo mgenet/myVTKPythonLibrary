@@ -20,7 +20,7 @@ import myVTKPythonLibrary as myVTK
 def computeABPointsFromBoundsAndCenter(
         mesh,
         AB=[0,0,1],
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeABPointsFromBoundsAndCenter ***")
 

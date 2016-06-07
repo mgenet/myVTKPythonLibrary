@@ -20,7 +20,7 @@ def clipPDataUsingField(
         pdata_mesh,
         array_name,
         threshold_value,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** clipPDataUsingField ***")
 

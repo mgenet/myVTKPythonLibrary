@@ -23,7 +23,7 @@ def readMatLabImage(
         field_name,
         field_type,
         spacing=[1.,1.,1.],
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** readMatLabImage ***")
 

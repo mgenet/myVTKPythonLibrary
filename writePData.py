@@ -19,7 +19,7 @@ import myVTKPythonLibrary as myVTK
 def writePData(
         pdata,
         filename,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** writePData: "+filename+" ***")
 

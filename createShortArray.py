@@ -21,7 +21,7 @@ def createShortArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     sarray = vtk.vtkShortArray()
     sarray.SetName(name)
@@ -39,7 +39,7 @@ def createUnsignedShortArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     usarray = vtk.vtkUnsignedShortArray()
     usarray.SetName(name)

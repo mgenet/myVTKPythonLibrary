@@ -20,7 +20,7 @@ from mat_vec_tools import *
 def computeSystolicStrainsFromEndDiastolicAndEndSystolicStates(
         farray_F_dia,
         farray_F_sys,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeSystolicStrainsFromEndDiastolicAndEndSystolicStates ***")
 

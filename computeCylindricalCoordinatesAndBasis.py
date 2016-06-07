@@ -87,7 +87,7 @@ def computeCylindricalCoordinatesAndBasis(
 def addCylindricalCoordinatesAndBasis(
         ugrid,
         points_AB,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addCylindricalCoordinatesAndBasis ***")
 

@@ -17,7 +17,7 @@ import myVTKPythonLibrary as myVTK
 def addMappingFromPointsToCells(
         ugrid_points,
         ugrid_cells,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addMappingFromPointsToCells ***")
 

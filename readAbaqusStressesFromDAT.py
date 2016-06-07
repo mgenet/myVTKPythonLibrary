@@ -16,7 +16,7 @@ import myVTKPythonLibrary as myVTK
 
 def readAbaqusStressFromDAT(
         data_filename,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** readAbaqusStressFromDAT: "+data_filename+" ***")
 

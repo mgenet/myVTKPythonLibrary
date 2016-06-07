@@ -21,7 +21,7 @@ def computeMeanStddevAngles(
         angles,
         angles_in_degrees=True,
         angles_in_pm_pi=True,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeMeanStddevAngles ***")
 
@@ -48,7 +48,7 @@ def computeMeanStddevAngles(
 
 #def cleanAngles(
         #angles,
-        #verbose=1):
+        #verbose=0):
 
     #myVTK.myPrint(verbose, "*** cleanAngles ***")
 

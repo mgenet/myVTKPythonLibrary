@@ -134,7 +134,7 @@ def addFiberSheetNormalDirections(
         angles_in_degrees=True,
         use_new_definition=False,
         shuffle_vectors=False,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addFiberSheetNormalDirections ***")
 

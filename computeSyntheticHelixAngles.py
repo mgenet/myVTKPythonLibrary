@@ -19,7 +19,7 @@ def computeSyntheticHelixAngles(
         helix_angle_end,
         helix_angle_epi,
         farray_angle_helix=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeSyntheticHelixAngles ***")
 
@@ -49,7 +49,7 @@ def addSyntheticHelixAngles(
         helix_angle_end,
         helix_angle_epi,
         type_of_support="cell",
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addSyntheticHelixAngles ***")
 

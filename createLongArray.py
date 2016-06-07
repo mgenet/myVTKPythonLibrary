@@ -21,7 +21,7 @@ def createLongArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     larray = vtk.vtkLongArray()
     larray.SetName(name)
@@ -39,7 +39,7 @@ def createUnsignedLongArray(
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
-        verbose=1):
+        verbose=0):
 
     ularray = vtk.vtkUnsignedLongArray()
     ularray.SetName(name)

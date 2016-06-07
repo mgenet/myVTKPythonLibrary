@@ -23,7 +23,7 @@ def rotateMatrix(
         in_vecs=None,
         R=None,
         out_vecs=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** rotateMatrix ***")
     myVTK.myPrint(min(verbose,1), "*** Warning: in rotateMatrix, the definition of the global rotation is probably the inverse of the definition in previous rotateTensors function. ***")

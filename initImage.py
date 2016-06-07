@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 def initImage(
         image=None,
         image_filename=None,
-        verbose=1):
+        verbose=0):
 
     assert ((image is not None) or (image_filename is not None)), "Need an image or an image_filename. Aborting."
 

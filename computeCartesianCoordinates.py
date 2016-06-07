@@ -10,13 +10,15 @@
 ###                                                                  ###
 ########################################################################
 
+import numpy
+
 import myVTKPythonLibrary as myVTK
 
 ########################################################################
 
 def computeCartesianCoordinates(
         points,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeCartesianCoordinates ***")
 
@@ -63,7 +65,7 @@ def computeCartesianCoordinates(
 
 def addCartesianCoordinates(
         ugrid,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addCartesianCoordinates ***")
 

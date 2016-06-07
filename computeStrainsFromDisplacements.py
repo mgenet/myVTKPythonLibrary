@@ -22,7 +22,7 @@ def computeStrainsFromDisplacements(
         mesh,
         disp_array_name="displacement",
         ref_mesh=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeStrainsFromDisplacements ***")
 

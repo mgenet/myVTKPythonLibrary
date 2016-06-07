@@ -26,7 +26,7 @@ def computeSyntheticHelixTransverseSheetAngles(
         farray_angle_helix=None,
         farray_angle_trans=None,
         farray_angle_sheet=None,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** computeSyntheticHelixTransverseSheetAngles ***")
 
@@ -154,7 +154,7 @@ def addSyntheticHelixTransverseSheetAngles(
         angles="+/-60",
         type_of_support="cell",
         sigma=0.,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** addSyntheticHelixTransverseSheetAngles ***")
 

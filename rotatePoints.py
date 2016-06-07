@@ -21,7 +21,7 @@ def rotatePoints(
         old_points,
         C,
         R,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** rotatePoints ***")
 

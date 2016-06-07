@@ -18,7 +18,7 @@ import myVTKPythonLibrary as myVTK
 
 def findPointsInCell(points,
                      cell,
-                     verbose=1):
+                     verbose=0):
 
     ugrid_cell = vtk.vtkUnstructuredGrid()
     ugrid_cell.SetPoints(cell.GetPoints())

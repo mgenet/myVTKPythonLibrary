@@ -21,7 +21,7 @@ def clipSurfacesForCutLVMesh(
         endo,
         epi,
         height,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** clipSurfacesForCutLVMesh ***")
 

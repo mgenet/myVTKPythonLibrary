@@ -16,7 +16,7 @@ import myVTKPythonLibrary as myVTK
 
 def readAbaqusDeformationGradientsFromDAT(
         data_filename,
-        verbose=1):
+        verbose=0):
 
     myVTK.myPrint(verbose, "*** readAbaqusDeformationGradientsFromDAT: "+data_filename+" ***")
 
