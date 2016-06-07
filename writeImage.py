@@ -30,6 +30,8 @@ def writeImage(
     else:
         assert 0, "File must be .vtk or .vti. Aborting."
 
+    myVTK.myPrint(verbose-1, "n_points = "+str(image.GetNumberOfPoints()))
+
     image_writer.SetFileName(filename)
     if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
         image_writer.SetInputData(image)
