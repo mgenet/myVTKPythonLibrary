@@ -21,15 +21,17 @@ import myVTKPythonLibrary as myVTK
 def computeImageGradient(
         image=None,
         image_filename=None,
+        image_dimensionality=None,
         verbose=0):
 
     myVTK.myPrint(verbose, "*** computeImageGradient ***")
 
     image = myVTK.initImage(image, image_filename, verbose-1)
 
-    image_dimensionality = myVTK.computeImageDimensionality(
-        image=image,
-        verbose=verbose-1)
+    if (image_dimensionality is None):
+        image_dimensionality = myVTK.computeImageDimensionality(
+            image=image,
+            verbose=verbose-1)
 
     image_gradient = vtk.vtkImageGradient()
     if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
