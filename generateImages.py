@@ -78,7 +78,7 @@ import myVTKPythonLibrary as myVTK
 
 #class TextureInfo():
     #def __init__(self, type, **kwargs):
-        #assert (type in ("no", "sine", "sinX", "sinY", "sinZ", "taggX", "taggY", "taggZ"))
+        #assert (type in ("no", "sinsq", "sinsqX", "sinsqY", "sinsqZ", "taggX", "taggY", "taggZ"))
         #self["type"] = type
 
 #class NoiseInfo():
@@ -99,6 +99,7 @@ class Image():
     def __init__(self, images, structure, texture, noise):
         self.L = images["L"]
 
+        # structure
         if (structure["type"] == "no"):
             self.I0_structure = self.I0_structure_no
         elif (structure["type"] == "heart"):
@@ -119,53 +120,42 @@ class Image():
         else:
             assert (0), "structure type must be \"no\" or \"heart\". Aborting."
 
-        texture = texture
+        # texture
         if (texture["type"] == "no"):
             self.I0_texture = self.I0_texture_no
-        elif (texture["type"] == "sine"):
-            if   (images["n_dim"] == 1):
-                self.I0_texture = self.I0_texture_sine_X
-            elif (images["n_dim"] == 2):
-                self.I0_texture = self.I0_texture_sine_XY
-            elif (images["n_dim"] == 3):
-                self.I0_texture = self.I0_texture_sine_XYZ
-            else:
-                assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
-        elif (texture["type"] == "sinX"):
-            self.I0_texture = self.I0_texture_sine_X
-        elif (texture["type"] == "sinY"):
-            self.I0_texture = self.I0_texture_sine_Y
-        elif (texture["type"] == "sinZ"):
-            self.I0_texture = self.I0_texture_sine_Z
-        elif (texture["type"] == "tagging"):
+        elif (texture["type"].startswith("tagging")):
             if   (images["n_dim"] == 1):
                 self.I0_texture = self.I0_texture_tagging_X
-                self.s = texture["s"]
             elif (images["n_dim"] == 2):
                 self.I0_texture = self.I0_texture_tagging_XY
-                self.s = texture["s"]
             elif (images["n_dim"] == 3):
                 self.I0_texture = self.I0_texture_tagging_XYZ
-                self.s = texture["s"]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
-        elif (texture["type"] == "taggX"):
+            self.s = texture["s"]
+        elif (texture["type"].startswith("taggX")):
             self.I0_texture = self.I0_texture_tagging_X
             self.s = texture["s"]
-        elif (texture["type"] == "taggY"):
+        elif (texture["type"].startswith("taggY")):
             self.I0_texture = self.I0_texture_tagging_Y
             self.s = texture["s"]
-        elif (texture["type"] == "taggZ"):
+        elif (texture["type"].startswith("taggZ")):
             self.I0_texture = self.I0_texture_tagging_Z
             self.s = texture["s"]
         else:
-            assert (0), "texture type must be \"no\", \"sine\", \"sinX\", \"sinY\", \"sinZ\", \"tagging\", \"taggX\", \"taggY\" or \"taggZ\". Aborting."
+            assert (0), "texture type must be \"no\", \"tagging\", \"taggX\", \"taggY\" or \"taggZ\". Aborting."
 
+        if ("-signed" in texture["type"]):
+            self.signed = True
+        else:
+            self.signed = False
+
+        # noise
         if (noise["type"] == "no"):
             self.I0_noise = self.I0_noise_no
         elif (noise["type"] == "normal"):
             self.I0_noise = self.I0_noise_normal
-            self.avg = noise.avg  if ("avg" in noise.keys()) else 0.
+            self.avg = noise.avg if ("avg" in noise.keys()) else 0.
             self.std = noise.std
         else:
             assert (0), "noise type must be \"no\" or \"normal\". Aborting."
@@ -201,71 +191,38 @@ class Image():
         i[0] *= 1.
         if (g is not None): g[:] *= 0.
 
-    def I0_texture_sine_X(self, X, i, g=None):
-        i[0]  *= math.sin(math.pi*X[0]/self.L[0])**2
-        if (g is not None):
-            g[0]  *= 2 * (math.pi/self.L[0]) * math.cos(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[0]/self.L[0])
-            g[1:] *= 0.
-
-    def I0_texture_sine_Y(self, X, i, g=None):
-        i[0]  *= math.sin(math.pi*X[1]/self.L[1])**2
-        if (g is not None):
-            g[0]  *= 0.
-            g[1]  *= 2 * (math.pi/self.L[1]) * math.cos(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[1]/self.L[1])
-            g[2:] *= 0.
-
-    def I0_texture_sine_Z(self, X, i, g=None):
-        i[0]   *= math.sin(math.pi*X[2]/self.L[2])**2
-        if (g is not None):
-            g[0:2] *= 0.
-            g[2]   *= 2 * (math.pi/self.L[2]) * math.cos(math.pi*X[2]/self.L[2]) * math.sin(math.pi*X[2]/self.L[2])
-
-    def I0_texture_sine_XY(self, X, i, g=None):
-        i[0]  *= (math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2)**(0.5)
-        if (g is not None):
-            g[0]  *= (math.pi/self.L[0]) * math.cos(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[1]/self.L[1])**2 / i[0]
-            g[1]  *= math.sin(math.pi*X[0]/self.L[0])**2 * (math.pi/self.L[1]) * math.cos(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[1]/self.L[1]) / i[0]
-            g[2:] *= 0.
-
-    def I0_texture_sine_XYZ(self, X, i, g=None):
-        i[0] *= (math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2 * math.sin(math.pi*X[2]/self.L[2])**2)**(1./3)
-        if (g is not None):
-            g[0] *= (2./3) * (math.pi/self.L[0]) * math.cos(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[0]/self.L[0]) * math.sin(math.pi*X[1]/self.L[1])**2 * math.sin(math.pi*X[2]/self.L[2])**2 / i[0]**2
-            g[1] *= math.sin(math.pi*X[0]/self.L[0])**2 * (2./3) * (math.pi/self.L[1]) * math.cos(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[1]/self.L[1]) * math.sin(math.pi*X[2]/self.L[2])**2 / i[0]**2
-            g[2] *= math.sin(math.pi*X[0]/self.L[0])**2 * math.sin(math.pi*X[1]/self.L[1])**2 * (2./3) * (math.pi/self.L[2]) * math.cos(math.pi*X[2]/self.L[2]) * math.sin(math.pi*X[2]/self.L[2]) / i[0]**2
-
     def I0_texture_tagging_X(self, X, i, g=None):
-        i[0] *= math.sin(math.pi*X[0]/self.s)**2
+        i[0] *= math.copysign(math.sin(math.pi*X[0]/self.s)**2, self.signed*math.sin(math.pi*X[0]/self.s))
         if (g is not None):
-            g[0] *= 2 * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s)
+            g[0]  *= math.copysign(2 * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s), self.signed*math.sin(math.pi*X[0]/self.s))
             g[1:] *= 0.
 
     def I0_texture_tagging_Y(self, X, i, g=None):
-        i[0] *= math.sin(math.pi*X[1]/self.s)**2
+        i[0] *= math.copysign(math.sin(math.pi*X[1]/self.s)**2, self.signed*math.sin(math.pi*X[1]/self.s))
         if (g is not None):
             g[0]  *= 0.
-            g[1]  *= 2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s)
+            g[1]  *= math.copysign(2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s), self.signed*math.sin(math.pi*X[1]/self.s))
             g[2:] *= 0.
 
     def I0_texture_tagging_Z(self, X, i, g=None):
-        i[0] *= math.sin(math.pi*X[2]/self.s)**2
+        i[0] *= math.copysign(math.sin(math.pi*X[2]/self.s)**2, self.signed*math.sin(math.pi*X[2]/self.s))
         if (g is not None):
             g[0:2] *= 0.
-            g[2]   *= 2 * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s)
+            g[2]   *= math.copysign(2 * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s), self.signed*math.sin(math.pi*X[2]/self.s))
 
     def I0_texture_tagging_XY(self, X, i, g=None):
-        i[0] *= (math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2)**(0.5)
+        i[0] *= math.copysign((math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2)**(0.5), self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s))
         if (g is not None):
-            g[0]  *= (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 / i[0]
-            g[1]  *= math.sin(math.pi*X[0]/self.s)**2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) / i[0]
+            g[0]  *= math.copysign((math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 / i[0], self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s))
+            g[1]  *= math.copysign(math.sin(math.pi*X[0]/self.s)**2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) / i[0], self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s))
             g[2:] *= 0.
 
     def I0_texture_tagging_XYZ(self, X, i, g=None):
-        i[0] *= (math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2)**(1./3)
+        i[0] *= math.copysign((math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2)**(1./3), self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
         if (g is not None):
-            g[0] *= (2./3) * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2
-            g[1] *= math.sin(math.pi*X[0]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2
-            g[2] *= math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s) / i[0]**2
+            g[0] *= math.copysign((2./3) * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2, self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
+            g[1] *= math.copysign(math.sin(math.pi*X[0]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2, self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
+            g[2] *= math.copysign(math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s) / i[0]**2, self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
 
     def I0_noise_no(self, i, g=None):
         pass
@@ -317,7 +274,7 @@ class Mapping:
 
         if (evolution["type"] == "linear"):
             self.phi = self.phi_linear
-        elif (evolution["type"] == "sine"):
+        elif (evolution["type"] == "sinsq"):
             self.phi = self.phi_sine
             self.T = evolution["T"]
         else:
@@ -675,401 +632,3 @@ def generateImages(
                 verbose=verbose-1)
     else:
         assert (0), "Wrong data type. Aborting."
-
-########################################################################
-
-def generateUndersampledImages(
-        images,
-        structure,
-        texture,
-        noise,
-        deformation,
-        evolution,
-        undersampling_level,
-        keep_temporary_images=0,
-        verbose=0):
-
-    myVTK.myPrint(verbose, "*** generateUndersampledImages ***")
-
-    images_basename = images["basename"]
-    images_n_voxels = images["n_voxels"][:]
-
-    images["n_voxels"][1] /= undersampling_level
-    if (images["n_dim"] >= 3):
-        images["n_voxels"][2] /= undersampling_level
-    images["basename"] = images_basename+"-X"
-    texture["type"] = "taggX"
-    myVTK.generateImages(
-        images=images,
-        structure=structure,
-        texture=texture,
-        noise=noise,
-        deformation=deformation,
-        evolution=evolution,
-        verbose=verbose-1)
-    images["n_voxels"] = images_n_voxels[:]
-    images["basename"] = images_basename
-
-    images["n_voxels"][0] /= undersampling_level
-    if (images["n_dim"] >= 3):
-        images["n_voxels"][2] /= undersampling_level
-    images["basename"] = images_basename+"-Y"
-    texture["type"] = "taggY"
-    myVTK.generateImages(
-        images=images,
-        structure=structure,
-        texture=texture,
-        noise=noise,
-        deformation=deformation,
-        evolution=evolution,
-        verbose=verbose-1)
-    images["n_voxels"] = images_n_voxels[:]
-    images["basename"] = images_basename
-
-    if (images["n_dim"] >= 3):
-        images["n_voxels"][0] /= undersampling_level
-        images["n_voxels"][1] /= undersampling_level
-        images["basename"] = images_basename+"-Z"
-        texture["type"] = "taggZ"
-        myVTK.generateImages(
-            images=images,
-            structure=structure,
-            texture=texture,
-            noise=noise,
-            deformation=deformation,
-            evolution=evolution,
-            verbose=verbose-1)
-        images["n_voxels"] = images_n_voxels
-        images["basename"] = images_basename
-
-    if ("zfill" not in images.keys()):
-        images["zfill"] = len(str(images["n_frames"]))
-    for k_frame in xrange(images["n_frames"]):
-        imageX = myVTK.readImage(
-            filename=images["folder"]+"/"+images["basename"]+"-X_"+str(k_frame).zfill(images["zfill"])+".vti",
-            verbose=verbose-1)
-        interpolatorX = myVTK.createImageInterpolator(
-            image=imageX,
-            verbose=verbose-1)
-        iX = numpy.empty(1)
-
-        imageY = myVTK.readImage(
-            filename=images["folder"]+"/"+images["basename"]+"-Y_"+str(k_frame).zfill(images["zfill"])+".vti",
-            verbose=verbose-1)
-        interpolatorY = myVTK.createImageInterpolator(
-            image=imageY,
-            verbose=verbose-1)
-        iY = numpy.empty(1)
-
-        if (images["n_dim"] == 2):
-            imageXY = vtk.vtkImageData()
-            imageXY.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0, 0])
-            imageXY.SetSpacing([images["L"][0]/images["n_voxels"][0], images["L"][1]/images["n_voxels"][1], 1.])
-            imageXY.SetOrigin([images["L"][0]/images["n_voxels"][0]/2, images["L"][1]/images["n_voxels"][1]/2, 0.])
-            if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-                imageXY.AllocateScalars(vtk.VTK_FLOAT, 1)
-            else:
-                imageXY.SetScalarTypeToFloat()
-                imageXY.SetNumberOfScalarComponents(1)
-                imageXY.AllocateScalars()
-            scalars = imageXY.GetPointData().GetScalars()
-            x = numpy.empty(3)
-            for k_point in xrange(imageXY.GetNumberOfPoints()):
-                imageXY.GetPoint(k_point, x)
-                interpolatorX.Interpolate(x, iX)
-                interpolatorY.Interpolate(x, iY)
-                scalars.SetTuple(k_point, (iX*iY)**(1./2))
-            myVTK.writeImage(
-                image=imageXY,
-                filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
-                verbose=verbose-1)
-            if not (keep_temporary_images):
-                os.system("rm "+images["folder"]+"/"+images["basename"]+"-X_"+str(k_frame).zfill(images["zfill"])+".vti")
-                os.system("rm "+images["folder"]+"/"+images["basename"]+"-Y_"+str(k_frame).zfill(images["zfill"])+".vti")
-
-        elif (images["n_dim"] == 3):
-            imageZ = myVTK.readImage(
-                filename=images["folder"]+"/"+images["basename"]+"-Z_"+str(k_frame).zfill(images["zfill"])+".vti",
-                verbose=verbose-1)
-            interpolatorZ = myVTK.createImageInterpolator(
-                image=imageZ,
-                verbose=verbose-1)
-            iZ = numpy.empty(1)
-
-            imageXYZ = vtk.vtkImageData()
-            imageXYZ.SetExtent([0, images["n_voxels"][0]-1, 0, images["n_voxels"][1]-1, 0, images["n_voxels"][2]-1])
-            imageXYZ.SetSpacing([images["L"][0]/images["n_voxels"][0], images["L"][1]/images["n_voxels"][1], images["L"][2]/images["n_voxels"][2]])
-            imageXYZ.SetOrigin([images["L"][0]/images["n_voxels"][0]/2, images["L"][1]/images["n_voxels"][1]/2, images["L"][2]/images["n_voxels"][2]/2])
-            if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-                imageXYZ.AllocateScalars(vtk.VTK_FLOAT, 1)
-            else:
-                imageXYZ.SetScalarTypeToFloat()
-                imageXYZ.SetNumberOfScalarComponents(1)
-                imageXYZ.AllocateScalars()
-            scalars = imageXYZ.GetPointData().GetScalars()
-            x = numpy.empty(3)
-            for k_point in xrange(imageXYZ.GetNumberOfPoints()):
-                imageXYZ.GetPoint(k_point, x)
-                interpolatorX.Interpolate(x, iX)
-                interpolatorY.Interpolate(x, iY)
-                interpolatorZ.Interpolate(x, iZ)
-                scalars.SetTuple(k_point, (iX*iY*iZ)**(1./3))
-            myVTK.writeImage(
-                image=imageXYZ,
-                filename=images["folder"]+"/"+images["basename"]+"_"+str(k_frame).zfill(images["zfill"])+".vti",
-                verbose=verbose-1)
-            if not (keep_temporary_images):
-                os.system("rm "+images["folder"]+"/"+images["basename"]+"-X_"+str(k_frame).zfill(images["zfill"])+".vti")
-                os.system("rm "+images["folder"]+"/"+images["basename"]+"-Y_"+str(k_frame).zfill(images["zfill"])+".vti")
-                os.system("rm "+images["folder"]+"/"+images["basename"]+"-Z_"+str(k_frame).zfill(images["zfill"])+".vti")
-
-########################################################################
-
-def generateWarpedImages(
-        ref_image_folder,
-        ref_image_basename,
-        sol_folder,
-        sol_basename,
-        ref_frame=0,
-        sol_ext="vtu",
-        verbose=0):
-
-    myVTK.myPrint(verbose, "*** generateWarpedImages ***")
-
-    ref_image_zfill = len(glob.glob(ref_image_folder+"/"+ref_image_basename+"_*.vti")[0].rsplit("_")[-1].split(".")[0])
-    ref_image_filename = ref_image_folder+"/"+ref_image_basename+"_"+str(ref_frame).zfill(ref_image_zfill)+".vti"
-    ref_image = myVTK.readImage(
-        filename=ref_image_filename)
-
-    interpolator = myVTK.createImageInterpolator(
-        image=ref_image)
-    #I = numpy.empty(1)
-    #interpolator.Interpolate([0.35, 0.25, 0.], I)
-
-    image = vtk.vtkImageData()
-    image.SetOrigin(ref_image.GetOrigin())
-    image.SetSpacing(ref_image.GetSpacing())
-    image.SetExtent(ref_image.GetExtent())
-    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        image.AllocateScalars(vtk.VTK_FLOAT, 1)
-    else:
-        image.SetScalarTypeToFloat()
-        image.SetNumberOfScalarComponents(1)
-        image.AllocateScalars()
-    scalars = image.GetPointData().GetScalars()
-
-    sol_zfill = len(glob.glob(sol_folder+"/"+sol_basename+"_*."+sol_ext)[0].rsplit("_")[-1].split(".")[0])
-    n_frames = len(glob.glob(sol_folder+"/"+sol_basename+"_"+"[0-9]"*sol_zfill+"."+sol_ext))
-    #n_frames = 1
-
-    X = numpy.empty(3)
-    U = numpy.empty(3)
-    x = numpy.empty(3)
-    I = numpy.empty(1)
-    m = numpy.empty(1)
-    for k_frame in xrange(n_frames):
-        myVTK.myPrint(verbose, "k_frame = "+str(k_frame))
-
-        mesh = myVTK.readUGrid(
-            filename=sol_folder+"/"+sol_basename+"_"+str(k_frame).zfill(sol_zfill)+"."+sol_ext)
-        #print mesh
-
-        warp = vtk.vtkWarpVector()
-        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-            warp.SetInputData(mesh)
-        else:
-            warp.SetInput(mesh)
-        warp.Update()
-        warped_mesh = warp.GetOutput()
-        #myVTK.writeUGrid(
-            #ugrid=warped_mesh,
-            #filename=sol_folder+"/"+sol_basename+"-warped_"+str(k_frame).zfill(sol_zfill)+"."+sol_ext)
-
-        probe = vtk.vtkProbeFilter()
-        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-            probe.SetInputData(image)
-            probe.SetSourceData(warped_mesh)
-        else:
-            probe.SetInput(image)
-            probe.SetSource(warped_mesh)
-        probe.Update()
-        probed_image = probe.GetOutput()
-        scalars_mask = probed_image.GetPointData().GetArray("vtkValidPointMask")
-        scalars_U = probed_image.GetPointData().GetArray("displacement")
-        #myVTK.writeImage(
-            #image=probed_image,
-            #filename=sol_folder+"/"+sol_basename+"_"+str(k_frame).zfill(sol_zfill)+".vti")
-
-        for k_point in xrange(image.GetNumberOfPoints()):
-            scalars_mask.GetTuple(k_point, m)
-            if (m[0] == 0):
-                I[0] = 0.
-            else:
-                image.GetPoint(k_point, x)
-                scalars_U.GetTuple(k_point, U)
-                X = x - U
-                interpolator.Interpolate(X, I)
-            scalars.SetTuple(k_point, I)
-
-        myVTK.writeImage(
-            image=image,
-            filename=sol_folder+"/"+sol_basename+"-warped_"+str(k_frame).zfill(sol_zfill)+".vti")
-
-########################################################################
-
-def generateUnwarpedImages(
-        images_folder,
-        images_basename,
-        sol_folder,
-        sol_basename,
-        sol_ext="vtu",
-        verbose=0):
-
-    myVTK.myPrint(verbose, "*** generateUnwarpedImages ***")
-
-    ref_image_zfill = len(glob.glob(images_folder+"/"+images_basename+"_*.vti")[0].rsplit("_")[-1].split(".")[0])
-    ref_image_filename = images_folder+"/"+images_basename+"_"+str(0).zfill(ref_image_zfill)+".vti"
-    ref_image = myVTK.readImage(
-        filename=ref_image_filename)
-
-    image = vtk.vtkImageData()
-    image.SetOrigin(ref_image.GetOrigin())
-    image.SetSpacing(ref_image.GetSpacing())
-    image.SetExtent(ref_image.GetExtent())
-    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        image.AllocateScalars(vtk.VTK_FLOAT, 1)
-    else:
-        image.SetScalarTypeToFloat()
-        image.SetNumberOfScalarComponents(1)
-        image.AllocateScalars()
-    scalars = image.GetPointData().GetScalars()
-
-    sol_zfill = len(glob.glob(sol_folder+"/"+sol_basename+"_*."+sol_ext)[0].rsplit("_")[-1].split(".")[0])
-    n_frames = len(glob.glob(sol_folder+"/"+sol_basename+"_"+"[0-9]"*sol_zfill+"."+sol_ext))
-    #n_frames = 1
-
-    X = numpy.empty(3)
-    U = numpy.empty(3)
-    x = numpy.empty(3)
-    I = numpy.empty(1)
-    m = numpy.empty(1)
-    for k_frame in xrange(n_frames):
-        myVTK.myPrint(verbose, "k_frame = "+str(k_frame))
-
-        def_image = myVTK.readImage(
-            filename=images_folder+"/"+images_basename+"_"+str(k_frame).zfill(ref_image_zfill)+".vti")
-
-        interpolator = myVTK.createImageInterpolator(
-            image=def_image)
-
-        mesh = myVTK.readUGrid(
-            filename=sol_folder+"/"+sol_basename+"_"+str(k_frame).zfill(sol_zfill)+"."+sol_ext)
-
-        probe = vtk.vtkProbeFilter()
-        if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-            probe.SetInputData(image)
-            probe.SetSourceData(mesh)
-        else:
-            probe.SetInput(image)
-            probe.SetSource(mesh)
-        probe.Update()
-        probed_image = probe.GetOutput()
-        scalars_mask = probed_image.GetPointData().GetArray("vtkValidPointMask")
-        scalars_U = probed_image.GetPointData().GetArray("displacement")
-
-        for k_point in xrange(image.GetNumberOfPoints()):
-            scalars_mask.GetTuple(k_point, m)
-            if (m[0] == 0):
-                I[0] = 0.
-            else:
-                image.GetPoint(k_point, X)
-                scalars_U.GetTuple(k_point, U)
-                x = X + U
-                interpolator.Interpolate(x, I)
-            scalars.SetTuple(k_point, I)
-
-        myVTK.writeImage(
-            image=image,
-            filename=sol_folder+"/"+sol_basename+"-unwarped_"+str(k_frame).zfill(sol_zfill)+".vti")
-
-########################################################################
-
-def warpMesh(
-        mesh_folder,
-        mesh_basename,
-        images,
-        structure,
-        deformation,
-        evolution,
-        verbose=0):
-
-    myVTK.myPrint(verbose, "*** warpMesh ***")
-
-    mesh = myVTK.readUGrid(
-        filename=mesh_folder+"/"+mesh_basename+".vtk",
-        verbose=verbose-1)
-    n_points = mesh.GetNumberOfPoints()
-    n_cells = mesh.GetNumberOfCells()
-
-    if os.path.exists(mesh_folder+"/"+mesh_basename+"-WithLocalBasis.vtk"):
-        ref_mesh = myVTK.readUGrid(
-            filename=mesh_folder+"/"+mesh_basename+"-WithLocalBasis.vtk",
-            verbose=verbose-1)
-    else:
-        ref_mesh = None
-
-    farray_disp = myVTK.createFloatArray(
-        name="displacement",
-        n_components=3,
-        n_tuples=n_points,
-        verbose=verbose-1)
-    mesh.GetPointData().AddArray(farray_disp)
-
-    mapping = Mapping(images, structure, deformation, evolution)
-
-    X = numpy.empty(3)
-    x = numpy.empty(3)
-    U = numpy.empty(3)
-    if ("zfill" not in images.keys()):
-        images["zfill"] = len(str(images["n_frames"]))
-    for k_frame in xrange(images["n_frames"]):
-        t = images["T"]*float(k_frame)/(images["n_frames"]-1) if (images["n_frames"]>1) else 0.
-        mapping.init_t(t)
-
-        for k_point in xrange(n_points):
-            mesh.GetPoint(k_point, X)
-            mapping.x(X, x)
-            U = x - X
-            farray_disp.SetTuple(k_point, U)
-
-        myVTK.computeStrainsFromDisplacements(
-            mesh=mesh,
-            disp_array_name="displacement",
-            ref_mesh=ref_mesh,
-            verbose=verbose-1)
-
-        myVTK.writeUGrid(
-            ugrid=mesh,
-            filename=mesh_folder+"/"+mesh_basename+"_"+str(k_frame).zfill(images["zfill"])+".vtk",
-            verbose=verbose-1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
