@@ -78,7 +78,7 @@ import myVTKPythonLibrary as myVTK
 
 #class TextureInfo():
     #def __init__(self, type, **kwargs):
-        #assert (type in ("no", "sinsq", "sinsqX", "sinsqY", "sinsqZ", "taggX", "taggY", "taggZ"))
+        #assert (type in ("no", "taggX", "taggY", "taggZ"))
         #self["type"] = type
 
 #class NoiseInfo():
@@ -125,11 +125,20 @@ class Image():
             self.I0_texture = self.I0_texture_no
         elif (texture["type"].startswith("tagging")):
             if   (images["n_dim"] == 1):
-                self.I0_texture = self.I0_texture_tagging_X
+                if ("-signed" in texture["type"]):
+                    self.I0_texture = self.I0_texture_tagging_signed_X
+                else:
+                    self.I0_texture = self.I0_texture_tagging_X
             elif (images["n_dim"] == 2):
-                self.I0_texture = self.I0_texture_tagging_XY
+                if ("-signed" in texture["type"]):
+                    self.I0_texture = self.I0_texture_tagging_signed_XY
+                else:
+                    self.I0_texture = self.I0_texture_tagging_XY
             elif (images["n_dim"] == 3):
-                self.I0_texture = self.I0_texture_tagging_XYZ
+                if ("-signed" in texture["type"]):
+                    self.I0_texture = self.I0_texture_tagging_signed_XYZ
+                else:
+                    self.I0_texture = self.I0_texture_tagging_XYZ
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
             self.s = texture["s"]
@@ -144,11 +153,6 @@ class Image():
             self.s = texture["s"]
         else:
             assert (0), "texture type must be \"no\", \"tagging\", \"taggX\", \"taggY\" or \"taggZ\". Aborting."
-
-        if ("-signed" in texture["type"]):
-            self.signed = True
-        else:
-            self.signed = False
 
         # noise
         if (noise["type"] == "no"):
@@ -167,69 +171,95 @@ class Image():
 
     def I0_structure_no(self, X, i, g=None):
         i[0] = 1.
-        if (g is not None): g[:] = 1.
+        #if (g is not None): g[:] = 1.
 
     def I0_structure_heart_2(self, X, i, g=None):
         self.R = ((X[0]-self.L[0]/2)**2 + (X[1]-self.L[1]/2)**2)**(1./2)
         if (self.R >= self.Ri) and (self.R <= self.Re):
             i[0] = 1.
-            if (g is not None): g[:] = 1.
+            #if (g is not None): g[:] = 1.
         else:
             i[0] = 0.
-            if (g is not None): g[:] = 0.
+            #if (g is not None): g[:] = 0.
+        #i[0] = 1.
 
     def I0_structure_heart_3(self, X, i, g=None):
         self.R = ((X[0]-self.L[0]/2)**2 + (X[1]-self.L[1]/2)**2)**(1./2)
         if (self.R >= self.Ri) and (self.R <= self.Re) and (X[2] >= self.Zmin) and (X[2] <= self.Zmax):
             i[0] = 1.
-            if (g is not None): g[:] = 1.
+            #if (g is not None): g[:] = 1.
         else:
             i[0] = 0.
-            if (g is not None): g[:] = 0.
+            #if (g is not None): g[:] = 0.
 
     def I0_texture_no(self, X, i, g=None):
         i[0] *= 1.
-        if (g is not None): g[:] *= 0.
+        #if (g is not None): g[:] *= 0.
+
+    def I0_texture_tagging_signed_X(self, X, i, g=None):
+        i[0] *= math.sin(math.pi*X[0]/self.s)
+        #if (g is not None):
+            #assert (0), "ToDo"
 
     def I0_texture_tagging_X(self, X, i, g=None):
-        i[0] *= math.copysign(math.sin(math.pi*X[0]/self.s)**2, self.signed*math.sin(math.pi*X[0]/self.s))
-        if (g is not None):
-            g[0]  *= math.copysign(2 * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s), self.signed*math.sin(math.pi*X[0]/self.s))
-            g[1:] *= 0.
+        i[0] *= abs(math.sin(math.pi*X[0]/self.s))
+        #if (g is not None):
+            #assert (0), "ToDo"
+
+    def I0_texture_tagging_signed_Y(self, X, i, g=None):
+        i[0] *= math.sin(math.pi*X[1]/self.s)
+        #if (g is not None):
+            #assert (0), "ToDo"
 
     def I0_texture_tagging_Y(self, X, i, g=None):
-        i[0] *= math.copysign(math.sin(math.pi*X[1]/self.s)**2, self.signed*math.sin(math.pi*X[1]/self.s))
-        if (g is not None):
-            g[0]  *= 0.
-            g[1]  *= math.copysign(2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s), self.signed*math.sin(math.pi*X[1]/self.s))
-            g[2:] *= 0.
+        i[0] *= abs(math.sin(math.pi*X[1]/self.s))
+        #if (g is not None):
+            #assert (0), "ToDo"
+
+    def I0_texture_tagging_signed_Z(self, X, i, g=None):
+        i[0] *= math.sin(math.pi*X[2]/self.s)
+        #if (g is not None):
+            #assert (0), "ToDo"
 
     def I0_texture_tagging_Z(self, X, i, g=None):
-        i[0] *= math.copysign(math.sin(math.pi*X[2]/self.s)**2, self.signed*math.sin(math.pi*X[2]/self.s))
-        if (g is not None):
-            g[0:2] *= 0.
-            g[2]   *= math.copysign(2 * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s), self.signed*math.sin(math.pi*X[2]/self.s))
+        i[0] *= abs(math.sin(math.pi*X[2]/self.s))
+        #if (g is not None):
+            #assert (0), "ToDo"
+
+    def I0_texture_tagging_signed_XY(self, X, i, g=None):
+        i[0] *= (math.sin(math.pi*X[0]/self.s)
+              +  math.sin(math.pi*X[1]/self.s))/2
+        assert (i[0] >= 0.)
+        #if (g is not None):
+            #assert (0), "ToDo"
 
     def I0_texture_tagging_XY(self, X, i, g=None):
-        i[0] *= math.copysign((math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2)**(0.5), self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s))
-        if (g is not None):
-            g[0]  *= math.copysign((math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 / i[0], self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s))
-            g[1]  *= math.copysign(math.sin(math.pi*X[0]/self.s)**2 * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) / i[0], self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s))
-            g[2:] *= 0.
+        i[0] *= (abs(math.sin(math.pi*X[0]/self.s))
+              +  abs(math.sin(math.pi*X[1]/self.s)))/2
+        assert (i[0] >= 0.)
+        #if (g is not None):
+            #assert (0), "ToDo"
+
+    def I0_texture_tagging_signed_XYZ(self, X, i, g=None):
+        i[0] *= (math.sin(math.pi*X[0]/self.s)
+              +  math.sin(math.pi*X[1]/self.s)
+              +  math.sin(math.pi*X[2]/self.s))/3
+        #if (g is not None):
+            #assert (0), "ToDo"
 
     def I0_texture_tagging_XYZ(self, X, i, g=None):
-        i[0] *= math.copysign((math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2)**(1./3), self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
-        if (g is not None):
-            g[0] *= math.copysign((2./3) * (math.pi/self.s) * math.cos(math.pi*X[0]/self.s) * math.sin(math.pi*X[0]/self.s) * math.sin(math.pi*X[1]/self.s)**2 * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2, self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
-            g[1] *= math.copysign(math.sin(math.pi*X[0]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[1]/self.s) * math.sin(math.pi*X[1]/self.s) * math.sin(math.pi*X[2]/self.s)**2 / i[0]**2, self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
-            g[2] *= math.copysign(math.sin(math.pi*X[0]/self.s)**2 * math.sin(math.pi*X[1]/self.s)**2 * (2./3) * (math.pi/self.s) * math.cos(math.pi*X[2]/self.s) * math.sin(math.pi*X[2]/self.s) / i[0]**2, self.signed*math.sin(math.pi*X[0]/self.s)*math.sin(math.pi*X[1]/self.s)*math.sin(math.pi*X[2]/self.s))
+        i[0] *= (abs(math.sin(math.pi*X[0]/self.s))
+              +  abs(math.sin(math.pi*X[1]/self.s))
+              +  abs(math.sin(math.pi*X[2]/self.s)))/3
+        #if (g is not None):
+            #assert (0), "ToDo"
 
     def I0_noise_no(self, i, g=None):
         pass
 
     def I0_noise_normal(self, i, g=None):
         i[0] += random.normalvariate(self.avg, self.std)
-        if (g is not None): g[k] += [2*random.normalvariate(self.avg, self.std) for k in xrange(len(g))]
+        #if (g is not None): g[k] += [2*random.normalvariate(self.avg, self.std) for k in xrange(len(g))]
 
 ########################################################################
 
@@ -274,11 +304,11 @@ class Mapping:
 
         if (evolution["type"] == "linear"):
             self.phi = self.phi_linear
-        elif (evolution["type"] == "sinsq"):
+        elif (evolution["type"] == "sine"):
             self.phi = self.phi_sine
             self.T = evolution["T"]
         else:
-            assert (0), "evolution type must be \"linear\" or \"sine\". Aborting."
+            assert (0), "evolution ("+evolution["type"]+") type must be \"linear\" or \"sine\". Aborting."
 
     def phi_linear(self, t):
         return t
@@ -341,19 +371,19 @@ class Mapping:
 
     def X_no(self, x, X, Finv=None):
         X[:] = x
-        if (Finv is not None): Finv[:,:] = numpy.identity(numpy.sqrt(numpy.size(Finv)))
+        #if (Finv is not None): Finv[:,:] = numpy.identity(numpy.sqrt(numpy.size(Finv)))
 
     def X_trans(self, x, X, Finv=None):
         X[:] = x - self.D
-        if (Finv is not None): Finv[:,:] = numpy.identity(numpy.sqrt(numpy.size(Finv)))
+        #if (Finv is not None): Finv[:,:] = numpy.identity(numpy.sqrt(numpy.size(Finv)))
 
     def X_rot(self, x, X, Finv=None):
         X[:] = numpy.dot(self.Rinv, x - self.C) + self.C
-        if (Finv is not None): Finv[:,:] = self.Rinv
+        #if (Finv is not None): Finv[:,:] = self.Rinv
 
     def X_homogeneous(self, x, X, Finv=None):
         X[:] = numpy.dot(self.Finv, x)
-        if (Finv is not None): Finv[:,:] = self.Finv
+        #if (Finv is not None): Finv[:,:] = self.Finv
 
     def X_heart(self, x, X, Finv=None):
         #print "x = "+str(x)
@@ -369,47 +399,47 @@ class Mapping:
         X[1] = self.RT[0] * math.sin(self.RT[1]) + self.L[1]/2
         X[2] = x[2]
         #print "X = "+str(X)
-        if (Finv is not None):
-            Finv[0,0] = 1.+(self.dRe-self.dRi)/(self.Re-self.Ri)
-            Finv[0,1] = 0.
-            Finv[0,2] = 0.
-            Finv[1,0] = (self.dTe-self.dTi)/(self.Re-self.Ri)*self.rt[0]
-            Finv[1,1] = self.rt[0]/self.RT[0]
-            Finv[1,2] = 0.
-            Finv[2,0] = 0.
-            Finv[2,1] = 0.
-            Finv[2,2] = 1.
-            #print "F = "+str(Finv)
-            Finv[:,:] = numpy.linalg.inv(Finv)
-            #print "Finv = "+str(Finv)
-            self.R[0,0] = +math.cos(self.RT[1])
-            self.R[0,1] = +math.sin(self.RT[1])
-            self.R[0,2] = 0.
-            self.R[1,0] = -math.sin(self.RT[1])
-            self.R[1,1] = +math.cos(self.RT[1])
-            self.R[1,2] = 0.
-            self.R[2,0] = 0.
-            self.R[2,1] = 0.
-            self.R[2,2] = 1.
-            #print "R = "+str(self.R)
-            Finv[:] = numpy.dot(numpy.transpose(self.R), numpy.dot(Finv, self.R))
-            #print "Finv = "+str(Finv)
+        #if (Finv is not None):
+            #Finv[0,0] = 1.+(self.dRe-self.dRi)/(self.Re-self.Ri)
+            #Finv[0,1] = 0.
+            #Finv[0,2] = 0.
+            #Finv[1,0] = (self.dTe-self.dTi)/(self.Re-self.Ri)*self.rt[0]
+            #Finv[1,1] = self.rt[0]/self.RT[0]
+            #Finv[1,2] = 0.
+            #Finv[2,0] = 0.
+            #Finv[2,1] = 0.
+            #Finv[2,2] = 1.
+            ##print "F = "+str(Finv)
+            #Finv[:,:] = numpy.linalg.inv(Finv)
+            ##print "Finv = "+str(Finv)
+            #self.R[0,0] = +math.cos(self.RT[1])
+            #self.R[0,1] = +math.sin(self.RT[1])
+            #self.R[0,2] = 0.
+            #self.R[1,0] = -math.sin(self.RT[1])
+            #self.R[1,1] = +math.cos(self.RT[1])
+            #self.R[1,2] = 0.
+            #self.R[2,0] = 0.
+            #self.R[2,1] = 0.
+            #self.R[2,2] = 1.
+            ##print "R = "+str(self.R)
+            #Finv[:] = numpy.dot(numpy.transpose(self.R), numpy.dot(Finv, self.R))
+            ##print "Finv = "+str(Finv)
 
     def x_no(self, X, x, F=None):
         x[:] = X
-        if (Finv is not None): F[:,:] = numpy.identity(numpy.sqrt(numpy.size(F)))
+        #if (F is not None): F[:,:] = numpy.identity(numpy.sqrt(numpy.size(F)))
 
     def x_trans(self, X, x, F=None):
         x[:] = X + self.D
-        if (Finv is not None): F[:,:] = numpy.identity(numpy.sqrt(numpy.size(F)))
+        #if (F is not None): F[:,:] = numpy.identity(numpy.sqrt(numpy.size(F)))
 
     def x_rot(self, X, x, F=None):
         x[:] = numpy.dot(self.R, X - self.C) + self.C
-        if (Finv is not None): F[:,:] = self.R
+        #if (F is not None): F[:,:] = self.R
 
     def x_homogeneous(self, X, x, F=None):
         x[:] = numpy.dot(self.F, X)
-        if (Finv is not None): F[:,:] = self.F
+        #if (F is not None): F[:,:] = self.F
 
     def x_heart(self, X, x, F=None):
         #print "X = "+str(X)
@@ -425,28 +455,28 @@ class Mapping:
         x[1] = self.rt[0] * math.sin(self.rt[1]) + self.L[1]/2
         x[2] = X[2]
         #print "x = "+str(x)
-        if (Finv is not None):
-            F[0,0] = 1.+(self.dRe-self.dRi)/(self.Re-self.Ri)
-            F[0,1] = 0.
-            F[0,2] = 0.
-            F[1,0] = (self.dTe-self.dTi)/(self.Re-self.Ri)*self.rt[0]
-            F[1,1] = self.rt[0]/self.RT[0]
-            F[1,2] = 0.
-            F[2,0] = 0.
-            F[2,1] = 0.
-            F[2,2] = 1.
-            #print "F = "+str(F)
-            self.R[0,0] = +math.cos(self.RT[1])
-            self.R[0,1] = +math.sin(self.RT[1])
-            self.R[0,2] = 0.
-            self.R[1,0] = -math.sin(self.RT[1])
-            self.R[1,1] = +math.cos(self.RT[1])
-            self.R[1,2] = 0.
-            self.R[2,0] = 0.
-            self.R[2,1] = 0.
-            self.R[2,2] = 1.
-            F[:] = numpy.dot(numpy.transpose(self.R), numpy.dot(F, self.R))
-            #print "F = "+str(F)
+        #if (F is not None):
+            #F[0,0] = 1.+(self.dRe-self.dRi)/(self.Re-self.Ri)
+            #F[0,1] = 0.
+            #F[0,2] = 0.
+            #F[1,0] = (self.dTe-self.dTi)/(self.Re-self.Ri)*self.rt[0]
+            #F[1,1] = self.rt[0]/self.RT[0]
+            #F[1,2] = 0.
+            #F[2,0] = 0.
+            #F[2,1] = 0.
+            #F[2,2] = 1.
+            ##print "F = "+str(F)
+            #self.R[0,0] = +math.cos(self.RT[1])
+            #self.R[0,1] = +math.sin(self.RT[1])
+            #self.R[0,2] = 0.
+            #self.R[1,0] = -math.sin(self.RT[1])
+            #self.R[1,1] = +math.cos(self.RT[1])
+            #self.R[1,2] = 0.
+            #self.R[2,0] = 0.
+            #self.R[2,1] = 0.
+            #self.R[2,2] = 1.
+            #F[:] = numpy.dot(numpy.transpose(self.R), numpy.dot(F, self.R))
+            ##print "F = "+str(F)
 
 ########################################################################
 
@@ -543,7 +573,7 @@ def generateImages(
             #print "x = "+str(x)
             I[0] = 0.
             #print "I = "+str(I)
-            if (generate_image_gradient): G[:] = 0.
+            #if (generate_image_gradient): G[:] = 0.
                 #print "G = "+str(G)
             if   (images["n_dim"] == 1):
                 for k_x in xrange(images["n_integration"][0]):
@@ -551,9 +581,9 @@ def generateImages(
                     mapping.X(x, X, Finv)
                     image.I0(X, i, g)
                     I += i
-                    if (generate_image_gradient): G += numpy.dot(g, Finv)
+                    #if (generate_image_gradient): G += numpy.dot(g, Finv)
                 I /= images["n_integration"][0]
-                if (generate_image_gradient): G /= images["n_integration"][0]
+                #if (generate_image_gradient): G /= images["n_integration"][0]
             elif (images["n_dim"] == 2):
                 for k_y in xrange(images["n_integration"][1]):
                     x[1] = x0[1] - dx[1]/2 + (k_y+1./2)*dx[1]/images["n_integration"][1]
@@ -567,9 +597,9 @@ def generateImages(
                         #print "i = "+str(i)
                         #print "g = "+str(g)
                         I += i
-                        if (generate_image_gradient): G += numpy.dot(g, Finv)
+                        #if (generate_image_gradient): G += numpy.dot(g, Finv)
                 I /= images["n_integration"][1]*images["n_integration"][0]
-                if (generate_image_gradient):G /= images["n_integration"][1]*images["n_integration"][0]
+                #if (generate_image_gradient):G /= images["n_integration"][1]*images["n_integration"][0]
             elif (images["n_dim"] == 3):
                 for k_z in xrange(images["n_integration"][2]):
                     x[2] = x0[2] - dx[2]/2 + (k_z+1./2)*dx[2]/images["n_integration"][2]
@@ -580,13 +610,13 @@ def generateImages(
                             mapping.X(x, X, Finv)
                             image.I0(X, i, g)
                             I += i
-                            if (generate_image_gradient): G += numpy.dot(g, Finv)
+                            #if (generate_image_gradient): G += numpy.dot(g, Finv)
                 I /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
-                if (generate_image_gradient): G /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
+                #if (generate_image_gradient): G /= images["n_integration"][2]*images["n_integration"][1]*images["n_integration"][0]
             else:
                 assert (0), "n_dim must be \"1\", \"2\" or \"3\". Aborting."
             vtk_image_scalars.SetTuple(k_point, I)
-            if (generate_image_gradient): vtk_image_gradient.SetTuple(k_point, G)
+            #if (generate_image_gradient): vtk_image_gradient.SetTuple(k_point, G)
             if (I[0] < global_min): global_min = I[0]
             if (I[0] > global_max): global_max = I[0]
         myVTK.writeImage(
