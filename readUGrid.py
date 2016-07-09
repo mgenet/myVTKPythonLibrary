@@ -36,7 +36,7 @@ def readUGrid(
     ugrid_reader.Update()
     ugrid = ugrid_reader.GetOutput()
 
-    myVTK.myPrint(verbose-1, "n_points = "+str(ugrid.GetNumberOfPoints()))
-    myVTK.myPrint(verbose-1, "n_cells = "+str(ugrid.GetNumberOfCells()))
+    myVTK.myPrint(verbose, "n_points = "+str(ugrid.GetNumberOfPoints()))
+    myVTK.myPrint(verbose, "n_cells = "+str(ugrid.GetNumberOfCells()))
 
     return ugrid

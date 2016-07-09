@@ -40,6 +40,6 @@ def computeImageDimensionality(
 
     #dimensionality = sum([extent[2*k_dim+1]>extent[2*k_dim] for k_dim in range(3)])
 
-    myVTK.myPrint(verbose-1, "dimensionality = "+str(dimensionality))
+    myVTK.myPrint(verbose, "dimensionality = "+str(dimensionality))
 
     return dimensionality
