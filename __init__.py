@@ -66,7 +66,7 @@ from computeSectors import *
 from mapDataSetToCellData import *
 from computeABPointsFromBoundsAndCenter import *
 from clipSurfacesForCutLVMesh import *
-from computeSystolicStrainsFromEndDiastolicAndEndSystolicStates import *
+from computeSystolicStrainsFromEndDiastolicAndEndSystolicDeformationGradients import *
 from computeImageGradient import *
 from readDynaDeformationGradients import *
 from getPointLocator import *

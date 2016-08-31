@@ -17,12 +17,12 @@ from mat_vec_tools import *
 
 ########################################################################
 
-def computeSystolicStrainsFromEndDiastolicAndEndSystolicStates(
+def computeSystolicStrainsFromEndDiastolicAndEndSystolicDeformationGradients(
         farray_F_dia,
         farray_F_sys,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** computeSystolicStrainsFromEndDiastolicAndEndSystolicStates ***")
+    myVTK.myPrint(verbose, "*** computeSystolicStrainsFromEndDiastolicAndEndSystolicDeformationGradients ***")
 
     n_tuples = farray_F_dia.GetNumberOfTuples()
     assert (farray_F_sys.GetNumberOfTuples() == n_tuples)

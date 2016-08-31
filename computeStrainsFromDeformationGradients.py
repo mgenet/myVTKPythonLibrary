@@ -18,30 +18,27 @@ from mat_vec_tools import *
 
 ########################################################################
 
-def computeStrainsFromDisplacements(
+def computeStrainsFromDeformationGradients(
         mesh,
-        disp_array_name="displacement",
+        defo_grad_array_name="DeformationGradient",
+        strain_array_name="Strain",
         mesh_w_local_basis=None,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** computeStrainsFromDisplacements ***")
+    myVTK.myPrint(verbose, "*** computeStrainsFromDeformationGradients ***")
 
-    myVTK.computeDeformationGradientsFromDisplacements(
-        mesh=mesh,
-        disp_array_name=disp_array_name,
-        verbose=verbose-1)
-    assert (mesh.GetCellData().HasArray("DeformationGradient"))
-    farray_f = mesh.GetCellData().GetArray("DeformationGradient")
+    assert (mesh.GetCellData().HasArray(defo_grad_array_name))
+    farray_f = mesh.GetCellData().GetArray(defo_grad_array_name)
 
     n_cells = mesh.GetNumberOfCells()
     if (mesh_w_local_basis is not None):
         farray_strain = myVTK.createFloatArray(
-            name="Strain_CAR",
+            name=strain_array_name+"_CAR",
             n_components=6,
             n_tuples=n_cells)
     else:
         farray_strain = myVTK.createFloatArray(
-            name="Strain",
+            name=strain_array_name,
             n_components=6,
             n_tuples=n_cells)
     mesh.GetCellData().AddArray(farray_strain)
@@ -62,22 +59,26 @@ def computeStrainsFromDisplacements(
             #farray_almansi.SetTuple(k_cell, e_vec)
 
     if (mesh_w_local_basis is not None):
-        if (mesh_w_local_basis.GetCellData().HasArray("eR")) and (mesh_w_local_basis.GetCellData().HasArray("eC")) and (mesh_w_local_basis.GetCellData().HasArray("eL")):
+        if  (mesh_w_local_basis.GetCellData().HasArray("eR"))\
+        and (mesh_w_local_basis.GetCellData().HasArray("eC"))\
+        and (mesh_w_local_basis.GetCellData().HasArray("eL")):
             farray_strain_cyl = myVTK.rotateMatrix(
-                old_array=mesh.GetCellData().GetArray("Strain_CAR"),
+                old_array=mesh.GetCellData().GetArray(strain_array_name+"_CAR"),
                 out_vecs=[mesh_w_local_basis.GetCellData().GetArray("eR"),
                           mesh_w_local_basis.GetCellData().GetArray("eC"),
                           mesh_w_local_basis.GetCellData().GetArray("eL")],
                 verbose=0)
-            farray_strain_cyl.SetName("Strain_CYL")
+            farray_strain_cyl.SetName(strain_array_name+"_CYL")
             mesh.GetCellData().AddArray(farray_strain_cyl)
 
-        if (mesh_w_local_basis.GetCellData().HasArray("eRR")) and (mesh_w_local_basis.GetCellData().HasArray("eCC")) and (mesh_w_local_basis.GetCellData().HasArray("eLL")):
+        if  (mesh_w_local_basis.GetCellData().HasArray("eRR"))\
+        and (mesh_w_local_basis.GetCellData().HasArray("eCC"))\
+        and (mesh_w_local_basis.GetCellData().HasArray("eLL")):
             farray_strain_pps = myVTK.rotateMatrix(
-                old_array=mesh.GetCellData().GetArray("Strain_CAR"),
+                old_array=mesh.GetCellData().GetArray(strain_array_name+"_CAR"),
                 out_vecs=[mesh_w_local_basis.GetCellData().GetArray("eRR"),
                           mesh_w_local_basis.GetCellData().GetArray("eCC"),
                           mesh_w_local_basis.GetCellData().GetArray("eLL")],
                 verbose=0)
-            farray_strain_pps.SetName("Strain_PPS")
+            farray_strain_pps.SetName(strain_array_name+"_PPS")
             mesh.GetCellData().AddArray(farray_strain_pps)
