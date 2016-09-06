@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def readAbaqusMeshFromINP(
         elem_types="all",
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readAbaqusMeshFromINP: "+mesh_filename+" ***")
+    mypy.my_print(verbose, "*** readAbaqusMeshFromINP: "+mesh_filename+" ***")
 
     points = vtk.vtkPoints()
     cell_array = vtk.vtkCellArray()
@@ -31,7 +32,7 @@ def readAbaqusMeshFromINP(
     context = ""
     for line in mesh_file:
         if (line[-1:] == "\n"): line = line[:-1]
-        #myVTK.myPrint(verbose-1, "line =", line)
+        #mypy.my_print(verbose-1, "line =", line)
 
         if line.startswith("**"): continue
 
@@ -78,6 +79,6 @@ def readAbaqusMeshFromINP(
     ugrid.SetPoints(points)
     ugrid.SetCells(cell_vtk_type, cell_array)
 
-    myVTK.myPrint(verbose-1, "n_cells = "+str(ugrid.GetNumberOfCells()))
+    mypy.my_print(verbose-1, "n_cells = "+str(ugrid.GetNumberOfCells()))
 
     return ugrid

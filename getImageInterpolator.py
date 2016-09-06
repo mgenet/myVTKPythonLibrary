@@ -17,20 +17,26 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
+def getImageInterpolator(
+        image,
+        mode="linear",
+        out_value=None,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    mypy.my_print(verbose, "*** getImageInterpolator ***")
 
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+    interpolator = vtk.vtkImageInterpolator()
+    assert (mode in ("nearest", "linear", "cubic"))
+    if (mode == "nearest"):
+        interpolator.SetInterpolationModeToNearest()
+    elif (mode == "linear"):
+        interpolator.SetInterpolationModeToLinear()
+    elif (mode == "cubic"):
+        interpolator.SetInterpolationModeToCubic()
+    if (out_value is not None):
+        interpolator.SetOutValue(out_value)
+    interpolator.Initialize(image)
+    interpolator.Update()
 
-    return iarray
+    return interpolator
+

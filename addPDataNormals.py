@@ -13,7 +13,8 @@
 import numpy
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -22,20 +23,20 @@ def addPDataNormals(
         orient_outward=1,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** addPDataNormals ***")
+    mypy.my_print(verbose, "*** addPDataNormals ***")
 
-    poly_data_normals = vtk.vtkPolyDataNormals()
-    poly_data_normals.ComputePointNormalsOff()
-    poly_data_normals.ComputeCellNormalsOn()
+    pdata_normals = vtk.vtkPolyDataNormals()
+    pdata_normals.ComputePointNormalsOff()
+    pdata_normals.ComputeCellNormalsOn()
     if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        poly_data_normals.SetInputData(pdata)
+        pdata_normals.SetInputData(pdata)
     else:
-        poly_data_normals.SetInput(pdata)
-    poly_data_normals.Update()
-    pdata = poly_data_normals.GetOutput()
+        pdata_normals.SetInput(pdata)
+    pdata_normals.Update()
+    pdata = pdata_normals.GetOutput()
 
     if (orient_outward):
-        cell_centers = myVTK.getCellCenters(
+        cell_centers = myvtk.getCellCenters(
             mesh=pdata,
             verbose=verbose-1)
         cell_center = numpy.empty(3)
@@ -59,8 +60,6 @@ def addPDataNormals(
         #print cnt_neg
 
         if (cnt_neg > cnt_pos):
-            poly_data_normals.FlipNormalsOn()
-            poly_data_normals.Update()
-            pdata = poly_data_normals.GetOutput()
-
-    return pdata
+            pdata_normals.FlipNormalsOn()
+            pdata_normals.Update()
+            pdata = pdata_normals.GetOutput()

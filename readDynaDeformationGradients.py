@@ -10,7 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -20,7 +21,7 @@ def readDynaDeformationGradients(
         array_name,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readDynaDeformationGradients ***")
+    mypy.my_print(verbose, "*** readDynaDeformationGradients ***")
 
     n_cells = mesh.GetNumberOfCells()
 
@@ -36,11 +37,11 @@ def readDynaDeformationGradients(
             F_list[int(line[0])-1][k_component] = float(line[1])
         history_file.close()
 
-    F_array = myVTK.createFloatArray(array_name, 9, n_cells)
+    F_array = myvtk.createFloatArray(array_name, 9, n_cells)
 
     for k_cell in xrange(n_cells):
         F_array.SetTuple(k_cell, F_list[k_cell])
 
-    myVTK.myPrint(verbose-1, "n_tuples = "+str(F_array.GetNumberOfTuples()))
+    mypy.my_print(verbose-1, "n_tuples = "+str(F_array.GetNumberOfTuples()))
 
     mesh.GetCellData().AddArray(F_array)

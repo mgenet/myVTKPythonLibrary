@@ -17,20 +17,17 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
+def getMassProperties(
+        pdata,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    mypy.my_print(verbose, "*** getMassProperties ***")
 
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+    mass_properties = vtk.vtkMassProperties()
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        mass_properties.SetInputData(pdata)
+    else:
+        mass_properties.SetInput(pdata)
 
-    return iarray
+    return mass_properties
+

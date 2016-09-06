@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -20,7 +21,7 @@ def getCellLocator(
         mesh,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** getCellLocator ***")
+    mypy.my_print(verbose, "*** getCellLocator ***")
 
     cell_locator = vtk.vtkCellLocator()
     cell_locator.SetDataSet(mesh)

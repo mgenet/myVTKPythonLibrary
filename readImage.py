@@ -13,7 +13,8 @@
 import os
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def readImage(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readImage: "+filename+" ***")
+    mypy.my_print(verbose, "*** readImage: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -36,6 +37,6 @@ def readImage(
     image_reader.Update()
     image = image_reader.GetOutput()
 
-    myVTK.myPrint(verbose, "n_points = "+str(image.GetNumberOfPoints()))
+    mypy.my_print(verbose, "n_points = "+str(image.GetNumberOfPoints()))
 
     return image

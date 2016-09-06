@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def writeUGrid(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** writeUGrid: "+filename+" ***")
+    mypy.my_print(verbose, "*** writeUGrid: "+filename+" ***")
 
     if ('vtk' in filename):
         ugrid_writer = vtk.vtkUnstructuredGridWriter()

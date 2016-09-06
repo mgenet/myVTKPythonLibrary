@@ -17,20 +17,27 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
+def getImageDimensionality(
+        image,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    mypy.my_print(verbose, "*** getImageDimensionality ***")
 
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+    extent = image.GetExtent()
+    DX = extent[1]+1-extent[0]
+    DY = extent[3]+1-extent[2]
+    DZ = extent[5]+1-extent[4]
+    if   (DX > 1) and (DY > 1) and (DZ > 1):
+        dimensionality = 3
+    elif (DX > 1) and (DY > 1) and (DZ == 1):
+        dimensionality = 2
+    elif (DX > 1) and (DY == 1) and (DZ == 1):
+        dimensionality = 1
+    else:
+        assert (0), "Wrong image dimensionality ("+str(extent)+")"
 
-    return iarray
+    #dimensionality = sum([extent[2*k_dim+1]>extent[2*k_dim] for k_dim in range(3)])
+
+    mypy.my_print(verbose, "dimensionality = "+str(dimensionality))
+
+    return dimensionality

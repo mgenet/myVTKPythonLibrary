@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -20,7 +21,7 @@ def readDynaMesh(lsdyna_mesh_filename,
                  cell_type='hexahedron',
                  verbose=0):
 
-    myVTK.myPrint(verbose, "*** readDynaMesh: "+lsdyna_mesh_filename+" ***")
+    mypy.my_print(verbose, "*** readDynaMesh: "+lsdyna_mesh_filename+" ***")
 
     points = vtk.vtkPoints()
 
@@ -36,14 +37,14 @@ def readDynaMesh(lsdyna_mesh_filename,
         print 'Wrong cell type. Aborting.'
         exit()
 
-    myVTK.myPrint(verbose-1, "Reading Dyna mesh file...")
+    mypy.my_print(verbose-1, "Reading Dyna mesh file...")
 
     mesh_file = open(lsdyna_mesh_filename, 'r')
 
     context = ''
     for line in mesh_file:
         if (line[-1:] == '\n'): line = line[:-1]
-        #myVTK.myPrint(verbose-1, "line ="+line)
+        #mypy.my_print(verbose-1, "line ="+line)
 
         if line.startswith('$'): continue
 
@@ -73,7 +74,7 @@ def readDynaMesh(lsdyna_mesh_filename,
 
     mesh_file.close()
 
-    myVTK.myPrint(verbose-1, "Creating VTK mesh...")
+    mypy.my_print(verbose-1, "Creating VTK mesh...")
 
     ugrid = vtk.vtkUnstructuredGrid()
     ugrid.SetPoints(points)

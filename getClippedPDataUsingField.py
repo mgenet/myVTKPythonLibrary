@@ -17,20 +17,25 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
+def getClippedPDataUsingField(
+        pdata_mesh,
+        array_name,
+        threshold_value,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    mypy.my_print(verbose, "*** getClippedPDataUsingField ***")
 
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+    pdata_mesh.GetPointData().SetActiveScalars(array_name)
+    clip_poly_data = vtk.vtkClipPolyData()
+    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
+        clip_poly_data.SetInputData(pdata_mesh)
+    else:
+        clip_poly_data.SetInput(pdata_mesh)
+    clip_poly_data.SetValue(threshold_value)
+    clip_poly_data.GenerateClippedOutputOn()
+    clip_poly_data.Update()
 
-    return iarray
+    return clip_poly_data.GetOutput(0), clip_poly_data.GetOutput(1)
+
+
+

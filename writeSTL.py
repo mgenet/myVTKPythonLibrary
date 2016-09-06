@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def writeSTL(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** writeSTL: "+filename+" ***")
+    mypy.my_print(verbose, "*** writeSTL: "+filename+" ***")
 
     stl_writer = vtk.vtkSTLWriter()
     stl_writer.SetFileName(filename)

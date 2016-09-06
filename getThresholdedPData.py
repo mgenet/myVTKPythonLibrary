@@ -17,20 +17,23 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
+def getThresholdedPData(
+        pdata,
+        field_support,
+        field_name,
+        threshold_value,
+        threshold_by_upper_or_lower,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    mypy.my_print(verbose, "*** getThresholdedPData ***")
 
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+    thresholded_ugrid = getThresholdedUGrid(
+        pdata,
+        field_support,
+        field_name,
+        threshold_value,
+        threshold_by_upper_or_lower,
+        False)
+    thresholded_pdata = ugrid2pdata(thresholded_ugrid, False)
 
-    return iarray
+    return thresholded_pdata

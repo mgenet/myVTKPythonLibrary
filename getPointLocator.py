@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -20,7 +21,7 @@ def getPointLocator(
         mesh,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** getPointLocator ***")
+    mypy.my_print(verbose, "*** getPointLocator ***")
 
     point_locator = vtk.vtkPointLocator()
     point_locator.SetDataSet(mesh)

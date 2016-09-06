@@ -10,7 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -18,9 +19,9 @@ def readAbaqusStressFromDAT(
         data_filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readAbaqusStressFromDAT: "+data_filename+" ***")
+    mypy.my_print(verbose, "*** readAbaqusStressFromDAT: "+data_filename+" ***")
 
-    s_array = myVTK.createFloatArray("", 6)
+    s_array = myvtk.createFloatArray("", 6)
 
     data_file = open(data_filename, 'r')
     context = ""
@@ -43,7 +44,7 @@ def readAbaqusStressFromDAT(
 
     data_file.close()
 
-    myVTK.myPrint(verbose-1, "n_tuples = "+str(s_array.GetNumberOfTuples()))
+    mypy.my_print(verbose-1, "n_tuples = "+str(s_array.GetNumberOfTuples()))
 
     return s_array
 

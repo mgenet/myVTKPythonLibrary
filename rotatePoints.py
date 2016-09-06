@@ -13,31 +13,27 @@
 import numpy
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
 def rotatePoints(
-        old_points,
+        points,
         C,
         R,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** rotatePoints ***")
+    mypy.my_print(verbose, "*** rotatePoints ***")
 
-    n_points = old_points.GetNumberOfPoints()
+    n_points = points.GetNumberOfPoints()
 
-    new_points = vtk.vtkPoints()
-    new_points.SetNumberOfPoints(n_points)
-
-    old_point = numpy.empty(3)
+    point = numpy.empty(3)
     for k_point in xrange(n_points):
-        old_points.GetPoint(k_point, old_point)
-        #print old_point
+        points.GetPoint(k_point, point)
+        #print point
 
-        new_point = C + numpy.dot(R, old_point - C)
+        point = C + numpy.dot(R, point - C)
         #print new_point
 
-        new_points.InsertPoint(k_point, new_point)
-
-    return new_points
+        points.SetPoint(k_point, point)

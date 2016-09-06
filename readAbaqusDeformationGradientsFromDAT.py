@@ -10,7 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -18,9 +19,9 @@ def readAbaqusDeformationGradientsFromDAT(
         data_filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readAbaqusDeformationGradientsFromDAT: "+data_filename+" ***")
+    mypy.my_print(verbose, "*** readAbaqusDeformationGradientsFromDAT: "+data_filename+" ***")
 
-    farray_F = myVTK.createFloatArray("F", 9)
+    farray_F = myvtk.createFloatArray("F", 9)
 
     data_file = open(data_filename, 'r')
     context = ""
@@ -45,7 +46,7 @@ def readAbaqusDeformationGradientsFromDAT(
 
     data_file.close()
 
-    myVTK.myPrint(verbose-1, "n_tuples = "+str(farray_F.GetNumberOfTuples()))
+    mypy.my_print(verbose-1, "n_tuples = "+str(farray_F.GetNumberOfTuples()))
 
     return farray_F
 

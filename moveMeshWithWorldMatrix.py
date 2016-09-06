@@ -12,9 +12,9 @@
 ########################################################################
 
 import numpy
-import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -23,11 +23,11 @@ def moveMeshWithWorldMatrix(
         M,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** moveMeshWithWorldMatrix ***")
+    mypy.my_print(verbose, "*** moveMeshWithWorldMatrix ***")
 
     n_points = mesh.GetNumberOfPoints()
     points = mesh.GetPoints()
-    P = numpy.array([0.]*4)
+    P = numpy.empty(4)
 
     for k_point in xrange(n_points):
         P[0:3] = points.GetPoint(k_point)

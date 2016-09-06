@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #coding=utf8
 
 ########################################################################
@@ -10,27 +11,21 @@
 ###                                                                  ###
 ########################################################################
 
-import vtk
+import argparse
 
 import myPythonLibrary as mypy
 import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
-        verbose=0):
+if (__name__ == "__main__"):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('vtu_filename', type=str)
+    args = parser.parse_args()
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
-
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
-
-    return iarray
+    assert (args.vtu_filename.endswith(".vtu"))
+    mesh = myvtk.readUGrid(
+        filename=args.vtu_filename)
+    myvtk.writeUGrid(
+        ugrid=mesh,
+        filename=args.vtu_filename.replace(".vtu", ".vtk"))

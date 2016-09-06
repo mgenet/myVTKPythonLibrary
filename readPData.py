@@ -13,7 +13,8 @@
 import os
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def readPData(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readPData: "+filename+" ***")
+    mypy.my_print(verbose, "*** readPData: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -36,10 +37,10 @@ def readPData(
     pdata_reader.Update()
     pdata = pdata_reader.GetOutput()
 
-    myVTK.myPrint(verbose, "n_points = "+str(pdata.GetNumberOfPoints()))
-    myVTK.myPrint(verbose, "n_verts = "+str(pdata.GetNumberOfVerts()))
-    myVTK.myPrint(verbose, "n_lines = "+str(pdata.GetNumberOfLines()))
-    myVTK.myPrint(verbose, "n_polys = "+str(pdata.GetNumberOfPolys()))
-    myVTK.myPrint(verbose, "n_strips = "+str(pdata.GetNumberOfStrips()))
+    mypy.my_print(verbose, "n_points = "+str(pdata.GetNumberOfPoints()))
+    mypy.my_print(verbose, "n_verts = "+str(pdata.GetNumberOfVerts()))
+    mypy.my_print(verbose, "n_lines = "+str(pdata.GetNumberOfLines()))
+    mypy.my_print(verbose, "n_polys = "+str(pdata.GetNumberOfPolys()))
+    mypy.my_print(verbose, "n_strips = "+str(pdata.GetNumberOfStrips()))
 
     return pdata

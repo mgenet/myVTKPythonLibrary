@@ -17,18 +17,31 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def getCellCenters(
-        mesh,
+def getThresholdedUGrid(
+        ugrid,
+        field_support,
+        field_name,
+        threshold_value,
+        threshold_by_upper_or_lower,
         verbose=0):
 
-    mypy.my_print(verbose, "*** getCellCenters ***")
+    mypy.my_print(verbose, "*** getThresholdedUGrid ***")
 
-    filter_cell_centers = vtk.vtkCellCenters()
+    threshold = vtk.vtkThreshold()
     if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        filter_cell_centers.SetInputData(mesh)
+        threshold.SetInputData(ugrid)
     else:
-        filter_cell_centers.SetInput(mesh)
-    filter_cell_centers.Update()
-    cell_centers = filter_cell_centers.GetOutput()
+        threshold.SetInput(ugrid)
+    if (field_support == "points"):
+        association = vtk.vtkDataObject.FIELD_ASSOCIATION_POINTS
+    elif (field_support == "cells"):
+        association = vtk.vtkDataObject.FIELD_ASSOCIATION_CELLS
+    threshold.SetInputArrayToProcess(0, 0, 0, association, field_name)
+    if (threshold_by_upper_or_lower == "upper"):
+        threshold.ThresholdByUpper(threshold_value)
+    elif (threshold_by_upper_or_lower == "lower"):
+        threshold.ThresholdByLower(threshold_value)
+    threshold.Update()
+    thresholded_ugrid = threshold.GetOutput()
 
-    return cell_centers
+    return thresholded_ugrid

@@ -10,7 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -18,9 +19,9 @@ def getPDataSurfaceArea(
         pdata,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** getPDataSurfaceArea ***")
+    mypy.my_print(verbose, "*** getPDataSurfaceArea ***")
 
-    mass_properties = myVTK.createMassProperties(
+    mass_properties = myvtk.getMassProperties(
         pdata=pdata,
         verbose=verbose-1)
 

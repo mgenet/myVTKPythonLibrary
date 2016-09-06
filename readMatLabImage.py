@@ -14,7 +14,8 @@ import os
 import scipy
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -25,7 +26,7 @@ def readMatLabImage(
         spacing=[1.,1.,1.],
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readMatLabImage ***")
+    mypy.my_print(verbose, "*** readMatLabImage ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -44,12 +45,12 @@ def readMatLabImage(
     #cell = vtk.vtkVertex()
 
     if (field_type == "int"):
-        array_data = myVTK.createIntArray(
+        array_data = myvtk.createIntArray(
             name=field_name,
             n_components=1,
             n_tuples=n_pixels)
     elif (field_type == "double"):
-        array_data = myVTK.createFloatArray(
+        array_data = myvtk.createFloatArray(
             name=field_name,
             n_components=1,
             n_tuples=n_pixels)

@@ -12,7 +12,8 @@
 
 import numpy
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -22,23 +23,23 @@ def addArrays(
     array3=None,
     verbose=0):
 
-    myVTK.myPrint(verbose, "*** addArrays ***")
+    mypy.my_print(verbose, "*** addArrays ***")
 
     n_components = array1.GetNumberOfComponents()
     assert (array2.GetNumberOfComponents() == n_components)
-    if (verbose >= 2): print "n_components = "+str(n_components)
+    mypy.my_print(verbose, "n_components = "+str(n_components))
 
     n_tuples = array1.GetNumberOfTuples()
     assert (array2.GetNumberOfTuples() == n_tuples)
-    if (verbose >= 2): print "n_tuples = "+str(n_tuples)
+    mypy.my_print(verbose, "n_tuples = "+str(n_tuples))
 
     array_type = type(array1.GetTuple(0)[0])
     assert (array_type in [int, float])
     assert (type(array2.GetTuple(0)[0]) is array_type)
-    if (verbose >= 2): print "array_type = "+str(array_type)
+    mypy.my_print(verbose, "array_type = "+str(array_type))
 
     if (array3 is None):
-        array3 = myVTK.createArray(
+        array3 = myvtk.createArray(
             name="",
             n_components=n_components,
             n_tuples=n_tuples,
@@ -49,7 +50,7 @@ def addArrays(
         assert (type(array3.GetTuple(0)[0]) is array_type)
 
     for k_tuple in xrange(n_tuples):
-        if (verbose >= 2): print "k_tuple = "+str(k_tuple)
+        mypy.my_print(verbose, "k_tuple = "+str(k_tuple))
 
         array3.SetTuple(
             k_tuple,
@@ -65,7 +66,7 @@ def subArrays(
     array3=None,
     verbose=0):
 
-    myVTK.myPrint(verbose, "*** subArrays ***")
+    mypy.my_print(verbose, "*** subArrays ***")
 
     n_components = array1.GetNumberOfComponents()
     assert (array2.GetNumberOfComponents() == n_components)
@@ -78,7 +79,7 @@ def subArrays(
     assert (type(array2.GetTuple(0)[0]) is array_type)
 
     if (array3 is None):
-        array3 = myVTK.createArray(
+        array3 = myvtk.createArray(
             name="",
             n_components=n_components,
             n_tuples=n_tuples,
@@ -103,7 +104,7 @@ def mulArrays(
     array3=None,
     verbose=0):
 
-    myVTK.myPrint(verbose, "*** mulArrays ***")
+    mypy.my_print(verbose, "*** mulArrays ***")
 
     n_components = array1.GetNumberOfComponents()
     assert (array2.GetNumberOfComponents() == n_components)
@@ -116,7 +117,7 @@ def mulArrays(
     assert (type(array2.GetTuple(0)[0]) is array_type)
 
     if (array3 is None):
-        array3 = myVTK.createArray(
+        array3 = myvtk.createArray(
             name="",
             n_components=n_components,
             n_tuples=n_tuples,

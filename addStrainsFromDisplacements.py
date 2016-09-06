@@ -10,6 +10,7 @@
 ###                                                                  ###
 ########################################################################
 
+import numpy
 import vtk
 
 import myPythonLibrary as mypy
@@ -17,20 +18,23 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createIntArray(
-        name,
-        n_components=1,
-        n_tuples=0,
-        init_to_zero=0,
+def addStrainsFromDisplacements(
+        mesh,
+        disp_array_name="Displacement",
+        defo_grad_array_name="DeformationGradient",
+        strain_array_name="Strain",
+        mesh_w_local_basis=None,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    mypy.my_print(verbose, "*** addStrainsFromDisplacements ***")
 
-    if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
-
-    return iarray
+    myvtk.addDeformationGradients(
+        mesh=mesh,
+        disp_array_name=disp_array_name,
+        verbose=verbose-1)
+    myvtk.addStrainsFromDeformationGradients(
+        mesh=mesh,
+        defo_grad_array_name=defo_grad_array_name,
+        strain_array_name=strain_array_name,
+        mesh_w_local_basis=mesh_w_local_basis,
+        verbose=verbose-1)

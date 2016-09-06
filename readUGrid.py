@@ -13,7 +13,8 @@
 import os
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def readUGrid(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readUGrid: "+filename+" ***")
+    mypy.my_print(verbose, "*** readUGrid: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -36,7 +37,7 @@ def readUGrid(
     ugrid_reader.Update()
     ugrid = ugrid_reader.GetOutput()
 
-    myVTK.myPrint(verbose, "n_points = "+str(ugrid.GetNumberOfPoints()))
-    myVTK.myPrint(verbose, "n_cells = "+str(ugrid.GetNumberOfCells()))
+    mypy.my_print(verbose, "n_points = "+str(ugrid.GetNumberOfPoints()))
+    mypy.my_print(verbose, "n_cells = "+str(ugrid.GetNumberOfCells()))
 
     return ugrid

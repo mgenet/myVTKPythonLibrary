@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def writePData(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** writePData: "+filename+" ***")
+    mypy.my_print(verbose, "*** writePData: "+filename+" ***")
 
     if ('vtk' in filename):
         pdata_writer = vtk.vtkPolyDataWriter()

@@ -12,7 +12,8 @@
 
 import numpy
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def addMappingFromPointsToCells(
         ugrid_cells,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** addMappingFromPointsToCells ***")
+    mypy.my_print(verbose, "*** addMappingFromPointsToCells ***")
 
     n_points = ugrid_points.GetNumberOfPoints()
     n_cells = ugrid_cells.GetNumberOfCells()
@@ -47,7 +48,9 @@ def addMappingFromPointsToCells(
 
     point = numpy.empty(3)
     for k_point in xrange(n_points):
-        ugrid_points.GetPoint(k_point, point)
+        ugrid_points.GetPoint(
+            k_point,
+            point)
 
         cell_locator.FindClosestPoint(
             point,

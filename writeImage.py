@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def writeImage(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** writeImage: "+filename+" ***")
+    mypy.my_print(verbose, "*** writeImage: "+filename+" ***")
 
     if ('vtk' in filename):
         image_writer = vtk.vtkImageWriter()
@@ -30,7 +31,7 @@ def writeImage(
     else:
         assert 0, "File must be .vtk or .vti. Aborting."
 
-    myVTK.myPrint(verbose, "n_points = "+str(image.GetNumberOfPoints()))
+    mypy.my_print(verbose, "n_points = "+str(image.GetNumberOfPoints()))
 
     image_writer.SetFileName(filename)
     if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):

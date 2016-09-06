@@ -13,7 +13,8 @@
 import os
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -21,7 +22,7 @@ def readSTL(
         filename,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** readSTL: "+filename+" ***")
+    mypy.my_print(verbose, "*** readSTL: "+filename+" ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
@@ -30,7 +31,7 @@ def readSTL(
     stl_reader.Update()
     pdata = stl_reader.GetOutput()
 
-    myVTK.myPrint(verbose-1, "n_points ="+str(pdata.GetNumberOfPoints()))
-    myVTK.myPrint(verbose-1, "n_cells ="+str(pdata.GetNumberOfCells()))
+    mypy.my_print(verbose-1, "n_points ="+str(pdata.GetNumberOfPoints()))
+    mypy.my_print(verbose-1, "n_cells ="+str(pdata.GetNumberOfCells()))
 
     return pdata

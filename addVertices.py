@@ -12,7 +12,8 @@
 
 import vtk
 
-import myVTKPythonLibrary as myVTK
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
@@ -20,7 +21,7 @@ def addVertices(
         ugrid,
         verbose=0):
 
-    myVTK.myPrint(verbose, "*** addVertices ***")
+    mypy.my_print(verbose, "*** addVertices ***")
 
     cell = vtk.vtkVertex()
     cell_array = vtk.vtkCellArray()
