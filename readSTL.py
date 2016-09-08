@@ -31,7 +31,7 @@ def readSTL(
     stl_reader.Update()
     pdata = stl_reader.GetOutput()
 
-    mypy.my_print(verbose-1, "n_points ="+str(pdata.GetNumberOfPoints()))
-    mypy.my_print(verbose-1, "n_cells ="+str(pdata.GetNumberOfCells()))
+    mypy.my_print(verbose-1, "n_points = "+str(pdata.GetNumberOfPoints()))
+    mypy.my_print(verbose-1, "n_cells = "+str(pdata.GetNumberOfCells()))
 
     return pdata
