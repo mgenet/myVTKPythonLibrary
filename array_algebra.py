@@ -27,16 +27,16 @@ def addArrays(
 
     n_components = array1.GetNumberOfComponents()
     assert (array2.GetNumberOfComponents() == n_components)
-    mypy.my_print(verbose, "n_components = "+str(n_components))
+    mypy.my_print(verbose-1, "n_components = "+str(n_components))
 
     n_tuples = array1.GetNumberOfTuples()
     assert (array2.GetNumberOfTuples() == n_tuples)
-    mypy.my_print(verbose, "n_tuples = "+str(n_tuples))
+    mypy.my_print(verbose-1, "n_tuples = "+str(n_tuples))
 
     array_type = type(array1.GetTuple(0)[0])
     assert (array_type in [int, float])
     assert (type(array2.GetTuple(0)[0]) is array_type)
-    mypy.my_print(verbose, "array_type = "+str(array_type))
+    mypy.my_print(verbose-1, "array_type = "+str(array_type))
 
     if (array3 is None):
         array3 = myvtk.createArray(
@@ -50,7 +50,7 @@ def addArrays(
         assert (type(array3.GetTuple(0)[0]) is array_type)
 
     for k_tuple in xrange(n_tuples):
-        mypy.my_print(verbose, "k_tuple = "+str(k_tuple))
+        mypy.my_print(verbose-2, "k_tuple = "+str(k_tuple))
 
         array3.SetTuple(
             k_tuple,

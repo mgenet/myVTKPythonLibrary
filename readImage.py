@@ -37,6 +37,6 @@ def readImage(
     image_reader.Update()
     image = image_reader.GetOutput()
 
-    mypy.my_print(verbose, "n_points = "+str(image.GetNumberOfPoints()))
+    mypy.my_print(verbose-1, "n_points = "+str(image.GetNumberOfPoints()))
 
     return image

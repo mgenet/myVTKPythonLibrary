@@ -38,6 +38,6 @@ def getImageDimensionality(
 
     #dimensionality = sum([extent[2*k_dim+1]>extent[2*k_dim] for k_dim in range(3)])
 
-    mypy.my_print(verbose, "dimensionality = "+str(dimensionality))
+    mypy.my_print(verbose-1, "dimensionality = "+str(dimensionality))
 
     return dimensionality

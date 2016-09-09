@@ -37,7 +37,7 @@ def readUGrid(
     ugrid_reader.Update()
     ugrid = ugrid_reader.GetOutput()
 
-    mypy.my_print(verbose, "n_points = "+str(ugrid.GetNumberOfPoints()))
-    mypy.my_print(verbose, "n_cells = "+str(ugrid.GetNumberOfCells()))
+    mypy.my_print(verbose-1, "n_points = "+str(ugrid.GetNumberOfPoints()))
+    mypy.my_print(verbose-1, "n_cells = "+str(ugrid.GetNumberOfCells()))
 
     return ugrid
