@@ -28,14 +28,14 @@ if (__name__ == "__main__"):
     parser.add_argument('-v', '--verbose', type=int, default=1)
     args = parser.parse_args()
 
-    if (image_in is not None):
+    if (args.image_in is not None):
         S_in = numpy.diag(list(numpy.loadtxt("Image_"+args.image_in+"_Scaling.dat"))+[1])
         W_in = numpy.loadtxt("Image_"+args.image_in+"_WorldMatrix.dat")
         I2W_in = numpy.dot(W_in, numpy.linalg.inv(S_in))
     else:
         I2W_in = numpy.eye(4)
 
-    if (image_out is not None):
+    if (args.image_out is not None):
         S_out = numpy.diag(list(numpy.loadtxt("Image_"+args.image_out+"_Scaling.dat"))+[1])
         W_out = numpy.loadtxt("Image_"+args.image_out+"_WorldMatrix.dat")
         I2W_out = numpy.dot(W_out, numpy.linalg.inv(S_out))
@@ -48,8 +48,8 @@ if (__name__ == "__main__"):
         mesh = myvtk.readUGrid(
             filename=args.mesh_in_filename,
             verbose=args.verbose)
-    elif (args.mesh_in_filename.endswith(".stl")):
-        mesh = myvtk.readSTL(
+    elif (args.mesh_in_filename.endswith(".vtp") or args.mesh_in_filename.endswith(".stl")):
+        mesh = myvtk.readPData(
             filename=args.mesh_in_filename,
             verbose=args.verbose)
     else:
