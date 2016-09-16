@@ -23,6 +23,7 @@ def readSTL(
         verbose=0):
 
     mypy.my_print(verbose, "*** readSTL: "+filename+" ***")
+    mypy.my_print(1, "*** DEPRECATED: USE READPDATA INSTEAD! ***")
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 

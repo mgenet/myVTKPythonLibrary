@@ -26,9 +26,9 @@ def readUGrid(
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
-    if ('vtk' in filename):
+    if   (filename.endswith('vtk')):
         ugrid_reader = vtk.vtkUnstructuredGridReader()
-    elif ('vtu' in filename):
+    elif (filename.endswith('vtu')):
         ugrid_reader = vtk.vtkXMLUnstructuredGridReader()
     else:
         assert 0, "File must be .vtk or .vtu. Aborting."

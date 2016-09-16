@@ -26,12 +26,14 @@ def readPData(
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
-    if ('vtk' in filename):
+    if   (filename.endswith('vtk')):
         pdata_reader = vtk.vtkPolyDataReader()
-    elif ('vtp' in filename):
+    elif (filename.endswith('vtp')):
         pdata_reader = vtk.vtkXMLPolyDataReader()
+    elif (filename.endswith('stl')):
+        pdata_reader = vtk.vtkSTLReader()
     else:
-        assert 0, "File must be .vtk or .vtp. Aborting."
+        assert 0, "File must be .vtk, .vtp or .stl. Aborting."
 
     pdata_reader.SetFileName(filename)
     pdata_reader.Update()
