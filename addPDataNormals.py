@@ -33,7 +33,7 @@ def addPDataNormals(
     else:
         pdata_normals.SetInput(pdata)
     pdata_normals.Update()
-    pdata = pdata_normals.GetOutput()
+    pdata.GetCellData().SetNormals(pdata_normals.GetOutput().GetCellData().GetNormals())
 
     if (orient_outward):
         cell_centers = myvtk.getCellCenters(
@@ -62,4 +62,4 @@ def addPDataNormals(
         if (cnt_neg > cnt_pos):
             pdata_normals.FlipNormalsOn()
             pdata_normals.Update()
-            pdata = pdata_normals.GetOutput()
+            pdata.GetCellData().SetNormals(pdata_normals.GetOutput().GetCellData().GetNormals())
