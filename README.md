@@ -5,7 +5,7 @@ First you need to install [myPythonLibrary](https://github.com/mgenet/myPythonLi
 ### Installation
 Get the code:
 ```
-> git clone git@github.com:mgenet/myVTKPythonLibrary
+> git clone https://github.com/mgenet/myVTKPythonLibrary
 ```
 To load the library within python, the simplest is to add the folder containing myVTKPythonLibrary to `PYTHONPATH`:
 ```
