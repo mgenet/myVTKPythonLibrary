@@ -7,7 +7,7 @@ Get the code:
 ```
 git clone https://github.com/mgenet/myVTKPythonLibrary
 ```
-To load the library within python, the simplest is to add the folder containing myVTKPythonLibrary to `PYTHONPATH`:
+To load the library within python, the simplest is to add the folder containing `myVTKPythonLibrary` to `PYTHONPATH`:
 ```
 export PYTHONPATH=$PYTHONPATH:/path/to/folder
 ```
