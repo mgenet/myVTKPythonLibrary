@@ -61,7 +61,7 @@ if (__name__ == "__main__"):
         verbose=args.verbose)
 
     if (args.mesh_out_filename == None):
-        args.mesh_out_filename = args.mesh_in_filename.replace(args.image_in, args.image_out)
+        args.mesh_out_filename = args.mesh_in_filename.replace(args.image_in+"Coords", args.image_out+"Coords")
 
     if (args.mesh_out_filename.endswith(".vtk") or args.mesh_out_filename.endswith(".vtu")):
         myvtk.writeUGrid(

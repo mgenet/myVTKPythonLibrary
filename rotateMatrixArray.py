@@ -30,11 +30,11 @@ def rotateMatrixArray(
 
     n_components = old_array.GetNumberOfComponents()
     if   (old_array_storage == "vec"):
-        assert (n_components == 6), "Wrong numpber of components (n_components="+str(n_components)+"). Aborting."
+        assert (n_components == 6), "Wrong number of components (n_components="+str(n_components)+"). Aborting."
     elif (old_array_storage == "Cmat"):
-        assert (n_components == 9), "Wrong numpber of components (n_components="+str(n_components)+"). Aborting."
+        assert (n_components == 9), "Wrong number of components (n_components="+str(n_components)+"). Aborting."
     elif (old_array_storage == "Fmat"):
-        assert (n_components == 9), "Wrong numpber of components (n_components="+str(n_components)+"). Aborting."
+        assert (n_components == 9), "Wrong number of components (n_components="+str(n_components)+"). Aborting."
     else:
         assert (0), "Wrong storage (old_array_storage="+str(old_array_storage)+"). Aborting."
     n_tuples = old_array.GetNumberOfTuples()
