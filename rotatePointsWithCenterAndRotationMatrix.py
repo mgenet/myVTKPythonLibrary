@@ -18,13 +18,13 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def rotatePoints(
+def rotatePointsWithCenterAndRotationMatrix(
         points,
         C,
         R,
         verbose=0):
 
-    mypy.my_print(verbose, "*** rotatePoints ***")
+    mypy.my_print(verbose, "*** rotatePointsWithCenterAndRotationMatrix ***")
 
     n_points = points.GetNumberOfPoints()
 
