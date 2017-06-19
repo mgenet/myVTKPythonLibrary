@@ -7,7 +7,7 @@ from addStrainsFromDeformationGradients import *
 from rotateMatrixArray import *
 from createCharArray import *
 from writeSTL import *
-from rotatePoints import *
+from rotatePointsWithCenterAndRotationMatrix import *
 from writePData import *
 from getImageInterpolator import *
 from writeUGrid import *

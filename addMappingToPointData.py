@@ -32,14 +32,14 @@ def addMappingToPointData(
 
     if (type_of_support == "point"):
         dataset = mesh_from.GetPointData()
-        point_locator = getPointLocator(
+        point_locator = myvtk.getPointLocator(
             mesh_from)
     elif (type_of_support == "cell"):
         dataset = mesh_from.GetPointData()
-        pdata_cell_centers_fr = getCellCenters(
+        pdata_cell_centers_fr = myvtk.getCellCenters(
             mesh=mesh_from,
             verbose=verbose-1)
-        point_locator = getPointLocator(
+        point_locator = myvtk.getPointLocator(
             pdata_cell_centers_fr)
 
     n_points = mesh_to.GetNumberOfPoints()
@@ -71,14 +71,14 @@ def addMappingToPointData(
     points_within_radius = vtk.vtkIdList()
 
     for k_point in xrange(n_points):
-        point_locator.FindClosestNPoints(
-            3,
-            mesh_to.GetPoints().GetPoint(k_point),
-            points_within_radius)
-        #point_locator.FindPointsWithinRadius(
-            #radius,
+        #point_locator.FindClosestNPoints(
+            #3,
             #mesh_to.GetPoints().GetPoint(k_point),
             #points_within_radius)
+        point_locator.FindPointsWithinRadius(
+            radius,
+            mesh_to.GetPoints().GetPoint(k_point),
+            points_within_radius)
 
         for farray_name in farray_names:
             if (points_within_radius.GetNumberOfIds() > 0):
