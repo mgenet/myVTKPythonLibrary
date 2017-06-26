@@ -7,7 +7,6 @@ from addStrainsFromDeformationGradients import *
 from rotateMatrixArray import *
 from createCharArray import *
 from writeSTL import *
-from rotatePointsWithCenterAndRotationMatrix import *
 from writePData import *
 from getImageInterpolator import *
 from writeUGrid import *
@@ -26,10 +25,12 @@ from getImageDimensionality import *
 from addImageHessian import *
 from addMappingToCellData import *
 from pdata2ugrid import *
+from rotateVectorArray import *
 from writeSGrid import *
 from getCellLocator import *
 from getPointsInCell import *
 from readMatLabImage import *
+from rotatePointsWithCenterAndRotationMatrix import *
 from getPointLocator import *
 from vtu2vtk import *
 from inp2vtk import *
