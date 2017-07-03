@@ -52,17 +52,17 @@ def addMappingToPointData(
 
         farray_type = dataset.GetArray(farray_name).GetDataTypeAsString()
         farray_n_components = dataset.GetArray(farray_name).GetNumberOfComponents()
-        farrays_avg[farray_name] = createArray(
+        farrays_avg[farray_name] = myvtk.createArray(
             farray_name+"_avg",
             farray_n_components,
             n_points,
             farray_type)
-        farrays_std[farray_name] = createArray(
+        farrays_std[farray_name] = myvtk.createArray(
             farray_name+"_std",
             farray_n_components,
             n_points,
             farray_type)
-        farrays_rat[farray_name] = createArray(
+        farrays_rat[farray_name] = myvtk.createArray(
             farray_name+"_rat",
             farray_n_components,
             n_points,
