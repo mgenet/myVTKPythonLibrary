@@ -12,6 +12,7 @@
 ########################################################################
 
 import numpy
+import vtk
 
 import myPythonLibrary as mypy
 import myVTKPythonLibrary as myvtk
@@ -21,20 +22,35 @@ import myVTKPythonLibrary as myvtk
 def moveMeshWithWorldMatrix(
         mesh,
         M,
+        in_place=True,
         verbose=0):
 
     mypy.my_print(verbose, "*** moveMeshWithWorldMatrix ***")
 
-    n_points = mesh.GetNumberOfPoints()
-    points = mesh.GetPoints()
+    if (in_place):
+        mesh2 = mesh
+    else:
+        if mesh.IsA("vtkPolyData"):
+            mesh2 = vtk.vtkPolyData()
+        elif mesh.IsA("vtkUnstructuredGrid"):
+            mesh2 = vtk.vtkUnstructuredGrid()
+        else:
+            assert (0), "Not implemented. Aborting."
+        mesh2.DeepCopy(mesh)
+
+    n_points = mesh2.GetNumberOfPoints()
+    points = mesh2.GetPoints()
     P = numpy.empty(4)
+    P[3] = 1.
+    Q = numpy.empty(4)
 
     for k_point in xrange(n_points):
         P[0:3] = points.GetPoint(k_point)
-        P[3] = 1.
         #print P
 
-        P = numpy.dot(M, P)
-        #print new_P
+        Q = numpy.dot(M, P)
+        #print Q
 
-        points.SetPoint(k_point, P[0:3])
+        points.SetPoint(k_point, Q[0:3])
+
+    return mesh2
