@@ -26,9 +26,9 @@ def readImage(
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
-    if   (filename.endswith('vtk')):
+    if   (filename.endswith("vtk")):
         image_reader = vtk.vtkImageReader()
-    elif (filename.endswith('vti')):
+    elif (filename.endswith("vti")):
         image_reader = vtk.vtkXMLImageDataReader()
     else:
         assert 0, "File must be .vtk or .vti. Aborting."

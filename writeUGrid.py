@@ -24,9 +24,9 @@ def writeUGrid(
 
     mypy.my_print(verbose, "*** writeUGrid: "+filename+" ***")
 
-    if ('vtk' in filename):
+    if (filename.endswith("vtk")):
         ugrid_writer = vtk.vtkUnstructuredGridWriter()
-    elif ('vtu' in filename):
+    elif (filename.endswith("vtu")):
         ugrid_writer = vtk.vtkXMLUnstructuredGridWriter()
     else:
         assert 0, "File must be .vtk or .vtu. Aborting."

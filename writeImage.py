@@ -24,9 +24,9 @@ def writeImage(
 
     mypy.my_print(verbose, "*** writeImage: "+filename+" ***")
 
-    if ('vtk' in filename):
+    if (filename.endswith("vtk")):
         image_writer = vtk.vtkImageWriter()
-    elif ('vti' in filename):
+    elif (filename.endswith("vti")):
         image_writer = vtk.vtkXMLImageDataWriter()
     else:
         assert 0, "File must be .vtk or .vti. Aborting."

@@ -24,9 +24,9 @@ def writePData(
 
     mypy.my_print(verbose, "*** writePData: "+filename+" ***")
 
-    if ('vtk' in filename):
+    if (filename.endswith("vtk")):
         pdata_writer = vtk.vtkPolyDataWriter()
-    elif ('vtp' in filename):
+    elif (filename.endswith("vtp")):
         pdata_writer = vtk.vtkXMLPolyDataWriter()
     else:
         assert 0, "File must be .vtk or .vtp. Aborting."

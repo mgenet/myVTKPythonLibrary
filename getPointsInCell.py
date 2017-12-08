@@ -51,5 +51,5 @@ def getPointsInCell(
         enclosed_points_filter.SetInput(pdata_points)
     enclosed_points_filter.Update()
 
-    points_in_cell = [k_point for k_point in xrange(points.GetNumberOfPoints()) if enclosed_points_filter.GetOutput().GetPointData().GetArray('SelectedPoints').GetTuple1(k_point)]
+    points_in_cell = [k_point for k_point in xrange(points.GetNumberOfPoints()) if enclosed_points_filter.GetOutput().GetPointData().GetArray("SelectedPoints").GetTuple1(k_point)]
     return points_in_cell

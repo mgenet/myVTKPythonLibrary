@@ -23,7 +23,7 @@ def readAbaqusDeformationGradientsFromDAT(
 
     farray_F = myvtk.createFloatArray("F", 9)
 
-    data_file = open(data_filename, 'r')
+    data_file = open(data_filename, "r")
     context = ""
     k_cell = 0
     for line in data_file:

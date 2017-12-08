@@ -26,9 +26,9 @@ def readSGrid(
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
-    if   (filename.endswith('vtk')):
+    if   (filename.endswith("vtk")):
         sgrid_reader = vtk.vtkStructuredGridReader()
-    elif (filename.endswith('vts')):
+    elif (filename.endswith("vts")):
         sgrid_reader = vtk.vtkXMLStructuredGridReader()
     else:
         assert 0, "File must be .vtk or .vts. Aborting."

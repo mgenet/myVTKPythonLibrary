@@ -23,7 +23,7 @@ def readAbaqusStressFromDAT(
 
     s_array = myvtk.createFloatArray("", 6)
 
-    data_file = open(data_filename, 'r')
+    data_file = open(data_filename, "r")
     context = ""
     k_cell = 0
     for line in data_file:

@@ -57,4 +57,4 @@ def addDeformationGradients(
     for k_cell in range(n_cells):
         GU = numpy.reshape(farray_gu.GetTuple(k_cell), (3,3), order=ordering)
         F = I + GU
-        farray_defo_grad.SetTuple(k_cell, numpy.reshape(F, 9, order='C'))
+        farray_defo_grad.SetTuple(k_cell, numpy.reshape(F, 9, order="C"))

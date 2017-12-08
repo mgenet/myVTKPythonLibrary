@@ -20,7 +20,7 @@ import myVTKPythonLibrary as myvtk
 
 if (__name__ == "__main__"):
     parser = argparse.ArgumentParser()
-    parser.add_argument('inp_filename', type=str)
+    parser.add_argument("inp_filename", type=str)
     args = parser.parse_args()
 
     mesh = myvtk.readAbaqusMeshFromINP(

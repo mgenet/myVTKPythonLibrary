@@ -26,11 +26,11 @@ def readPData(
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
-    if   (filename.endswith('vtk')):
+    if   (filename.endswith("vtk")):
         pdata_reader = vtk.vtkPolyDataReader()
-    elif (filename.endswith('vtp')):
+    elif (filename.endswith("vtp")):
         pdata_reader = vtk.vtkXMLPolyDataReader()
-    elif (filename.endswith('stl')):
+    elif (filename.endswith("stl")):
         pdata_reader = vtk.vtkSTLReader()
     else:
         assert 0, "File must be .vtk, .vtp or .stl. Aborting."
@@ -40,9 +40,6 @@ def readPData(
     pdata = pdata_reader.GetOutput()
 
     mypy.my_print(verbose-1, "n_points = "+str(pdata.GetNumberOfPoints()))
-    mypy.my_print(verbose-1, "n_verts = "+str(pdata.GetNumberOfVerts()))
-    mypy.my_print(verbose-1, "n_lines = "+str(pdata.GetNumberOfLines()))
-    mypy.my_print(verbose-1, "n_polys = "+str(pdata.GetNumberOfPolys()))
-    mypy.my_print(verbose-1, "n_strips = "+str(pdata.GetNumberOfStrips()))
+    mypy.my_print(verbose-1, "n_cells = "+str(pdata.GetNumberOfCells()))
 
     return pdata

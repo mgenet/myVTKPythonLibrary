@@ -35,4 +35,9 @@ def readSTL(
     mypy.my_print(verbose-1, "n_points = "+str(pdata.GetNumberOfPoints()))
     mypy.my_print(verbose-1, "n_cells = "+str(pdata.GetNumberOfCells()))
 
+    mypy.my_print(verbose-1, "n_verts = "+str(pdata.GetNumberOfVerts()))
+    mypy.my_print(verbose-1, "n_lines = "+str(pdata.GetNumberOfLines()))
+    mypy.my_print(verbose-1, "n_polys = "+str(pdata.GetNumberOfPolys()))
+    mypy.my_print(verbose-1, "n_strips = "+str(pdata.GetNumberOfStrips()))
+
     return pdata

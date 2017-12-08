@@ -20,7 +20,7 @@ import myVTKPythonLibrary as myvtk
 
 if (__name__ == "__main__"):
     parser = argparse.ArgumentParser()
-    parser.add_argument('vtk_filename', type=str)
+    parser.add_argument("vtk_filename", type=str)
     args = parser.parse_args()
 
     assert (args.vtk_filename.endswith(".vtk"))
