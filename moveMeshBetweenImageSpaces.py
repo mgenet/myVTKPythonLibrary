@@ -21,11 +21,12 @@ import myVTKPythonLibrary as myvtk
 
 if (__name__ == "__main__"):
     parser = argparse.ArgumentParser()
-    parser.add_argument('mesh_in_filename', type=str)
-    parser.add_argument('--image_in', type=str, default=None)
-    parser.add_argument('--image_out', type=str, default=None)
-    parser.add_argument('--mesh_out_filename', type=str, default=None)
-    parser.add_argument('-v', '--verbose', type=int, default=1)
+    parser.add_argument("mesh_in_filename", type=str)
+    parser.add_argument("--image_in", type=str, default=None)
+    parser.add_argument("--image_out", type=str, default=None)
+    parser.add_argument("--mesh_out_filename", type=str, default=None)
+    parser.add_argument("--flip_world_coords", type=bool, default=False)
+    parser.add_argument("-v", "--verbose", type=int, default=1)
     args = parser.parse_args()
 
     if (args.image_in is not None):
@@ -42,36 +43,31 @@ if (__name__ == "__main__"):
     else:
         I2W_out = numpy.eye(4)
 
-    I2I = numpy.dot(numpy.linalg.inv(I2W_out), I2W_in)
+    flip = numpy.eye(4)
+    if (args.flip_world_coords):
+        flip[0,0] = -1.
+        flip[1,1] = -1.
+    I2I = numpy.dot(numpy.dot(numpy.linalg.inv(I2W_out), flip), I2W_in)
+    #I2I = numpy.dot(numpy.linalg.inv(I2W_out), I2W_in)
 
-    if (args.mesh_in_filename.endswith(".vtk") or args.mesh_in_filename.endswith(".vtu")):
-        mesh = myvtk.readUGrid(
-            filename=args.mesh_in_filename,
-            verbose=args.verbose)
-    elif (args.mesh_in_filename.endswith(".vtp") or args.mesh_in_filename.endswith(".stl")):
-        mesh = myvtk.readPData(
-            filename=args.mesh_in_filename,
-            verbose=args.verbose)
-    else:
-        assert (0), "Input file must be .vtk, .vtu, or .stl. Aborting."
+    mesh = myvtk.readDataSet(
+        filename=args.mesh_in_filename,
+        verbose=args.verbose)
 
     myvtk.moveMeshWithWorldMatrix(
         mesh=mesh,
         M=I2I,
         verbose=args.verbose)
 
-    if (args.mesh_out_filename == None):
-        args.mesh_out_filename = args.mesh_in_filename.replace(args.image_in+"Coords", args.image_out+"Coords")
+    if (args.mesh_out_filename is None):
+        if (args.image_in is not None) and (args.image_out is not None):
+            args.mesh_out_filename = args.mesh_in_filename.replace(args.image_in+"Coords", args.image_out+"Coords")
+        elif (args.image_in is not None):
+            args.mesh_out_filename = args.mesh_in_filename.replace(args.image_in+"Coords", "WorldCoords")
+        elif (args.image_out is not None):
+            args.mesh_out_filename = args.mesh_in_filename.replace("WorldCoords", args.image_out+"Coords")
 
-    if (args.mesh_out_filename.endswith(".vtk") or args.mesh_out_filename.endswith(".vtu")):
-        myvtk.writeUGrid(
-            ugrid=mesh,
-            filename=args.mesh_out_filename,
-            verbose=args.verbose)
-    elif (args.mesh_out_filename.endswith(".stl")):
-        myvtk.writeSTL(
-            pdata=mesh,
-            filename=args.mesh_out_filename,
-            verbose=args.verbose)
-    else:
-        assert (0), "Output file must be .vtk, .vtu, or .stl. Aborting."
+    myvtk.writeDataSet(
+        dataset=mesh,
+        filename=args.mesh_out_filename,
+        verbose=args.verbose)
