@@ -3,7 +3,7 @@
 
 ########################################################################
 ###                                                                  ###
-### Created by Martin Genet, 2012-2017                               ###
+### Created by Martin Genet, 2012-2018                               ###
 ###     (Inspired by Lik Chuan Lee)                                  ###
 ###                                                                  ###
 ### University of California at San Francisco (UCSF), USA            ###
