@@ -31,7 +31,13 @@ def addStrainsFromDeformationGradients(
     farray_f = mesh.GetCellData().GetArray(defo_grad_array_name)
 
     n_cells = mesh.GetNumberOfCells()
-    if (mesh_w_local_basis is not None):
+    if (mesh_w_local_basis is not None)\
+    and (((mesh_w_local_basis.GetCellData().HasArray("eR"))\
+      and (mesh_w_local_basis.GetCellData().HasArray("eC"))\
+      and (mesh_w_local_basis.GetCellData().HasArray("eL")))\
+    or ((mesh_w_local_basis.GetCellData().HasArray("eRR"))\
+    and (mesh_w_local_basis.GetCellData().HasArray("eCC"))\
+    and (mesh_w_local_basis.GetCellData().HasArray("eLL")))):
         farray_strain = myvtk.createFloatArray(
             name=strain_array_name+"_CAR",
             n_components=6,
