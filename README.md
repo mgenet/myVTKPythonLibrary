@@ -1,11 +1,11 @@
 # myVTKPythonLibrary
 A collection of tools to manipulate meshes and images using vtkpython.
 ### Requirements
-First you need to install [myPythonLibrary](https://github.com/mgenet/myPythonLibrary).
+First you need to install [myPythonLibrary](https://gitlab.inria.fr/mgenet/myPythonLibrary).
 ### Installation
 Get the code:
 ```
-git clone https://github.com/mgenet/myVTKPythonLibrary
+git clone https://gitlab.inria.fr/mgenet/myVTKPythonLibrary
 ```
 To load the library within python, the simplest is to add the folder containing `myVTKPythonLibrary` to `PYTHONPATH`:
 ```
