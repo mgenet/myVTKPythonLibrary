@@ -11,7 +11,6 @@
 ########################################################################
 
 import os
-import scipy
 import vtk
 
 import myPythonLibrary as mypy
@@ -30,6 +29,7 @@ def readMatLabImage(
 
     assert (os.path.isfile(filename)), "Wrong filename (\""+filename+"\"). Aborting."
 
+    import scipy
     data = scipy.io.loadmat(filename)[field_name]
 
     n_pixels_x = len(data)
