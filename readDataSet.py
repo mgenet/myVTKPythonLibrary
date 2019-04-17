@@ -2,7 +2,7 @@
 
 ########################################################################
 ###                                                                  ###
-### Created by Martin Genet, 2012-2018                               ###
+### Created by Martin Genet, 2012-2019                               ###
 ###                                                                  ###
 ### University of California at San Francisco (UCSF), USA            ###
 ### Swiss Federal Institute of Technology (ETH), Zurich, Switzerland ###
@@ -72,4 +72,3 @@ def readDataSet(
             verbose=verbose-1)
     else:
         assert 0, "Wrong extention ("+file_ext+"). Extention must be vtk, vti, vtp, stl, vts, vtu. Aborting."
-
