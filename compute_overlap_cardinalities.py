@@ -1,5 +1,24 @@
+#coding=utf8
+
+########################################################################
+###                                                                  ###
+### Created by Martin Genet, 2012-2019                               ###
+###                                                                  ###
+### University of California at San Francisco (UCSF), USA            ###
+### Swiss Federal Institute of Technology (ETH), Zurich, Switzerland ###
+### École Polytechnique, Palaiseau, France                           ###
+###                                                                  ###
+###                                                                  ###
+### And Cécile Patte, 2019                                           ###
+###                                                                  ###
+### INRIA, Palaiseau, France                                         ###
+###                                                                  ###
+########################################################################
+
 import myVTKPythonLibrary as myvtk
 import vtk
+
+################################################################################
 
 def compute_overlap_cardinalities(image0,
                                   image1,
