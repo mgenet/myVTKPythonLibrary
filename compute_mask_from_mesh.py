@@ -9,7 +9,7 @@
 ### École Polytechnique, Palaiseau, France                           ###
 ###                                                                  ###
 ###                                                                  ###
-### And Cécile Patte, 2019                                          ###
+### And Cécile Patte, 2019                                           ###
 ###                                                                  ###
 ### INRIA, Palaiseau, France                                         ###
 ###                                                                  ###
@@ -24,12 +24,13 @@ import myVTKPythonLibrary as myvtk
 
 ################################################################################
 
-def compute_mask_from_mesh(image,
-                           mesh,
-                           warp_mesh=1,
-                           mesh_displacement_field_name="U",
-                           binary_mask=1,
-                           verbose=0):
+def compute_mask_from_mesh(
+        image,
+        mesh,
+        warp_mesh=1,
+        mesh_displacement_field_name="U",
+        binary_mask=1,
+        verbose=0):
 
     if binary_mask:
         thres = vtk.vtkImageThreshold()
@@ -40,7 +41,7 @@ def compute_mask_from_mesh(image,
         thres.Update()
         image = thres.GetOutput()
 
-    assert (mesh.GetPointData().HasArray(mesh_displacement_field_name)), "no array '" + mesh_displacement_field_name + "' in mesh"
+    assert (mesh.GetPointData().HasArray(mesh_displacement_field_name)), "No array '" + mesh_displacement_field_name + "' in mesh. Aborting."
     mesh.GetPointData().SetActiveVectors(mesh_displacement_field_name)
 
     geom = vtk.vtkGeometryFilter()
