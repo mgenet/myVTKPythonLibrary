@@ -15,15 +15,18 @@
 ###                                                                  ###
 ########################################################################
 
-import myVTKPythonLibrary as myvtk
 import vtk
+
+import myPythonLibrary as mypy
+import myVTKPythonLibrary as myvtk
 
 ################################################################################
 
-def compute_overlap_cardinalities(image0,
-                                  image1,
-                                  image0_array_name='scalars',
-                                  image1_array_name='scalars'):
+def compute_overlap_cardinalities(
+        image0,
+        image1,
+        image0_array_name='scalars',
+        image1_array_name='scalars'):
 
     assert image0.GetDimensions() == image1.GetDimensions()
     assert image0.GetNumberOfPoints() == image1.GetNumberOfPoints()
