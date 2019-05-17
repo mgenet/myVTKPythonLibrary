@@ -12,6 +12,7 @@ from readDataSet import *
 from compute_mask_from_mesh import *
 from readImage import *
 from getClippedPDataUsingPlane import *
+from getImageDimensions import *
 from createCharArray import *
 from writeImage import *
 from addImageHessian import *
