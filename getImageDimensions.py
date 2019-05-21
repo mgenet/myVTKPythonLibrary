@@ -24,15 +24,16 @@ def getImageDimensions(
     mypy.my_print(verbose, "*** getImageDimensions ***")
 
     [DX, DY, DZ] = image.GetDimensions()
-    if   (DX > 1) and (DY > 1) and (DZ > 1):
+    mypy.my_print(verbose-1, "dimensions = "+str([DX, DY, DZ]))
+
+    if   (DX >  1) and (DY >  1) and (DZ >  1):
         dimensions = [DX, DY, DZ]
-    elif (DX > 1) and (DY > 1) and (DZ == 1):
+    elif (DX >  1) and (DY >  1) and (DZ == 1):
         dimensions = [DX, DY]
-    elif (DX > 1) and (DY == 1) and (DZ == 1):
+    elif (DX >  1) and (DY == 1) and (DZ == 1):
         dimensions = [DX]
     else:
         assert (0), "Wrong image dimensions ("+str([DX, DY, DZ])+")"
-
     mypy.my_print(verbose-1, "dimensions = "+str(dimensions))
 
     return dimensions
