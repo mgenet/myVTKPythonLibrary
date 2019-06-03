@@ -71,3 +71,4 @@ from getPDataSurfaceArea import *
 from getMassProperties import *
 from createUnsignedShortArray import *
 from readPNG import *
+from compute_mask_uint16_from_mesh import *
