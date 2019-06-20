@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 import vtk
 
@@ -25,7 +27,7 @@ def getVoxels(
     mypy.my_print(verbose, "*** getVoxels ***")
 
     n_points = ugrid.GetPoints().GetNumberOfPoints()
-    seed_point = int(n_points/2)
+    seed_point = n_points//2
 
     point_locator = myvtk.getPointLocator(ugrid)
 
@@ -53,7 +55,7 @@ def getVoxels(
     #print "X = "+str(X)
     #print "dX = "+str(dX)
 
-    for k_point in xrange(2, n_closest_points):
+    for k_point in range(2, n_closest_points):
         #print "k_point = "+str(k_point)
         ugrid.GetPoint(closest_points.GetId(k_point), P2)
 
@@ -75,7 +77,7 @@ def getVoxels(
     Z = numpy.cross(X, Y)
     dZ_list = []
 
-    for k_point in xrange(2, n_closest_points):
+    for k_point in range(2, n_closest_points):
         #print "k_point = "+str(k_point)
         ugrid.GetPoint(closest_points.GetId(k_point), P3)
 
@@ -107,7 +109,7 @@ def getVoxels(
 
     P = numpy.empty(3)
     PPP = numpy.empty(3)
-    for k_point in xrange(n_points):
+    for k_point in range(n_points):
         ugrid.GetPoint(k_point, P)
 
         point_ids = []
@@ -116,7 +118,7 @@ def getVoxels(
                 if (pm_Y == -1):   pm_X_list = [-1,+1]
                 elif (pm_Y == +1): pm_X_list = [+1,-1]
                 for pm_X in pm_X_list:
-                    PP = P + pm_Z * (dZ/2) * Z + pm_Y * (dY/2) * Y + pm_X * (dX/2) * X
+                    PP = P + pm_Z * dZ/2 * Z + pm_Y * dY/2 * Y + pm_X * dX/2 * X
 
                     if (points.GetNumberOfPoints() == 0):
                         point_id = point_locator.InsertNextPoint(PP)
@@ -133,7 +135,7 @@ def getVoxels(
 
                     point_ids.append(point_id)
 
-        for i in xrange(8):
+        for i in range(8):
             cell.GetPointIds().SetId(i, point_ids[i])
 
         cell_array.InsertNextCell(cell)
@@ -143,7 +145,7 @@ def getVoxels(
     new_ugrid.SetCells(vtk.VTK_HEXAHEDRON, cell_array)
 
     n_arrays = ugrid.GetPointData().GetNumberOfArrays()
-    for k_array in xrange(n_arrays):
+    for k_array in range(n_arrays):
         new_ugrid.GetCellData().AddArray(ugrid.GetPointData().GetArray(k_array))
 
     return new_ugrid

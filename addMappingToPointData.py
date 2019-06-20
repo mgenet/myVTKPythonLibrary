@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 import vtk
 
@@ -48,7 +50,8 @@ def addMappingToPointData(
     farrays_std = {}
     farrays_rat = {}
     for farray_name in farray_names:
-        assert (dataset.HasArray(farray_name)), "mesh has no array named "+farray_name+". Aborting."
+        assert (dataset.HasArray(farray_name)),\
+            "mesh has no array named "+farray_name+". Aborting."
 
         farray_type = dataset.GetArray(farray_name).GetDataTypeAsString()
         farray_n_components = dataset.GetArray(farray_name).GetNumberOfComponents()
@@ -70,7 +73,7 @@ def addMappingToPointData(
 
     points_within_radius = vtk.vtkIdList()
 
-    for k_point in xrange(n_points):
+    for k_point in range(n_points):
         #point_locator.FindClosestNPoints(
             #3,
             #mesh_to.GetPoints().GetPoint(k_point),
@@ -82,7 +85,7 @@ def addMappingToPointData(
 
         for farray_name in farray_names:
             if (points_within_radius.GetNumberOfIds() > 0):
-                values = [numpy.array(dataset.GetArray(farray_name).GetTuple(points_within_radius.GetId(k_id))) for k_id in xrange(points_within_radius.GetNumberOfIds())]
+                values = [numpy.array(dataset.GetArray(farray_name).GetTuple(points_within_radius.GetId(k_id))) for k_id in range(points_within_radius.GetNumberOfIds())]
                 #print "values = "+str(values)
                 if (threshold_min != None):
                     values = [value for value in values if (numpy.linalg.norm(value) > threshold_min)]

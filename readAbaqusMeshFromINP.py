@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -46,7 +48,7 @@ def readAbaqusMeshFromINP(
                 elif (context == "reading elems"):
                     splitted_line = line.split(",")
                     assert (len(splitted_line) == 1+cell_n_points), "Wrong number of elements in line. Aborting."
-                    for k_point in xrange(cell_n_points): cell.GetPointIds().SetId(k_point, int(splitted_line[1+k_point])-1)
+                    for k_point in range(cell_n_points): cell.GetPointIds().SetId(k_point, int(splitted_line[1+k_point])-1)
                     cell_array.InsertNextCell(cell)
 
         if line.startswith("*NODE"):
@@ -73,7 +75,7 @@ def readAbaqusMeshFromINP(
                 cell_n_points = 8
                 cell = vtk.vtkHexahedron()
             else:
-                print "Warning: elements not read: "+line+"."
+                mypy.my_print(verbose, "Warning: elements not read: "+line+".")
 
     mesh_file.close()
 

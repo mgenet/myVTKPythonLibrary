@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -27,7 +29,7 @@ def getPointsInCell(
     ugrid_cell = vtk.vtkUnstructuredGrid()
     ugrid_cell.SetPoints(cell.GetPoints())
     cell = vtk.vtkHexahedron()
-    for k_point in xrange(8): cell.GetPointIds().SetId(k_point, k_point)
+    for k_point in range(8): cell.GetPointIds().SetId(k_point, k_point)
     cell_array_cell = vtk.vtkCellArray()
     cell_array_cell.InsertNextCell(cell)
     ugrid_cell.SetCells(vtk.VTK_HEXAHEDRON, cell_array_cell)
@@ -51,5 +53,5 @@ def getPointsInCell(
         enclosed_points_filter.SetInput(pdata_points)
     enclosed_points_filter.Update()
 
-    points_in_cell = [k_point for k_point in xrange(points.GetNumberOfPoints()) if enclosed_points_filter.GetOutput().GetPointData().GetArray("SelectedPoints").GetTuple1(k_point)]
+    points_in_cell = [k_point for k_point in range(points.GetNumberOfPoints()) if enclosed_points_filter.GetOutput().GetPointData().GetArray("SelectedPoints").GetTuple1(k_point)]
     return points_in_cell

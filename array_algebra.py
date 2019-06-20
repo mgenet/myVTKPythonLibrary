@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 
 import myPythonLibrary as mypy
@@ -49,7 +51,7 @@ def addArrays(
         assert (array3.GetNumberOfTuples() == n_tuples)
         assert (type(array3.GetTuple(0)[0]) is array_type)
 
-    for k_tuple in xrange(n_tuples):
+    for k_tuple in range(n_tuples):
         mypy.my_print(verbose-2, "k_tuple = "+str(k_tuple))
 
         array3.SetTuple(
@@ -89,7 +91,7 @@ def subArrays(
         assert (array3.GetNumberOfTuples() == n_tuples)
         assert (type(array3.GetTuple(0)[0]) is array_type)
 
-    for k_tuple in xrange(n_tuples):
+    for k_tuple in range(n_tuples):
         array3.SetTuple(
             k_tuple,
             numpy.array(array1.GetTuple(k_tuple)) - numpy.array(array2.GetTuple(k_tuple)))
@@ -127,7 +129,7 @@ def mulArrays(
         assert (array3.GetNumberOfTuples() == n_tuples)
         assert (type(array3.GetTuple(0)[0]) is array_type)
 
-    for k_tuple in xrange(n_tuples):
+    for k_tuple in range(n_tuples):
         array3.SetTuple(
             k_tuple,
             numpy.array(array1.GetTuple(k_tuple)) * numpy.array(array2.GetTuple(k_tuple)))

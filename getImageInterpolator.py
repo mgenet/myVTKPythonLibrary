@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -39,4 +41,3 @@ def getImageInterpolator(
     interpolator.Update()
 
     return interpolator
-

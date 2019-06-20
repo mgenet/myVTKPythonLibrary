@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -30,4 +32,3 @@ def getMassProperties(
         mass_properties.SetInput(pdata)
 
     return mass_properties
-

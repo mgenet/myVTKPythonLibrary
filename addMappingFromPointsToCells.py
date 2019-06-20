@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 
 import myPythonLibrary as mypy
@@ -47,7 +49,7 @@ def addMappingFromPointsToCells(
     ugrid_points.GetCellData().AddArray(iarray_k_cell)
 
     point = numpy.empty(3)
-    for k_point in xrange(n_points):
+    for k_point in range(n_points):
         ugrid_points.GetPoint(
             k_point,
             point)

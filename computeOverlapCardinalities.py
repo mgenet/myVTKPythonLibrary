@@ -15,6 +15,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -22,11 +24,14 @@ import myVTKPythonLibrary as myvtk
 
 ################################################################################
 
-def compute_overlap_cardinalities(
+def computeOverlapCardinalities(
         image0,
         image1,
         image0_array_name='scalars',
-        image1_array_name='scalars'):
+        image1_array_name='scalars',
+        verbose=0):
+
+    mypy.my_print(verbose, "*** computeOverlapCardinalities ***")
 
     assert image0.GetDimensions() == image1.GetDimensions()
     assert image0.GetNumberOfPoints() == image1.GetNumberOfPoints()
@@ -69,9 +74,12 @@ def compute_overlap_cardinalities(
     histo_array2 = histo2.GetHistogram()
     FN = histo_array2.GetTuple(1)[0]
     FP = histo_array2.GetTuple(255)[0]
-    assert int(FN + histo_array2.GetTuple(0)[0] + FP) == image0.GetNumberOfPoints()
+    assert (int(FN + histo_array2.GetTuple(0)[0] + FP) == image0.GetNumberOfPoints())
+    assert (int(TP + TN + FP + FN) == image0.GetNumberOfPoints())
 
-    print 'TP =', TP, ', TN =', TN, ', FP =', FP, ', FN =', FN
-    assert int(TP + TN + FP + FN) == image0.GetNumberOfPoints()
+    mypy.my_print(verbose-1, "TP ="+str(TP))
+    mypy.my_print(verbose-1, "TN ="+str(TN))
+    mypy.my_print(verbose-1, "FP ="+str(FP))
+    mypy.my_print(verbose-1, "FN ="+str(FN))
 
     return (TP, TN, FP, FN)

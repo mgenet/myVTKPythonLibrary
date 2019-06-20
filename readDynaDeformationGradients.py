@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import myPythonLibrary as mypy
 import myVTKPythonLibrary as myvtk
 
@@ -25,11 +27,11 @@ def readDynaDeformationGradients(
 
     n_cells = mesh.GetNumberOfCells()
 
-    history_files_names = [hystory_files_basename + ".history#" + str(num) for num in xrange(11,20)]
+    history_files_names = [hystory_files_basename + ".history#" + str(num) for num in range(11,20)]
 
-    F_list = [[0. for k_component in xrange(9)] for k_cell in xrange(n_cells)]
+    F_list = [[0. for k_component in range(9)] for k_cell in range(n_cells)]
 
-    for k_component in xrange(9):
+    for k_component in range(9):
         history_file = open(history_files_names[k_component], "r")
         for line in history_file:
             if line.startswith("*") or line.startswith("$"): continue
@@ -39,7 +41,7 @@ def readDynaDeformationGradients(
 
     F_array = myvtk.createFloatArray(array_name, 9, n_cells)
 
-    for k_cell in xrange(n_cells):
+    for k_cell in range(n_cells):
         F_array.SetTuple(k_cell, F_list[k_cell])
 
     mypy.my_print(verbose-1, "n_tuples = "+str(F_array.GetNumberOfTuples()))

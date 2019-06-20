@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -30,7 +32,7 @@ def createUnsignedShortArray(
     usarray.SetNumberOfTuples(n_tuples)
 
     if (init_to_zero):
-        for k_tuple in xrange(n_tuples):
+        for k_tuple in range(n_tuples):
             iarray.SetTuple(k_tuple, [0]*n_components)
 
     return usarray

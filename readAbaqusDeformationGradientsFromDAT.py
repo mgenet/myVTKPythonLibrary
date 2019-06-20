@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import myPythonLibrary as mypy
 import myVTKPythonLibrary as myvtk
 
@@ -49,8 +51,3 @@ def readAbaqusDeformationGradientsFromDAT(
     mypy.my_print(verbose-1, "n_tuples = "+str(farray_F.GetNumberOfTuples()))
 
     return farray_F
-
-
-
-
-

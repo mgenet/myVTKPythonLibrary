@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 
 import myPythonLibrary as mypy
@@ -49,7 +51,7 @@ def rotateMatrixArray(
         old_vector = numpy.empty(9)
     old_matrix = numpy.empty((3,3))
     new_matrix = numpy.empty((3,3))
-    for k_tuple in xrange(n_tuples):
+    for k_tuple in range(n_tuples):
         old_array.GetTuple(k_tuple, old_vector)
         if (old_array_storage == "vec"):
             mypy.vec_col6_to_mat_sym33(old_vector, old_matrix)

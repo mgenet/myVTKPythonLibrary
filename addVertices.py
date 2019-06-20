@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -27,12 +29,12 @@ def addVertices(
     cell_array = vtk.vtkCellArray()
 
     n_points = ugrid.GetPoints().GetNumberOfPoints()
-    for k_point in xrange(n_points):
+    for k_point in range(n_points):
         cell.GetPointIds().SetId(0, k_point)
         cell_array.InsertNextCell(cell)
 
     ugrid.SetCells(vtk.VTK_VERTEX, cell_array)
 
     n_arrays = ugrid.GetPointData().GetNumberOfArrays()
-    for k_array in xrange(n_arrays):
+    for k_array in range(n_arrays):
         ugrid.GetCellData().AddArray(ugrid.GetPointData().GetArray(k_array))

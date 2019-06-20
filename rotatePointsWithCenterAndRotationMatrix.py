@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 import vtk
 
@@ -29,7 +31,7 @@ def rotatePointsWithCenterAndRotationMatrix(
     n_points = points.GetNumberOfPoints()
 
     point = numpy.empty(3)
-    for k_point in xrange(n_points):
+    for k_point in range(n_points):
         points.GetPoint(k_point, point)
         #print point
 

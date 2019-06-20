@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -36,6 +38,3 @@ def getClippedPDataUsingField(
     clip_poly_data.Update()
 
     return clip_poly_data.GetOutput(0), clip_poly_data.GetOutput(1)
-
-
-

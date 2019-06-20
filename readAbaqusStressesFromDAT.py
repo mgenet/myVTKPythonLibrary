@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import myPythonLibrary as mypy
 import myVTKPythonLibrary as myvtk
 
@@ -35,7 +37,7 @@ def readAbaqusStressFromDAT(
             if ("OR" in line):
                 splitted_line = line.split()
                 assert (int(splitted_line[0]) == k_cell+1), "Wrong element number. Aborting."
-                s_list = [float(splitted_line[k]) for k in xrange(3,9)]
+                s_list = [float(splitted_line[k]) for k in range(3,9)]
                 s_array.InsertNextTuple(s_list)
                 k_cell += 1
 
@@ -47,8 +49,3 @@ def readAbaqusStressFromDAT(
     mypy.my_print(verbose-1, "n_tuples = "+str(s_array.GetNumberOfTuples()))
 
     return s_array
-
-
-
-
-

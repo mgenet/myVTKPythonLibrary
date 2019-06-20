@@ -11,6 +11,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 import vtk
 
@@ -44,7 +46,7 @@ def moveMeshWithWorldMatrix(
     P[3] = 1.
     Q = numpy.empty(4)
 
-    for k_point in xrange(n_points):
+    for k_point in range(n_points):
         P[0:3] = points.GetPoint(k_point)
         #print P
 

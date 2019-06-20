@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 import vtk
 
@@ -48,7 +50,7 @@ def addPDataNormals(
 
         cnt_pos = 0
         cnt_neg = 0
-        for k_cell in xrange(pdata.GetNumberOfCells()):
+        for k_cell in range(pdata.GetNumberOfCells()):
             cell_centers.GetPoint(k_cell, cell_center)
             outward  = cell_center-mesh_center
             outward /= numpy.linalg.norm(outward)

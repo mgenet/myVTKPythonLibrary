@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import vtk
 
 import myPythonLibrary as mypy
@@ -34,8 +36,8 @@ def readDynaMesh(lsdyna_mesh_filename,
         cell = vtk.vtkHexahedron()
         cell_array = vtk.vtkCellArray()
     else:
-        print "Wrong cell type. Aborting."
-        exit()
+        assert (0),\
+            "Wrong cell type. Aborting."
 
     mypy.my_print(verbose-1, "Reading Dyna mesh file...")
 
@@ -65,7 +67,7 @@ def readDynaMesh(lsdyna_mesh_filename,
                 splitted_line = line.split(",")
                 if (len(splitted_line) == 3): continue
                 if (cell_type == "hexahedron"):
-                    for k_node in xrange(8):
+                    for k_node in range(8):
                         cell.GetPointIds().SetId(k_node, int(splitted_line[2+k_node])-1)
                 cell_array.InsertNextCell(cell)
 

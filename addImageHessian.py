@@ -11,6 +11,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import argparse
 import vtk
 
@@ -41,7 +43,7 @@ def addImageHessian(
     image_w_gradient = image_gradient.GetOutput()
 
     image_append_components = vtk.vtkImageAppendComponents()
-    for k_dim in xrange(image_dimensionality):
+    for k_dim in range(image_dimensionality):
         image_extract_components = vtk.vtkImageExtractComponents()
         if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
             image_extract_components.SetInputData(image_w_gradient)

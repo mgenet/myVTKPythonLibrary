@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import os
 import vtk
 
@@ -56,9 +58,9 @@ def readMatLabImage(
             n_tuples=n_pixels)
 
     k_pixel = 0
-    for k_z in xrange(n_pixels_z):
-        for k_y in xrange(n_pixels_y):
-            for k_x in xrange(n_pixels_x):
+    for k_z in range(n_pixels_z):
+        for k_y in range(n_pixels_y):
+            for k_x in range(n_pixels_x):
                 #points.InsertPoint(k_pixel, [(k_x+0.5)/n_pixels_x,\
                                                #(k_y+0.5)/n_pixels_y,\
                                                #(k_z+0.5)/n_pixels_z])

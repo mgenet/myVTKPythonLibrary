@@ -19,20 +19,20 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def createCharArray(
+def createUnsignedLongArray(
         name,
         n_components=1,
         n_tuples=0,
         init_to_zero=0,
         verbose=0):
 
-    carray = vtk.vtkCharArray()
-    carray.SetName(name)
-    carray.SetNumberOfComponents(n_components)
-    carray.SetNumberOfTuples(n_tuples)
+    ularray = vtk.vtkUnsignedLongArray()
+    ularray.SetName(name)
+    ularray.SetNumberOfComponents(n_components)
+    ularray.SetNumberOfTuples(n_tuples)
 
     if (init_to_zero):
         for k_tuple in range(n_tuples):
             iarray.SetTuple(k_tuple, [0]*n_components)
 
-    return carray
+    return ularray

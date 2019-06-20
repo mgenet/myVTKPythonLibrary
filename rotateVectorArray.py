@@ -10,6 +10,8 @@
 ###                                                                  ###
 ########################################################################
 
+from builtins import *
+
 import numpy
 
 import myPythonLibrary as mypy
@@ -33,7 +35,7 @@ def rotateVectorArray(
     new_vector = numpy.empty(3)
     old_vector = numpy.empty(3)
 
-    for k_tuple in xrange(n_tuples):
+    for k_tuple in range(n_tuples):
         old_array.GetTuple(k_tuple, old_vector)
 
         if (in_vecs is None):
