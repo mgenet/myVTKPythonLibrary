@@ -21,7 +21,7 @@ import glob
 import numpy
 import vtk
 
-import myPythonLibrary as mypy
+import myPythonLibrary    as mypy
 import myVTKPythonLibrary as myvtk
 
 ################################################################################
@@ -32,23 +32,25 @@ def computeMaskFromMesh(
         warp_mesh=1,
         mesh_displacement_field_name="U",
         binary_mask=1,
+        in_value=1.0,
+        out_value=0.0,
         verbose=0):
+
+    mypy.my_print(verbose, "*** computeMaskFromMesh ***")
 
     if (binary_mask):
         thres = vtk.vtkImageThreshold()
         thres.SetInputData(image)
         thres.ThresholdByUpper(0.)
-        thres.SetInValue(1.0)
+        thres.SetInValue(in_value)
         thres.ReplaceInOn()
         thres.Update()
         image = thres.GetOutput()
 
-    assert (mesh.GetPointData().HasArray(mesh_displacement_field_name)),\
-        "No array '" + mesh_displacement_field_name + "' in mesh. Aborting."
-    mesh.GetPointData().SetActiveVectors(mesh_displacement_field_name)
-
     geom = vtk.vtkGeometryFilter()
     if (warp_mesh):
+        assert (mesh.GetPointData().HasArray(mesh_displacement_field_name)),\
+            "No array '" + mesh_displacement_field_name + "' in mesh. Aborting."
         mesh.GetPointData().SetActiveVectors(mesh_displacement_field_name)
         warp = vtk.vtkWarpVector()
         warp.SetInputData(mesh)
@@ -63,13 +65,14 @@ def computeMaskFromMesh(
     pol2stenc.SetOutputOrigin(image.GetOrigin())
     pol2stenc.SetOutputSpacing(image.GetSpacing())
     pol2stenc.SetOutputWholeExtent(image.GetExtent())
+    # pol2stenc.CopyInformationFromPipeline(image.GetInformation())
     pol2stenc.Update()
 
     imgstenc = vtk.vtkImageStencil()
     imgstenc.SetInputData(image)
     imgstenc.SetStencilData(pol2stenc.GetOutput())
     imgstenc.ReverseStencilOff()
-    imgstenc.SetBackgroundValue(0)
+    imgstenc.SetBackgroundValue(out_value)
     imgstenc.Update()
 
     return imgstenc.GetOutput()
