@@ -47,8 +47,15 @@ def createArray(
     elif (type(array_type) is str):
         assert (array_type in ("double", "float", "long", "unsigned long", "int", "unsigned int", "short", "unsigned short", "char", "unsigned char", "int64", "uint64", "int32", "uint32", "int16", "uint16", "int8", "uint8")), "Wrong array type. Aborting."
 
-        if (array_type in ("float", "double")):
+        if (array_type == "float"):
             return myvtk.createFloatArray(
+                       name=name,
+                       n_components=n_components,
+                       n_tuples=n_tuples,
+                       init_to_zero=init_to_zero,
+                       verbose=verbose-1)
+        elif (array_type == "double"):
+            return myvtk.createDoubleArray(
                        name=name,
                        n_components=n_components,
                        n_tuples=n_tuples,
