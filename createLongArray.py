@@ -26,13 +26,13 @@ def createLongArray(
         init_to_zero=0,
         verbose=0):
 
-    larray = vtk.vtkLongArray()
-    larray.SetName(name)
-    larray.SetNumberOfComponents(n_components)
-    larray.SetNumberOfTuples(n_tuples)
+    array = vtk.vtkLongArray()
+    array.SetName(name)
+    array.SetNumberOfComponents(n_components)
+    array.SetNumberOfTuples(n_tuples)
 
     if (init_to_zero):
-        for k_tuple in range(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+        for k_component in range(n_components):
+            array.FillComponent(k_component, 0)
 
-    return larray
+    return array

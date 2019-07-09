@@ -26,13 +26,13 @@ def createIntArray(
         init_to_zero=0,
         verbose=0):
 
-    iarray = vtk.vtkIntArray()
-    iarray.SetName(name)
-    iarray.SetNumberOfComponents(n_components)
-    iarray.SetNumberOfTuples(n_tuples)
+    array = vtk.vtkIntArray()
+    array.SetName(name)
+    array.SetNumberOfComponents(n_components)
+    array.SetNumberOfTuples(n_tuples)
 
     if (init_to_zero):
-        for k_tuple in range(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+        for k_component in range(n_components):
+            farray.FillComponent(k_component, 0)
 
-    return iarray
+    return array

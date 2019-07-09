@@ -26,13 +26,13 @@ def createUnsignedCharArray(
         init_to_zero=0,
         verbose=0):
 
-    ucarray = vtk.vtkUnsignedCharArray()
-    ucarray.SetName(name)
-    ucarray.SetNumberOfComponents(n_components)
-    ucarray.SetNumberOfTuples(n_tuples)
+    array = vtk.vtkUnsignedCharArray()
+    array.SetName(name)
+    array.SetNumberOfComponents(n_components)
+    array.SetNumberOfTuples(n_tuples)
 
     if (init_to_zero):
-        for k_tuple in range(n_tuples):
-            iarray.SetTuple(k_tuple, [0]*n_components)
+        for k_component in range(n_components):
+            array.FillComponent(k_component, 0)
 
-    return ucarray
+    return array
