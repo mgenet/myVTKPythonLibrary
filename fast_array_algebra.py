@@ -15,7 +15,7 @@
 ###                                                                  ###
 ########################################################################
 
-from builtins import *
+from builtins import range
 
 import numpy
 import vtk
