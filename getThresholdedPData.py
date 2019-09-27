@@ -29,13 +29,13 @@ def getThresholdedPData(
 
     mypy.my_print(verbose, "*** getThresholdedPData ***")
 
-    thresholded_ugrid = getThresholdedUGrid(
+    thresholded_ugrid = myvtk.getThresholdedUGrid(
         pdata,
         field_support,
         field_name,
         threshold_value,
         threshold_by_upper_or_lower,
         False)
-    thresholded_pdata = ugrid2pdata(thresholded_ugrid, False)
+    thresholded_pdata = myvtk.ugrid2pdata(thresholded_ugrid, False)
 
     return thresholded_pdata
