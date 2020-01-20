@@ -2,14 +2,14 @@
 
 ########################################################################
 ###                                                                  ###
-### Created by Martin Genet, 2012-2019                               ###
+### Created by Martin Genet, 2012-2020                               ###
 ###                                                                  ###
 ### University of California at San Francisco (UCSF), USA            ###
 ### Swiss Federal Institute of Technology (ETH), Zurich, Switzerland ###
 ### École Polytechnique, Palaiseau, France                           ###
 ###                                                                  ###
 ###                                                                  ###
-### And Cécile Patte, 2018-2019                                      ###
+### And Cécile Patte, 2018-2020                                      ###
 ###                                                                  ###
 ### INRIA, Palaiseau, France                                         ###
 ###                                                                  ###
