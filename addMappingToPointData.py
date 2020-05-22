@@ -84,6 +84,7 @@ def addMappingToPointData(
             points_within_radius)
 
         for farray_name in farray_names:
+            farray_n_components = dataset.GetArray(farray_name).GetNumberOfComponents()
             if (points_within_radius.GetNumberOfIds() > 0):
                 values = [numpy.array(dataset.GetArray(farray_name).GetTuple(points_within_radius.GetId(k_id))) for k_id in range(points_within_radius.GetNumberOfIds())]
                 #print "values = "+str(values)
@@ -95,15 +96,18 @@ def addMappingToPointData(
                 if (len(values) > 0):
                     avg = numpy.mean(values, 0)
                     std = numpy.std(values, 0)
-                    rat = std/avg
+                    if (avg != 0).all():
+                        rat = std/avg
+                    else:
+                        rat = [0]*farray_n_components
                 else:
-                    avg = [0]*n_components
-                    std = [0]*n_components
-                    rat = [0]*n_components
+                    avg = [0]*farray_n_components
+                    std = [0]*farray_n_components
+                    rat = [0]*farray_n_components
             else:
-                avg = [0]*n_components
-                std = [0]*n_components
-                rat = [0]*n_components
+                avg = [0]*farray_n_components
+                std = [0]*farray_n_components
+                rat = [0]*farray_n_components
             farrays_avg[farray_name].SetTuple(k_point, avg)
             farrays_std[farray_name].SetTuple(k_point, std)
             farrays_rat[farray_name].SetTuple(k_point, rat)
