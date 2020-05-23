@@ -10,7 +10,6 @@ from .getPointsInCell import *
 from .addPhysicalGroupToMesh import *
 from .readDataSet import *
 from .computeMaskFromMesh import *
-from .computeUInt16MaskFromMesh import *
 from .readImage import *
 from .getClippedPDataUsingPlane import *
 from .getImageDimensions import *
@@ -72,5 +71,6 @@ from .ugrid2pdata import *
 from .getPointLocator import *
 from .getPDataSurfaceArea import *
 from .getMassProperties import *
+from .computeUInt16MaskFromMesh import *
 from .createUnsignedShortArray import *
 from .readPNG import *

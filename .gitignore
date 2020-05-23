@@ -3,5 +3,6 @@
 *.kateproject.d
 *.pyc
 .spyproject
+build
 dist
 *.egg-info
