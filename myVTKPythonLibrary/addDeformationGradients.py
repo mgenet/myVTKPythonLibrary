@@ -28,7 +28,7 @@ def addDeformationGradients(
 
     mypy.my_print(verbose, "*** addDeformationGradients ***")
 
-    mypy.my_print(min(verbose,1), "*** Warning: at some point the ordering of vector gradient components has changed, and uses C ordering instead of F. ***")
+    # mypy.my_print(min(verbose,1), "*** Warning: at some point the ordering of vector gradient components has changed, and uses C ordering instead of F. ***")
     if   (vtk.vtkVersion.GetVTKMajorVersion() >= 8):
         ordering = "C"
     elif (vtk.vtkVersion.GetVTKMajorVersion() == 7) and ((vtk.vtkVersion.GetVTKMinorVersion() > 0) or (vtk.vtkVersion.GetVTKBuildVersion() > 0)):
