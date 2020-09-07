@@ -18,6 +18,7 @@ from .writeImage import *
 from .addImageHessian import *
 from .writeSGrid import *
 from .readMatLabImage import *
+from .getMeshVolume import *
 from .vtk2vtu import *
 from .moveMeshWithWorldMatrix import *
 from .getCellCenters import *
@@ -71,6 +72,7 @@ from .ugrid2pdata import *
 from .getPointLocator import *
 from .getPDataSurfaceArea import *
 from .getMassProperties import *
+from .getWarpedMesh import *
 from .computeUInt16MaskFromMesh import *
 from .createUnsignedShortArray import *
 from .readPNG import *
