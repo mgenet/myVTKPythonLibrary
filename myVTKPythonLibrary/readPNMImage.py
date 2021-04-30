@@ -21,23 +21,21 @@ import myVTKPythonLibrary as myvtk
 ########################################################################
 
 def readPNMImage(
-        filename,
+        filename=None,
+        filepattern=None,
 		extent=None,
         verbose=0):
 
-    mypy.my_print(verbose, "*** readPNMImage: "+filename+" ***")
-
-    if (extent is None):
-        assert (os.path.isfile(filename)),\
-            "Wrong filename (\""+filename+"\"). Aborting."
-    else:
-        assert (os.path.isfile(filename+".0")),\
-            "Wrong filename (\""+filename+".0"+"\"). Aborting."
+    mypy.my_print(verbose, "*** readPNMImage ***")
 
     image_reader = vtk.vtkPNMReader()
-    image_reader.SetFilePattern(filename)
-    if (extent is not None):
-	    image_reader.SetDataExtent(extent)
+    if (filename is not None) and (filepattern is None) and (extent is None):
+        assert (os.path.isfile(filename)),\
+            "Wrong filename (\""+filename+"\"). Aborting."
+        image_reader.SetFileName(filename)
+    elif (filepattern is not None) and (extent is not None) and (filename is None):
+        image_reader.SetFilePattern(filepattern)
+        image_reader.SetDataExtent(extent)
     image_reader.Update()
     image = image_reader.GetOutput()
 
