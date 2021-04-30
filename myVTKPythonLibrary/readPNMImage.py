@@ -12,6 +12,7 @@
 
 from builtins import range
 
+import os
 import vtk
 
 import myPythonLibrary    as mypy
@@ -19,26 +20,27 @@ import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def writeImage(
-        image,
+def readPNMImage(
         filename,
+		extent=None,
         verbose=0):
 
-    mypy.my_print(verbose, "*** writeImage: "+filename+" ***")
+    mypy.my_print(verbose, "*** readPNMImage: "+filename+" ***")
 
-    if (filename.endswith("vtk")):
-        image_writer = vtk.vtkImageWriter()
-    elif (filename.endswith("vti")):
-        image_writer = vtk.vtkXMLImageDataWriter()
+    if (extent is None):
+        assert (os.path.isfile(filename)),\
+            "Wrong filename (\""+filename+"\"). Aborting."
     else:
-        assert 0, "File must be .vtk or .vti. Aborting."
+        assert (os.path.isfile(filename+".0")),\
+            "Wrong filename (\""+filename+".0"+"\"). Aborting."
 
-    mypy.my_print(verbose, "n_points = "+str(image.GetNumberOfPoints()))
+    image_reader = vtk.vtkPNMReader()
+    image_reader.SetFilePattern(filename)
+    if (extent is not None):
+	    image_reader.SetDataExtent(extent)
+    image_reader.Update()
+    image = image_reader.GetOutput()
 
-    image_writer.SetFileName(filename)
-    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        image_writer.SetInputData(image)
-    else:
-        image_writer.SetInput(image)
-    image_writer.Update()
-    image_writer.Write()
+    mypy.my_print(verbose-1, "n_points = "+str(image.GetNumberOfPoints()))
+
+    return image

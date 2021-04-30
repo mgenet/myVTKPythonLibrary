@@ -15,7 +15,7 @@ from builtins import range
 import numpy
 import vtk
 
-import myPythonLibrary as mypy
+import myPythonLibrary    as mypy
 import myVTKPythonLibrary as myvtk
 
 ########################################################################

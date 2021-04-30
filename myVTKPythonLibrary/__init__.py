@@ -30,6 +30,7 @@ from .addDeformationGradients import *
 from .createUnsignedCharArray import *
 from .createArray import *
 from .createShortArray import *
+from .readPNMImage import *
 from .readDynaMesh import *
 from .getImageInterpolator import *
 from .getThresholdedUGrid import *
@@ -60,6 +61,7 @@ from .writeDataSet import *
 from .getClippedPDataUsingField import *
 from .addMappingToPointData import *
 from .vtu2vtk import *
+from .pnm2vti import *
 from .getImageDimensionality import *
 from .addPDataNormals import *
 from .getMaskedImageUsingMesh import *

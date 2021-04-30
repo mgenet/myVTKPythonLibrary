@@ -1,3 +1,4 @@
+#!python3
 #coding=utf8
 
 ########################################################################
@@ -12,33 +13,29 @@
 
 from builtins import range
 
-import vtk
+import argparse
 
 import myPythonLibrary    as mypy
 import myVTKPythonLibrary as myvtk
 
 ########################################################################
 
-def writeImage(
-        image,
-        filename,
-        verbose=0):
+if (__name__ == "__main__"):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("pnm_filename", type=str)
+    parser.add_argument("--extent", type=int, nargs=6, default=None)
+    args = parser.parse_args()
 
-    mypy.my_print(verbose, "*** writeImage: "+filename+" ***")
+    ext_lst = ["pbm", "pgm", "ppm"]
+    assert (any("."+ext in args.pnm_filename for ext in ext_lst))
 
-    if (filename.endswith("vtk")):
-        image_writer = vtk.vtkImageWriter()
-    elif (filename.endswith("vti")):
-        image_writer = vtk.vtkXMLImageDataWriter()
-    else:
-        assert 0, "File must be .vtk or .vti. Aborting."
+    image = myvtk.readPNMImage(
+        filename=args.pnm_filename,
+        extent=args.extent)
 
-    mypy.my_print(verbose, "n_points = "+str(image.GetNumberOfPoints()))
-
-    image_writer.SetFileName(filename)
-    if (vtk.vtkVersion.GetVTKMajorVersion() >= 6):
-        image_writer.SetInputData(image)
-    else:
-        image_writer.SetInput(image)
-    image_writer.Update()
-    image_writer.Write()
+    for ext in ext_lst:
+        if ("."+ext in args.pnm_filename):
+           vti_filename = args.pnm_filename.split("."+ext)[0]+".vti"
+    myvtk.writeImage(
+        image=image,
+        filename=vti_filename)
