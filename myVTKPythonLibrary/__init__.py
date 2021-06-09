@@ -78,3 +78,5 @@ from .getWarpedMesh import *
 from .computeUInt16MaskFromMesh import *
 from .createUnsignedShortArray import *
 from .readPNG import *
+from .addEquivDeviatoricStrainsFromDeformationGradients import *
+from .addJacobiansFromDeformationGradients import *
