@@ -4,5 +4,6 @@
 *.kateproject.d
 *.pyc
 .spyproject
+.DS_Store
 build
 dist
