@@ -44,7 +44,7 @@ if (__name__ == "__main__"):
     parser.add_argument("pdata_filename", type=str)
     args = parser.parse_args()
 
-    assert (args.ugrid_filename.endswith(".vtp"))
+    assert (args.pdata_filename.endswith(".vtp"))
     pdata = myvtk.readPData(
         filename=args.pdata_filename)
     ugrid = myvtk.pdata2ugrid(
