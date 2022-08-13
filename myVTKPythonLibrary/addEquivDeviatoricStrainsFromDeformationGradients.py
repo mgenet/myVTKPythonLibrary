@@ -45,10 +45,10 @@ def addEquivDeviatoricStrainsFromDeformationGradients(
     I = numpy.eye(3)
     for k_cell in range(n_cells):
         F = numpy.reshape(farray_f.GetTuple(k_cell), (3,3), order="C")
-        F = numpy.power(numpy.linalg.det(F),-1./3.)*F
-        C = numpy.dot(numpy.transpose(F),F)
+        F = numpy.linalg.det(F)**(-1./3) * F
+        C = numpy.dot(numpy.transpose(F), F)
         E = (C - I)/2.
-        c = numpy.append(numpy.empty(shape=(1,0)), numpy.linalg.norm(C)/3.)
+        c = numpy.append(numpy.empty(shape=(1,0)), numpy.linalg.norm(C)/3)
         e = numpy.append(numpy.empty(shape=(1,0)), numpy.linalg.norm(E))
         farray_equiv_Cdev.SetTuple(k_cell, c)
         farray_equiv_Edev.SetTuple(k_cell, e)
