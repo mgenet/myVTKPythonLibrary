@@ -10,8 +10,6 @@
 ###                                                                  ###
 ########################################################################
 
-from builtins import range
-
 import myPythonLibrary    as mypy
 import myVTKPythonLibrary as myvtk
 
