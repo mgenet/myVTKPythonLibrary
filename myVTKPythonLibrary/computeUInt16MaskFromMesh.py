@@ -15,8 +15,6 @@
 ###                                                                  ###
 ########################################################################
 
-from builtins import range
-
 import vtk
 
 import myPythonLibrary    as mypy

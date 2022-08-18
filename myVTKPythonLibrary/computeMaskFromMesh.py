@@ -15,10 +15,6 @@
 ###                                                                  ###
 ########################################################################
 
-from builtins import range
-
-import glob
-import numpy
 import vtk
 
 import myPythonLibrary    as mypy
