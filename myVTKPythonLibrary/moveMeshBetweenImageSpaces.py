@@ -11,8 +11,6 @@
 ###                                                                  ###
 ########################################################################
 
-from builtins import range
-
 import argparse
 import numpy
 
