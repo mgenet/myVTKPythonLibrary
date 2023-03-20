@@ -2,14 +2,14 @@
 
 ########################################################################
 ###                                                                  ###
-### Created by Martin Genet, 2012-2022                               ###
+### Created by Martin Genet, 2012-2023                               ###
 ###                                                                  ###
 ### University of California at San Francisco (UCSF), USA            ###
 ### Swiss Federal Institute of Technology (ETH), Zurich, Switzerland ###
 ### École Polytechnique, Palaiseau, France                           ###
 ###                                                                  ###
 ###                                                                  ###
-### And Cécile Patte, 2019                                           ###
+### And Cécile Patte, 2018-2020                                      ###
 ###                                                                  ###
 ### INRIA, Palaiseau, France                                         ###
 ###                                                                  ###
@@ -22,7 +22,7 @@ import myVTKPythonLibrary as myvtk
 
 ################################################################################
 
-def computeMaskFromMesh(
+def getMaskFromMesh(
         image,
         mesh,
         warp_mesh=1,
@@ -32,7 +32,7 @@ def computeMaskFromMesh(
         out_value=0.0,
         verbose=0):
 
-    mypy.my_print(verbose, "*** computeMaskFromMesh ***")
+    mypy.my_print(verbose, "*** getMaskFromMesh ***")
 
     if (binary_mask):
         thres = vtk.vtkImageThreshold()
@@ -72,3 +72,36 @@ def computeMaskFromMesh(
     imgstenc.Update()
 
     return imgstenc.GetOutput()
+
+computeMaskFromMesh = getMaskFromMesh # MG20230320: Legacy
+
+################################################################################
+
+def getUInt16MaskFromMesh(
+        image,
+        mesh,
+        out_value,
+        binary_mask=0,
+        warp_mesh=0,
+        verbose=0):
+
+    mypy.my_print(verbose, "*** getUInt16MaskFromMesh ***")
+
+    assert (out_value <= 65535)
+    cast = vtk.vtkImageCast()
+    cast.SetInputData(image)
+    cast.SetOutputScalarTypeToUnsignedShort()
+    cast.Update()
+    image_for_mask = cast.GetOutput()
+
+    mask = myvtk.computeMaskFromMesh(
+        image=image_for_mask,
+        mesh=mesh,
+        warp_mesh=warp_mesh,
+        binary_mask=binary_mask,
+        out_value=out_value)
+    assert (mask.GetPointData().GetScalars().GetDataType() == 5)
+
+    return mask
+
+computeUInt16MaskFromMesh = getUInt16MaskFromMesh # MG20230320: Legacy

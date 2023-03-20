@@ -2,14 +2,14 @@
 
 ########################################################################
 ###                                                                  ###
-### Created by Martin Genet, 2012-2022                               ###
+### Created by Martin Genet, 2012-2023                               ###
 ###                                                                  ###
 ### University of California at San Francisco (UCSF), USA            ###
 ### Swiss Federal Institute of Technology (ETH), Zurich, Switzerland ###
 ### École Polytechnique, Palaiseau, France                           ###
 ###                                                                  ###
 ###                                                                  ###
-### And Cécile Patte, 2019                                           ###
+### And Cécile Patte, 2018-2020                                      ###
 ###                                                                  ###
 ### INRIA, Palaiseau, France                                         ###
 ###                                                                  ###
@@ -24,14 +24,14 @@ import myVTKPythonLibrary as myvtk
 
 ################################################################################
 
-def computeOverlapCardinalities(
+def getOverlapCardinalities(
         image0,
         image1,
         image0_array_name='scalars',
         image1_array_name='scalars',
         verbose=0):
 
-    mypy.my_print(verbose, "*** computeOverlapCardinalities ***")
+    mypy.my_print(verbose, "*** getOverlapCardinalities ***")
 
     assert image0.GetDimensions() == image1.GetDimensions()
     assert image0.GetNumberOfPoints() == image1.GetNumberOfPoints()
@@ -83,3 +83,5 @@ def computeOverlapCardinalities(
     mypy.my_print(verbose-1, "FN ="+str(FN))
 
     return (TP, TN, FP, FN)
+
+computeOverlapCardinalities = getOverlapCardinalities # MG20230320: Legacy

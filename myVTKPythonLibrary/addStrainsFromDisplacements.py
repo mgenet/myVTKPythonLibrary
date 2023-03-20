@@ -10,9 +10,6 @@
 ###                                                                  ###
 ########################################################################
 
-import numpy
-import vtk
-
 import myPythonLibrary    as mypy
 import myVTKPythonLibrary as myvtk
 
@@ -24,6 +21,7 @@ def addStrainsFromDisplacements(
         defo_grad_array_name="DeformationGradient",
         strain_array_name="Strain",
         mesh_w_local_basis=None,
+        compute_principal_directions=False,
         verbose=0):
 
     mypy.my_print(verbose, "*** addStrainsFromDisplacements ***")
@@ -37,4 +35,5 @@ def addStrainsFromDisplacements(
         defo_grad_array_name=defo_grad_array_name,
         strain_array_name=strain_array_name,
         mesh_w_local_basis=mesh_w_local_basis,
+        compute_principal_directions=compute_principal_directions,
         verbose=verbose-1)

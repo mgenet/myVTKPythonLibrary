@@ -10,13 +10,13 @@ from .addMappingToCellData import *
 from .addMappingToPointData import *
 from .addPDataNormals import *
 from .addPhysicalGroupToMesh import *
+from .addPrincipalDirections import *
 from .addStrainsFromDeformationGradients import *
 from .addStrainsFromDisplacements import *
 from .addVertices import *
 from .array_algebra import *
-from .computeMaskFromMesh import *
-from .computeOverlapCardinalities import *
-from .computeUInt16MaskFromMesh import *
+from .getMaskFromMesh import *
+from .getOverlapCardinalities import *
 from .createArray import *
 from .createCharArray import *
 from .createDoubleArray import *

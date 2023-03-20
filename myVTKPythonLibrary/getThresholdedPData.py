@@ -10,8 +10,6 @@
 ###                                                                  ###
 ########################################################################
 
-import vtk
-
 import myPythonLibrary    as mypy
 import myVTKPythonLibrary as myvtk
 

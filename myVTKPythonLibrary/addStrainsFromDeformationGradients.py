@@ -25,6 +25,7 @@ def addStrainsFromDeformationGradients(
         defo_grad_array_name="DeformationGradient",
         strain_array_name="Strain",
         mesh_w_local_basis=None,
+        compute_principal_directions=False,
         verbose=0):
 
     mypy.my_print(verbose, "*** addStrainsFromDeformationGradients ***")
@@ -34,12 +35,12 @@ def addStrainsFromDeformationGradients(
 
     n_cells = mesh.GetNumberOfCells()
     if (mesh_w_local_basis is not None)\
-    and (((mesh_w_local_basis.GetCellData().HasArray("eR"))\
-      and (mesh_w_local_basis.GetCellData().HasArray("eC"))\
+    and (((mesh_w_local_basis.GetCellData().HasArray("eR")) \
+      and (mesh_w_local_basis.GetCellData().HasArray("eC")) \
       and (mesh_w_local_basis.GetCellData().HasArray("eL")))\
-    or ((mesh_w_local_basis.GetCellData().HasArray("eRR"))\
-    and (mesh_w_local_basis.GetCellData().HasArray("eCC"))\
-    and (mesh_w_local_basis.GetCellData().HasArray("eLL")))):
+      or ((mesh_w_local_basis.GetCellData().HasArray("eRR"))\
+      and (mesh_w_local_basis.GetCellData().HasArray("eCC"))\
+      and (mesh_w_local_basis.GetCellData().HasArray("eLL")))):
         farray_strain = myvtk.createFloatArray(
             name=strain_array_name+"_CAR",
             n_components=6,
@@ -52,19 +53,19 @@ def addStrainsFromDeformationGradients(
     mesh.GetCellData().AddArray(farray_strain)
     I = numpy.eye(3)
     E_vec = numpy.empty(6)
-    #e_vec = numpy.empty(6)
+    # e_vec = numpy.empty(6)
     for k_cell in range(n_cells):
         F = numpy.reshape(farray_f.GetTuple(k_cell), (3,3), order="C")
         C = numpy.dot(numpy.transpose(F), F)
         E = (C - I)/2
         mypy.mat_sym33_to_vec_col6(E, E_vec)
         farray_strain.SetTuple(k_cell, E_vec)
-        #if (add_almansi_strain):
-            #Finv = numpy.linalg.inv(F)
-            #c = numpy.dot(numpy.transpose(Finv), Finv)
-            #e = (I - c)/2
-            #mypy.mat_sym33_to_vec_col6(e, e_vec)
-            #farray_almansi.SetTuple(k_cell, e_vec)
+        # if (add_almansi_strain):
+        #     Finv = numpy.linalg.inv(F)
+        #     c = numpy.dot(numpy.transpose(Finv), Finv)
+        #     e = (I - c)/2
+        #     mypy.mat_sym33_to_vec_col6(e, e_vec)
+        #     farray_almansi.SetTuple(k_cell, e_vec)
 
     if (mesh_w_local_basis is not None):
         if  (mesh_w_local_basis.GetCellData().HasArray("eR"))\
@@ -90,3 +91,11 @@ def addStrainsFromDeformationGradients(
                 verbose=0)
             farray_strain_pps.SetName(strain_array_name+"_PPS")
             mesh.GetCellData().AddArray(farray_strain_pps)
+
+    if (compute_principal_directions):
+        myvtk.addPrincipalDirections(
+            mesh=mesh,
+            field_name=strain_array_name,
+            field_support="cell",
+            field_storage="vec",
+            verbose=verbose-1)
