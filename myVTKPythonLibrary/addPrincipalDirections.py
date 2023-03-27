@@ -20,6 +20,7 @@ import myVTKPythonLibrary as myvtk
 def getPrincipalDirections(
         field,
         field_storage="vec",
+        remove_Z_component=False,
         verbose=0):
 
     mypy.my_print(verbose, "*** getPrincipalDirections ***")
@@ -59,6 +60,10 @@ def getPrincipalDirections(
             mypy.cvec9_to_mat33(vec, mat)
         elif (field_storage == "Fmat"):
             mypy.fvec9_to_mat33(vec, mat)
+
+        if (remove_Z_component):
+            mat[2,:] = 0.
+            mat[:,2] = 0.
 
         if (numpy.linalg.norm(mat) > 1e-6):
             #mypy.my_print(verbose-1, "k_tuple = "+str(k_tuple))
