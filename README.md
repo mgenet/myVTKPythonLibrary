@@ -1,3 +1,6 @@
+[![PyPi Version](https://img.shields.io/pypi/v/myvtkpythonlibrary.svg?style=flat-square)](https://pypi.org/project/myvtkpythonlibrary)
+[![PyPI Downloads](https://static.pepy.tech/badge/myvtkpythonlibrary)](https://pepy.tech/projects/myvtkpythonlibrary)
+
 # myVTKPythonLibrary
 
 A collection of tools to manipulate meshes and images using `vtkpython`.
